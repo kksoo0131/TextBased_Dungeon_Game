@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Kks\\source\\repos\\TextBased_Dungeon_Game\\TextBased_Dugeon_Game\\TextBased_Dungeon_Game.csproj",
+      "projectUniqueName": "C:\\Users\\Kks\\source\\repos\\TextBased_Dungeon_Game\\TextBased_Dungeon_Game.csproj",
       "projectName": "TextBased_Dungeon_Game",
-      "projectPath": "C:\\Users\\Kks\\source\\repos\\TextBased_Dungeon_Game\\TextBased_Dugeon_Game\\TextBased_Dungeon_Game.csproj",
+      "projectPath": "C:\\Users\\Kks\\source\\repos\\TextBased_Dungeon_Game\\TextBased_Dungeon_Game.csproj",
       "packagesPath": "C:\\Users\\Kks\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Kks\\source\\repos\\TextBased_Dungeon_Game\\TextBased_Dugeon_Game\\obj\\",
+      "outputPath": "C:\\Users\\Kks\\source\\repos\\TextBased_Dungeon_Game\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Kks\\AppData\\Roaming\\NuGet\\NuGet.Config",

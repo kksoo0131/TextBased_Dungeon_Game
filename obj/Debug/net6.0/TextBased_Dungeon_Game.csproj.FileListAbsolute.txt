@@ -1,0 +1,15 @@
+C:\Users\Kks\source\repos\TextBased_Dungeon_Game\bin\Debug\net6.0\TextBased_Dungeon_Game.exe
+C:\Users\Kks\source\repos\TextBased_Dungeon_Game\bin\Debug\net6.0\TextBased_Dungeon_Game.deps.json
+C:\Users\Kks\source\repos\TextBased_Dungeon_Game\bin\Debug\net6.0\TextBased_Dungeon_Game.runtimeconfig.json
+C:\Users\Kks\source\repos\TextBased_Dungeon_Game\bin\Debug\net6.0\TextBased_Dungeon_Game.dll
+C:\Users\Kks\source\repos\TextBased_Dungeon_Game\bin\Debug\net6.0\TextBased_Dungeon_Game.pdb
+C:\Users\Kks\source\repos\TextBased_Dungeon_Game\obj\Debug\net6.0\TextBased_Dungeon_Game.csproj.AssemblyReference.cache
+C:\Users\Kks\source\repos\TextBased_Dungeon_Game\obj\Debug\net6.0\TextBased_Dungeon_Game.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Kks\source\repos\TextBased_Dungeon_Game\obj\Debug\net6.0\TextBased_Dungeon_Game.AssemblyInfoInputs.cache
+C:\Users\Kks\source\repos\TextBased_Dungeon_Game\obj\Debug\net6.0\TextBased_Dungeon_Game.AssemblyInfo.cs
+C:\Users\Kks\source\repos\TextBased_Dungeon_Game\obj\Debug\net6.0\TextBased_Dungeon_Game.csproj.CoreCompileInputs.cache
+C:\Users\Kks\source\repos\TextBased_Dungeon_Game\obj\Debug\net6.0\TextBased_Dungeon_Game.dll
+C:\Users\Kks\source\repos\TextBased_Dungeon_Game\obj\Debug\net6.0\refint\TextBased_Dungeon_Game.dll
+C:\Users\Kks\source\repos\TextBased_Dungeon_Game\obj\Debug\net6.0\TextBased_Dungeon_Game.pdb
+C:\Users\Kks\source\repos\TextBased_Dungeon_Game\obj\Debug\net6.0\TextBased_Dungeon_Game.genruntimeconfig.cache
+C:\Users\Kks\source\repos\TextBased_Dungeon_Game\obj\Debug\net6.0\ref\TextBased_Dungeon_Game.dll
