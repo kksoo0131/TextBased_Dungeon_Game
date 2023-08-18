@@ -8,7 +8,8 @@ namespace TextBased_Dungeon_Game
 {
     internal class DungeonGame
     {
-        SceneManager sceneManager;
+        public SceneManager sceneManager;
+        public static Warrior player = new Warrior();
         public DungeonGame()
         {
             GameInit();
