@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextBased_Dugeon_Game
+namespace TextBased_Dungeon_Game
 {
     internal class DungeonGame
     {

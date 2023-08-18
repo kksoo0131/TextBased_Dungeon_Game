@@ -1,4 +1,4 @@
-﻿namespace TextBased_Dugeon_Game
+﻿namespace TextBased_Dungeon_Game
 {
     class Warrior
     {
