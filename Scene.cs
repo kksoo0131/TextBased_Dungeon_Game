@@ -51,16 +51,15 @@ namespace TextBased_Dungeon_Game
 
         public override int DrawScene()
         {
-            Warrior player = new Warrior() { Level = 1, Chad = "전사", Attack = 10, Defense = 5, Health = 100, Gold = 1500 };
             Console.Clear();
-            Console.WriteLine(MakeStatusText(player));
+            Console.WriteLine(MakeStatusText());
             return InputKey(options);
         }
 
-        public string MakeStatusText(Warrior player)
+        public string MakeStatusText()
         {
-            string status = $"Lv. {player.Level}\n\nChad({player.Chad})\n\n공격력: {player.Attack}\n\n방어력: {player.Defense}\n\n체력: {player.Health}\n\nGold: {player.Gold} G\n\n";
-            return $"상태 보기\n캐릭터의 정보가 표시됩니다.\n\n{status}0. 나가기\n\n원하시는 행동을 입력해주세요";
+           
+            return $"상태 보기\n캐릭터의 정보가 표시됩니다.\n\n{DungeonGame.player.PlayerInfo}0. 나가기\n\n원하시는 행동을 입력해주세요";
         }
     }
     class InventoryScene : Scene
@@ -78,7 +77,7 @@ namespace TextBased_Dungeon_Game
 
         public string MakeInventoryText()
         {
-            string itemlist = " ";// 아이템 리스트를 뽑아옴
+            string itemlist = DungeonGame.player.InventoryInfo();// 아이템 리스트를 뽑아옴
             return $"인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n\n[아이템 목록]\n\n{itemlist}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
 
         }
