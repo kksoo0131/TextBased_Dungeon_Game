@@ -30,7 +30,7 @@ namespace TextBased_Dungeon_Game
             
         }
 
-        public string MakeItemList()
+        public string MakeEquipList()
         {
             StringBuilder str = new StringBuilder();
 
@@ -49,6 +49,29 @@ namespace TextBased_Dungeon_Game
 
                 }
      
+            }
+
+            return str.ToString();
+        }
+
+        public string MakeItemList()
+        {
+            StringBuilder str = new StringBuilder();
+
+            foreach (Item _item in itemlist)
+            {
+                if (_item.Type == ItemType.Weapon)
+                {
+                    Weapon weapon = (Weapon)_item;
+                    str.Append($" - {_item.Name}| 공격력 +{weapon.Attack} | {_item.Info}\n");
+                }
+                else
+                {
+                    Armor armor = (Armor)_item;
+                    str.Append($" - {_item.Name}| 방어력 +{armor.Defense} | {_item.Info}\n");
+
+                }
+
             }
 
             return str.ToString();
