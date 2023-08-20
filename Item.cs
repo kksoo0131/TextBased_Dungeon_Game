@@ -34,6 +34,7 @@ namespace TextBased_Dungeon_Game
             IsEquip = false;
         }
 
+        private string name;
         public string Name 
         {
             get
@@ -41,21 +42,23 @@ namespace TextBased_Dungeon_Game
                 StringBuilder sb = new StringBuilder();
                 if (IsEquip)
                 {
-                    sb.Append($"[E]{Name}");
+                    sb.Append($"[E]{name}");
                 }
                 else
                 {
-                    sb.Append($"{Name}");
+                    sb.Append($"{name}");
                 }
 
-                while(sb.Length < 12)
+                while(sb.Length < 10)
                 {
                     sb.Append(" ");
                 }
-                Console.WriteLine(sb.ToString());
                 return sb.ToString();
+                // 버그해결
+                // 프로퍼티 안에서 프로퍼티를 호출하고 있어서 스택 오버플로우 발생
+                // 자동 -> 수동 프로퍼티로 바꾸려면 값을 저장할 변수가 따로 필요하게된다.
             }
-            private set { }
+            private set { name = value; }
         }
         public ItemType Type { get; private set; }
         public string Info { get; private set; }

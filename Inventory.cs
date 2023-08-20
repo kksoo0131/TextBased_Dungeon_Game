@@ -40,12 +40,12 @@ namespace TextBased_Dungeon_Game
                 if (_item.Type == ItemType.Weapon)
                 {
                     Weapon weapon = (Weapon)_item;
-                    str.Append($" - {index++}{_item.Name}| 공격력 +{weapon.Attack} | {_item.Info}\n");
+                    str.Append($" - {index++}. {_item.Name}| 공격력 +{weapon.Attack} | {_item.Info}\n");
                 }
                 else
                 {
                     Armor armor = (Armor)_item;
-                    str.Append($" - {index++}{_item.Name}| 방어력 +{armor.Defense} | {_item.Info}\n");
+                    str.Append($" - {index++}. {_item.Name}| 방어력 +{armor.Defense} | {_item.Info}\n");
 
                 }
      

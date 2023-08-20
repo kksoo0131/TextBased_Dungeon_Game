@@ -59,7 +59,10 @@ namespace TextBased_Dungeon_Game
         public string MakeStatusText()
         {
            
-            return $"상태 보기\n캐릭터의 정보가 표시됩니다.\n\n{DungeonGame.player.PlayerInfo}0. 나가기\n\n원하시는 행동을 입력해주세요";
+            return $"상태 보기\n캐릭터의 정보가 표시됩니다.\n\n{DungeonGame.player.PlayerInfo()}0. 나가기\n\n원하시는 행동을 입력해주세요";
+            // 버그 해결
+            // 괄호 안에 DungeonGame.player.PlayerInfo를 넣으면 델리게이트에 메서드 이름을 추가할때의 형식으로 메서드 이름이 들어가게됨
+            // DungeonGame.player.PlayerInfo() 는 메서드의 리턴값이 들어가게된다.
         }
     }
     class InventoryScene : Scene
