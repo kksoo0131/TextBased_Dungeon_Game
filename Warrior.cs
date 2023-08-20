@@ -31,8 +31,7 @@ namespace TextBased_Dungeon_Game
 
         public string PlayerInfo()
         {
-            string str = $"Lv. {Level}\n\nChad({Chad})\n\n공격력: {Attack}\n\n방어력: {Defense}\n\n체력: {Health}\n\nGold: {Gold} G\n\n";
-            return str;
+            return $"Lv. {Level}\n\nChad({Chad})\n\n공격력: {Attack}\n\n방어력: {Defense}\n\n체력: {Health}\n\nGold: {Gold} G\n\n";
         }
 
         public string InventoryInfo()

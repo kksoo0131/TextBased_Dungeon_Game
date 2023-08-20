@@ -22,7 +22,6 @@ namespace TextBased_Dungeon_Game
         Armor,
     }
 
-    // 
     class Item
     {
         public Item(string _name, ItemType _type, string _Info, int _price)
