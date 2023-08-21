@@ -52,11 +52,11 @@ namespace TextBased_Dungeon_Game
         public override int DrawScene()
         {
             Console.Clear();
-            Console.WriteLine(MakeStatusText());
+            Console.WriteLine(MakeText());
             return InputKey(options);
         }
 
-        public string MakeStatusText()
+        public string MakeText()
         {
            
             return $"상태 보기\n캐릭터의 정보가 표시됩니다.\n\n{DungeonGame.player.PlayerInfo()}0. 나가기\n\n원하시는 행동을 입력해주세요";
@@ -74,15 +74,59 @@ namespace TextBased_Dungeon_Game
         public override int DrawScene()
         {
             Console.Clear();
-            Console.WriteLine(MakeInventoryText());
-            return InputKey(options);
+            Console.WriteLine(MakeText());
+
+            switch (InputKey(options))
+            {
+                case 0:
+                    return (int)SceneType.StartScene;
+                case 1:
+                    return (int)SceneType.EquipmentScene;
+                default:
+                    return (int)SceneType.StartScene;
+            }
         }
 
-        public string MakeInventoryText()
+        public string MakeText()
         {
-            string itemlist = DungeonGame.player.InventoryInfo();// 아이템 리스트를 뽑아옴
-            return $"인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n\n[아이템 목록]\n\n{itemlist}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            return $"인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{DungeonGame.player.InventoryInfo()}\n\n1. 장착 관리\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+        }
+    }
+    class EquipmentScene : Scene
+    {
+        public EquipmentScene(SceneType _type) : base(_type) { }
 
+        int[] options = { 0 };
+
+        public override int DrawScene()
+        {
+            Console.Clear();
+            Console.WriteLine(MakeText());
+
+            // options를 아이템 Count갯수만큼 추가해야됨
+            options = new int[DungeonGame.player.ItemCount() + 1];
+            options[0] = 0;
+            for (int i =1; i<= DungeonGame.player.ItemCount(); i++)
+            {
+                options[i] = i;
+            }
+
+            int index = InputKey(options);
+            switch (index)
+            {
+                case 0:
+                    return (int)SceneType.InventoryScene;
+                default:
+                    // 해당 장비가 장착중 -> 장착 해제
+                    // 장착 해제 -> 장착중으로 변경함
+                    DungeonGame.player.EquipItem(index - 1);
+                    return (int)SceneType.EquipmentScene;   
+            }
+        }
+
+        public string MakeText()
+        {
+            return $"인벤토리 - 장착 관리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{DungeonGame.player.EquipmentInfo()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
         }
     }
 }
