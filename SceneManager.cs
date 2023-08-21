@@ -5,6 +5,7 @@
         StartScene,
         StatusScene,
         InventoryScene,
+        EquipmentScene,
         EndPoint,
     }
     class SceneManager
@@ -21,6 +22,7 @@
             _scenes.Add(new StartScene(SceneType.StartScene));
             _scenes.Add(new StatusScene(SceneType.StatusScene));
             _scenes.Add(new InventoryScene(SceneType.InventoryScene));
+            _scenes.Add(new EquipmentScene(SceneType.EquipmentScene));
 
         }
 

@@ -21,11 +21,22 @@ namespace TextBased_Dungeon_Game
             itemlist.Remove(_item);
         }
 
-        public void EquipItem(Item _item)
+        public int Count()
         {
-            if (!_item.IsEquip)
+            return itemlist.Count;
+        }
+
+        public Item EquipItem(int i)
+        {
+            if (!itemlist[i].IsEquip)
             {
-                _item.IsEquip = true;
+                itemlist[i].IsEquip = true;
+                return itemlist[i];
+            }
+            else
+            {
+                itemlist[i].IsEquip = false;
+                return itemlist[i];
             }
             
         }
@@ -34,7 +45,9 @@ namespace TextBased_Dungeon_Game
         {
             StringBuilder str = new StringBuilder();
 
-            int index = 0;
+            str.Append("[아이템 목록]\n");
+
+            int index = 1;
             foreach (Item _item in itemlist)
             {
                 if (_item.Type == ItemType.Weapon)
@@ -57,6 +70,8 @@ namespace TextBased_Dungeon_Game
         public string MakeItemList()
         {
             StringBuilder str = new StringBuilder();
+
+            str.Append("[아이템 목록]\n");
 
             foreach (Item _item in itemlist)
             {

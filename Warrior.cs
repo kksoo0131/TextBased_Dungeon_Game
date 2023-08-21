@@ -28,15 +28,61 @@ namespace TextBased_Dungeon_Game
         public int Defense { get; set; }
         public int Health { get; set; }
         public int Gold { get; set; }
+        public int AddAttack { get; set; }
+        public int AddDefense { get; set; }
 
         public string PlayerInfo()
         {
-            return $"Lv. {Level}\n\nChad({Chad})\n\n공격력: {Attack}\n\n방어력: {Defense}\n\n체력: {Health}\n\nGold: {Gold} G\n\n";
-        }
+            StringBuilder sb = new StringBuilder();
 
+            sb.Append($"{Level}\n\nChad({Chad})\n\n");
+            sb.Append(AddAttack > 0 ? $"공격력: {Attack + AddAttack} (+{AddAttack})\n\n" : $"공격력: {Attack}\n\n");
+            sb.Append(AddDefense > 0 ? $"방어력 : {Defense + AddDefense} (+{AddDefense})\n\n" : $"방어력: {Defense}\n\n");
+            sb.Append($"체력: {Health}\n\nGold: {Gold} G\n\n");
+            return sb.ToString();
+        }
         public string InventoryInfo()
         {
             return Inventory.MakeItemList();
+        }
+        public string EquipmentInfo()
+        {
+            return Inventory.MakeEquipList();
+        }
+        public int ItemCount()
+        {
+            return Inventory.Count();
+        }
+        public void EquipItem(int i)
+        {
+            Item target = Inventory.EquipItem(i);
+
+            if (target.IsEquip)
+            {
+                if(target.Type == ItemType.Weapon)
+                {
+                    Weapon weapon = (Weapon)target;
+                    AddAttack += weapon.Attack;
+                }
+                else
+                {
+                    Armor armor = (Armor)target;
+                    AddDefense += armor.Defense;
+                }
+            }
+            else
+            {
+                if (target.Type == ItemType.Weapon)
+                {
+                    Weapon weapon = (Weapon)target;
+                    AddAttack -= weapon.Attack;
+                }
+                else
+                {
+                    Armor armor = (Armor)target;
+                    AddDefense -= armor.Defense;
+                }
+            }
         }
      
     }
