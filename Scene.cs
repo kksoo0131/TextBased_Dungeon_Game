@@ -6,6 +6,16 @@ using System.Threading.Tasks;
 
 namespace TextBased_Dungeon_Game
 {
+    public enum SceneType
+    {
+        StartScene,
+        StatusScene,
+        InventoryScene,
+        ShopScene,
+        EquipmentScene,
+        BuyScene,
+        EndPoint,
+    }
     class Scene
     {   // 인터페이스에서는 모든 멤버가 암시적으로 public이고,
         // 클래스나 메서드에서는 모든 멤버가 암시적으로 internal이다.
@@ -15,7 +25,7 @@ namespace TextBased_Dungeon_Game
         string WrongInputText = "잘못된 입력입니다";
         public Scene(SceneType _type) { Type = _type; }
         SceneType Type { get; set; }
-        public virtual int DrawScene() { return -1; }
+        public virtual int DrawScene() { return 0; }
         public virtual int InputKey(int[] options)
         {
             int input;
@@ -27,14 +37,18 @@ namespace TextBased_Dungeon_Game
 
             return input;
         }
+        static void WriteLine(string str)
+        {
+            Console.SetCursorPosition(50, 20);
+        }
 
     }
     class StartScene : Scene
     {
         public StartScene(SceneType _type) : base(_type) { }
-        int[] options = { 1, 2 };
+        int[] options = { 1, 2, 3};
 
-        string GameStartText = "스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다. \n\n1. 상태 보기\n2. 인벤토리\n\n원하시는 행동을 입력해주세요.";
+        string GameStartText = "스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다. \n\n1. 상태 보기\n2. 인벤토리\n3. 상점\n\n원하시는 행동을 입력해주세요.";
         public override int DrawScene()
         {
             Console.Clear();
@@ -46,7 +60,6 @@ namespace TextBased_Dungeon_Game
     class StatusScene : Scene
     {
         public StatusScene(SceneType _type) : base(_type) { }
-        string WrongInputText = "잘못된 입력입니다";
         int[] options = { 0 };
 
         public override int DrawScene()
@@ -69,7 +82,7 @@ namespace TextBased_Dungeon_Game
     {
         public InventoryScene(SceneType _type) : base(_type) { }
 
-        int[] options = { 0, 1 };
+        int[] options = { 0, 1, 2, 3, 4, 5};
 
         public override int DrawScene()
         {
@@ -82,6 +95,18 @@ namespace TextBased_Dungeon_Game
                     return (int)SceneType.StartScene;
                 case 1:
                     return (int)SceneType.EquipmentScene;
+                case 2:
+                    DungeonGame.player.Inventory.SortInventory(SortingInventory.Name);
+                    return (int)SceneType.InventoryScene;
+                case 3:
+                    DungeonGame.player.Inventory.SortInventory(SortingInventory.Equipment);
+                    return (int)SceneType.InventoryScene;
+                case 4:
+                    DungeonGame.player.Inventory.SortInventory(SortingInventory.Attack);
+                    return (int)SceneType.InventoryScene;
+                case 5:
+                    DungeonGame.player.Inventory.SortInventory(SortingInventory.Defense);
+                    return (int)SceneType.InventoryScene;
                 default:
                     return (int)SceneType.StartScene;
             }
@@ -89,7 +114,7 @@ namespace TextBased_Dungeon_Game
 
         public string MakeText()
         {
-            return $"인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{DungeonGame.player.InventoryInfo()}\n\n1. 장착 관리\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            return $"인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{DungeonGame.player.Inventory.MakeItemList()}\n\n1. 장착 관리\n2. 이름\n3. 장착순\n4. 공격력\n5. 방어력\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
         }
     }
     class EquipmentScene : Scene
@@ -104,9 +129,9 @@ namespace TextBased_Dungeon_Game
             Console.WriteLine(MakeText());
 
             // options를 아이템 Count갯수만큼 추가해야됨
-            options = new int[DungeonGame.player.ItemCount() + 1];
+            options = new int[DungeonGame.player.Inventory.Count() + 1];
             options[0] = 0;
-            for (int i =1; i<= DungeonGame.player.ItemCount(); i++)
+            for (int i =1; i<= DungeonGame.player.Inventory.Count(); i++)
             {
                 options[i] = i;
             }
@@ -126,7 +151,74 @@ namespace TextBased_Dungeon_Game
 
         public string MakeText()
         {
-            return $"인벤토리 - 장착 관리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{DungeonGame.player.EquipmentInfo()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            return $"인벤토리 - 장착 관리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{DungeonGame.player.Inventory.MakeEquipList()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+        }
+    }
+    class ShopScene : Scene
+    {
+        public ShopScene(SceneType _type) : base(_type) { }
+        int[] options = { 0, 1};
+
+        public override int DrawScene()
+        {
+            Console.Clear();
+            Console.WriteLine(MakeText());
+
+            switch (InputKey(options))
+            {
+                case 0:
+                    return (int)SceneType.StartScene;
+                case 1:
+                    return (int)SceneType.BuyScene;
+                default:
+                    return (int)SceneType.ShopScene;
+            }
+        }
+
+        public string MakeText()
+        {
+            return $"상점\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{DungeonGame.player.Gold} G\n\n{DungeonGame.shop.MakeItemList()}\n\n1. 아이템 구매\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+        }
+
+    }
+    class BuyScene : Scene
+    {
+        public BuyScene(SceneType _type) : base(_type) { }
+
+        int[] options = { 0 };
+
+        public override int DrawScene()
+        {
+            Console.Clear();
+            Console.WriteLine(MakeText());
+
+            // options를 아이템 Count갯수만큼 추가해야됨
+            options = new int[DungeonGame.shop.Count() + 1];
+            options[0] = 0;
+            for (int i = 1; i <= DungeonGame.shop.Count(); i++)
+            {
+                options[i] = i;
+            }
+
+            int index = InputKey(options);
+            switch (index)
+            {
+                case 0:
+                    return (int)SceneType.InventoryScene;
+                default:
+                    Item? item = DungeonGame.shop.BuyItem(index - 1);
+                    if (item != null)
+                    {
+                        DungeonGame.player.Inventory.AddItem(item);
+                    }
+                    
+                    return (int)SceneType.BuyScene;
+            }
+        }
+
+        public string MakeText()
+        {
+            return $"상점\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{DungeonGame.player.Gold} G\n\n{DungeonGame.shop.MakeShopList()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
         }
     }
 }

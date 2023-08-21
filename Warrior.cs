@@ -21,7 +21,7 @@ namespace TextBased_Dungeon_Game
         }
 
 
-        Inventory Inventory = new Inventory();
+        public Inventory Inventory = new Inventory();
         public int Level { get; set; }
         public string Chad { get; set; }
         public int Attack { get; set; }
@@ -40,18 +40,6 @@ namespace TextBased_Dungeon_Game
             sb.Append(AddDefense > 0 ? $"방어력 : {Defense + AddDefense} (+{AddDefense})\n\n" : $"방어력: {Defense}\n\n");
             sb.Append($"체력: {Health}\n\nGold: {Gold} G\n\n");
             return sb.ToString();
-        }
-        public string InventoryInfo()
-        {
-            return Inventory.MakeItemList();
-        }
-        public string EquipmentInfo()
-        {
-            return Inventory.MakeEquipList();
-        }
-        public int ItemCount()
-        {
-            return Inventory.Count();
         }
         public void EquipItem(int i)
         {
