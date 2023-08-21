@@ -15,9 +15,12 @@
             _scenes.Add(new StatusScene(SceneType.StatusScene));
             _scenes.Add(new InventoryScene(SceneType.InventoryScene));
             _scenes.Add(new ShopScene(SceneType.ShopScene));
+            _scenes.Add(new DungeonEnterScene(SceneType.DungeonEnterScene));
             _scenes.Add(new EquipmentScene(SceneType.EquipmentScene));
             _scenes.Add(new BuyScene(SceneType.BuyScene));
             _scenes.Add(new SellScene(SceneType.SellScene));
+            _scenes.Add(new DungeonClearScene(SceneType.DungeonClearScene));
+            _scenes.Add(new DungeonFailScene(SceneType.DungeonFailScene));
 
 
         }
