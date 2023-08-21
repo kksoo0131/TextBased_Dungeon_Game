@@ -14,6 +14,7 @@ namespace TextBased_Dungeon_Game
         ShopScene,
         EquipmentScene,
         BuyScene,
+        SellScene,
         EndPoint,
     }
     class Scene
@@ -157,7 +158,7 @@ namespace TextBased_Dungeon_Game
     class ShopScene : Scene
     {
         public ShopScene(SceneType _type) : base(_type) { }
-        int[] options = { 0, 1};
+        int[] options = { 0, 1, 2};
 
         public override int DrawScene()
         {
@@ -170,6 +171,8 @@ namespace TextBased_Dungeon_Game
                     return (int)SceneType.StartScene;
                 case 1:
                     return (int)SceneType.BuyScene;
+                case 2:
+                    return (int)SceneType.SellScene;
                 default:
                     return (int)SceneType.ShopScene;
             }
@@ -177,7 +180,7 @@ namespace TextBased_Dungeon_Game
 
         public string MakeText()
         {
-            return $"상점\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{DungeonGame.player.Gold} G\n\n{DungeonGame.shop.MakeItemList()}\n\n1. 아이템 구매\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            return $"상점\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{DungeonGame.player.Gold} G\n\n{DungeonGame.shop.MakeItemList()}\n\n1. 아이템 구매\n2. 아이템 판매\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
         }
 
     }
@@ -204,7 +207,7 @@ namespace TextBased_Dungeon_Game
             switch (index)
             {
                 case 0:
-                    return (int)SceneType.InventoryScene;
+                    return (int)SceneType.ShopScene;
                 default:
                     Item? item = DungeonGame.shop.BuyItem(index - 1);
                     if (item != null)
@@ -218,7 +221,42 @@ namespace TextBased_Dungeon_Game
 
         public string MakeText()
         {
-            return $"상점\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{DungeonGame.player.Gold} G\n\n{DungeonGame.shop.MakeShopList()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            return $"상점 - 아이템 구매\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{DungeonGame.player.Gold} G\n\n{DungeonGame.shop.MakeShopList()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+        }
+    }
+    class SellScene : Scene
+    {
+        public SellScene(SceneType _type) : base(_type) { }
+
+        int[] options = { 0 };
+
+        public override int DrawScene()
+        {
+            Console.Clear();
+            Console.WriteLine(MakeText());
+
+            // options를 아이템 Count갯수만큼 추가해야됨
+            options = new int[DungeonGame.player.Inventory.Count() + 1];
+            options[0] = 0;
+            for (int i = 1; i <= DungeonGame.player.Inventory.Count(); i++)
+            {
+                options[i] = i;
+            }
+
+            int index = InputKey(options);
+            switch (index)
+            {
+                case 0:
+                    return (int)SceneType.ShopScene;
+                default:
+                    DungeonGame.player.SellItem(index - 1);
+                    return (int)SceneType.SellScene;
+            }
+        }
+
+        public string MakeText()
+        {
+            return $"상점 - 아이템 판매\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{DungeonGame.player.Gold} G\n\n{DungeonGame.player.Inventory.MakeSellList()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
         }
     }
 }
