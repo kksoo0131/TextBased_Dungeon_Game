@@ -17,6 +17,7 @@
             _scenes.Add(new ShopScene(SceneType.ShopScene));
             _scenes.Add(new EquipmentScene(SceneType.EquipmentScene));
             _scenes.Add(new BuyScene(SceneType.BuyScene));
+            _scenes.Add(new SellScene(SceneType.SellScene));
 
 
         }

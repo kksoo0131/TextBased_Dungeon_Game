@@ -16,8 +16,8 @@ namespace TextBased_Dungeon_Game
             Defense = 5;
             Health = 100;
             Gold = 1500;
-            Inventory.AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 0, 2));
-            Inventory.AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 0, 5));
+            Inventory.AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
+            Inventory.AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 5));
         }
 
 
@@ -41,7 +41,25 @@ namespace TextBased_Dungeon_Game
             sb.Append($"체력: {Health}\n\nGold: {Gold} G\n\n");
             return sb.ToString();
         }
+
         public void EquipItem(int i)
+        {
+            Item target = Inventory.PeekItem(i);
+
+            if (target.IsEquip)
+            {
+                target.IsEquip = false;
+                AddAttack -= target.Attack;
+                AddDefense -= target.Defense;
+            }
+            else
+            {
+                target.IsEquip = true;
+                AddAttack += target.Attack;
+                AddDefense += target.Defense;
+            }
+        }
+        /*public void EquipItem(int i)
         {
             Item target = Inventory.EquipItem(i);
 
@@ -71,6 +89,21 @@ namespace TextBased_Dungeon_Game
                     AddDefense -= armor.Defense;
                 }
             }
+        }*/
+
+        public void SellItem(int i)
+        {
+            Item sellitem = Inventory.PeekItem(i);
+
+            if (sellitem.IsEquip)
+            {
+                EquipItem(i);
+            }
+            Console.WriteLine((int)(sellitem.Price * 0.85f));
+            Gold += (int)(sellitem.Price * 0.85f);
+            Inventory.DeleteItem(sellitem);
+            
+            
         }
      
     }

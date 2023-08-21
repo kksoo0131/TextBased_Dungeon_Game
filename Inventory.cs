@@ -16,29 +16,19 @@ namespace TextBased_Dungeon_Game
             itemlist.Add(_item);
         }
 
-        public void DeleteItem(Item _item)
+        public Item PeekItem(int i)
         {
-            itemlist.Remove(_item);
+            return itemlist[i];
+        }
+
+        public bool DeleteItem(Item item)
+        {
+            return itemlist.Remove(item);
         }
 
         public int Count()
         {
             return itemlist.Count;
-        }
-
-        public Item EquipItem(int i)
-        {
-            if (!itemlist[i].IsEquip)
-            {
-                itemlist[i].IsEquip = true;
-                return itemlist[i];
-            }
-            else
-            {
-                itemlist[i].IsEquip = false;
-                return itemlist[i];
-            }
-            
         }
 
         public string MakeEquipList()
@@ -81,6 +71,35 @@ namespace TextBased_Dungeon_Game
                 str.Append("- ");
                 str.Append($"{MakeItemInfo(_item)}");
                 str.Append("\n");
+            }
+
+            return str.ToString();
+        }
+
+        public string MakeSellList()
+        {
+
+            StringBuilder str = new StringBuilder();
+
+            str.Append("[아이템 목록]\n");
+
+            int index = 1;
+            foreach (Item _item in itemlist)
+            {
+                str.Append($"- {index++} ");
+
+                if (_item.Type == ItemType.Weapon)
+                {
+                    Weapon weapon = (Weapon)_item;
+                    str.Append(MakeItemInfo(weapon));
+                }
+                else
+                {
+                    Armor armor = (Armor)_item;
+                    str.Append(MakeItemInfo(armor));
+                }
+                str.Append($" | {_item.Price} G\n");
+
             }
 
             return str.ToString();
@@ -129,7 +148,7 @@ namespace TextBased_Dungeon_Game
         public Shop()
         {
             AddItem(new Armor("수련자 갑옷", ItemType.Armor, "수련에 도움을 주는 갑옷입니다.", 1000, 5));
-            AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 0, 9));
+            AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 9));
             AddItem(new Armor("스파르타의 갑옷", ItemType.Armor, "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 3500, 15));
             AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
             AddItem(new Weapon("청동 도끼", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 1500, 5));
