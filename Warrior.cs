@@ -33,6 +33,9 @@ namespace TextBased_Dungeon_Game
         public Item EquipWeapon { get; set; }
         public Item EquipArmor { get; set; }
 
+        public int PrevHealth { get; set; }
+        public int PrevGold { get; set; }
+
         public string PlayerInfo()
         {
             StringBuilder sb = new StringBuilder();

@@ -8,13 +8,20 @@ namespace TextBased_Dungeon_Game
 {
     public enum SceneType
     {
+        
         StartScene,
+        // 스타트 씬 메뉴 4개
         StatusScene,
         InventoryScene,
         ShopScene,
+        DungeonEnterScene,
+
+        //나머지
         EquipmentScene,
         BuyScene,
         SellScene,
+        DungeonClearScene,
+        DungeonFailScene,
         EndPoint,
     }
     class Scene
@@ -47,14 +54,18 @@ namespace TextBased_Dungeon_Game
     class StartScene : Scene
     {
         public StartScene(SceneType _type) : base(_type) { }
-        int[] options = { 1, 2, 3};
-
-        string GameStartText = "스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다. \n\n1. 상태 보기\n2. 인벤토리\n3. 상점\n\n원하시는 행동을 입력해주세요.";
+        int[] options = { 1, 2, 3, 4 };
+        
         public override int DrawScene()
         {
             Console.Clear();
-            Console.WriteLine(GameStartText);
+            Console.WriteLine(MakeText());
             return InputKey(options);
+        }
+
+        public string MakeText()
+        {
+            return "스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다. \n\n1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n\n원하시는 행동을 입력해주세요.";
         }
 
     }
@@ -258,5 +269,74 @@ namespace TextBased_Dungeon_Game
         {
             return $"상점 - 아이템 판매\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{DungeonGame.player.Gold} G\n\n{DungeonGame.player.Inventory.MakeSellList()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
         }
+    }
+    class DungeonEnterScene : Scene
+    {
+        public DungeonEnterScene(SceneType _type) : base(_type) { }
+        int[] options = { 0, 1, 2, 3};
+
+        public override int DrawScene()
+        {
+            Console.Clear();
+            Console.WriteLine(MakeText());
+
+            switch (InputKey(options))
+            {
+                case 0:
+                    return (int)SceneType.StartScene;
+                case 1:
+                    return DungeonGame.Instance.EnterDungeon(1);
+                case 2:
+                    return DungeonGame.Instance.EnterDungeon(2);
+                case 3:
+                    return DungeonGame.Instance.EnterDungeon(3);
+                default:
+                    return (int)SceneType.StartScene;
+            }
+        }
+
+        public string MakeText()
+        {
+            return "던전입장\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n\n1. 쉬운 던전      | 방어력 5 이상 권장\n2. 일반 던전      | 방어력 11 이상 권장\n3. 어려운 던전     | 방어력 17 이상 권장\n0. 나가기\n\n원하시는 행동을 입력해주세요";
+
+        }
+    }
+
+    class DungeonClearScene : Scene
+    {
+        public DungeonClearScene(SceneType _type) : base(_type) { }
+        int[] options = { 0 };
+
+        public override int DrawScene()
+        {
+            Console.Clear();
+            Console.WriteLine(MakeText());
+            return InputKey(options);
+        }
+
+        public string MakeText()
+        {
+            return $"던전 클리어\n축하합니다!!\n쉬운 던전을 클리어 하였습니다.\n\n[탐험 결과]\n체력 {DungeonGame.player.PrevHealth} -> {DungeonGame.player.Health}\nGold {DungeonGame.player.PrevGold} G -> {DungeonGame.player.Gold} G\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+        }
+
+    }
+
+    class DungeonFailScene : Scene
+    {
+        public DungeonFailScene(SceneType _type) : base(_type) { }
+        int[] options = { 0 };
+
+        public override int DrawScene()
+        {
+            Console.Clear();
+            Console.WriteLine(MakeText());
+            return InputKey(options);
+        }
+
+        public string MakeText()
+        {
+            return $"던전 실패\n방어력이 부족해 던전에서 실패했습니다.\n방어력을 높혀 다시 도전해 주세요.\n\n[탐험 결과]\n체력 {DungeonGame.player.PrevHealth} -> {DungeonGame.player.Health}\nGold {DungeonGame.player.PrevGold} G -> {DungeonGame.player.Gold} G\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+        }
+
     }
 }
