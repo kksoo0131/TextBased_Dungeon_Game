@@ -30,6 +30,8 @@ namespace TextBased_Dungeon_Game
         public int Gold { get; set; }
         public int AddAttack { get; set; }
         public int AddDefense { get; set; }
+        public Item EquipWeapon { get; set; }
+        public Item EquipArmor { get; set; }
 
         public string PlayerInfo()
         {
@@ -54,6 +56,22 @@ namespace TextBased_Dungeon_Game
             }
             else
             {
+                if (target.Type == ItemType.Weapon)
+                {
+                    if(EquipWeapon != null)
+                    {
+                        EquipWeapon.IsEquip = false;
+                    }
+                    EquipWeapon = target;
+                }
+                else
+                {
+                    if(EquipArmor != null)
+                    {
+                        EquipArmor.IsEquip = false;
+                    }
+                    EquipArmor = target;
+                }
                 target.IsEquip = true;
                 AddAttack += target.Attack;
                 AddDefense += target.Defense;
