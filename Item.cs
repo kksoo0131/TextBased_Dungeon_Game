@@ -16,13 +16,22 @@ namespace TextBased_Dungeon_Game
 
     // player는 inventory객체를 하나가지고 inventory객체는 아이템을 넣고 빼고 정렬할 수 있다.
 
+
     public enum ItemType
     {
         Weapon,
         Armor,
     }
 
-    class Item
+    public enum SortingInventory
+    {
+        Name,
+        Equipment,
+        Attack,
+        Defense,
+    }
+
+    class Item : IComparable<Item>
     {
         public Item(string _name, ItemType _type, string _Info, int _price)
         {
@@ -31,49 +40,70 @@ namespace TextBased_Dungeon_Game
             Info = _Info;
             Price = _price;
             IsEquip = false;
+            Attack = 0;
+            Defense = 0;
+            IsSell = false;
         }
 
-        private string name;
+        private string _name;
         public string Name 
         {
             get
             {
                 StringBuilder sb = new StringBuilder();
-                if (IsEquip)
+                if(IsEquip)
                 {
-                    sb.Append($"[E]{name}");
+                    sb.Append($"[E]");
                 }
-                else
-                {
-                    sb.Append($"{name}");
-                }
+                sb.Append($"{_name}");
 
-                while(sb.Length < 10)
-                {
-                    sb.Append(" ");
-                }
                 return sb.ToString();
-                // 버그해결
-                // 프로퍼티 안에서 프로퍼티를 호출하고 있어서 스택 오버플로우 발생
-                // 자동 -> 수동 프로퍼티로 바꾸려면 값을 저장할 변수가 따로 필요하게된다.
             }
-            private set { name = value; }
-        }
+            private set { _name = value; }
+        }       
         public ItemType Type { get; private set; }
         public string Info { get; private set; }
         public bool IsEquip { get; set; }
-
+        public int Attack { get; set; }
+        public int Defense { get; set; }
         public int Price { get; private set; }
+
+        public bool IsSell { get; set; }
+        
+
+        public int CompareTo(Item? other)
+        {
+            return CompareBySortingInventory(other, SortingInventory.Name);
+        }
+
+        public int CompareBySortingInventory(Item? other, SortingInventory type)
+        {
+            switch (type)
+            {
+                case SortingInventory.Name:
+                    return Name.CompareTo(other.Name);
+                case SortingInventory.Equipment:
+                    return -IsEquip.CompareTo(other.IsEquip);
+                    // true가 위로 가기 위해서 CompareTo가 return한 int 값에 -1을 곱해서 방향을 바꿔준다.
+                case SortingInventory.Attack:
+                    return Attack.CompareTo(other.Attack);
+                case SortingInventory.Defense:
+                    return Defense.CompareTo(other.Defense);
+                default:
+                    return Name.CompareTo(other.Name);
+            }
+        }
     }
 
     class Weapon : Item
+
     {
         public Weapon(string _name, ItemType _type, string _Info, int _price, int _attack) : base(_name, _type, _Info, _price)
         {
             Attack = _attack;
         }
 
-        public int Attack { get; private set;}
+        
     }
 
     class Armor : Item
@@ -82,6 +112,5 @@ namespace TextBased_Dungeon_Game
         {
             Defense = _defense;
         }
-        public int Defense { get; private set; }
     }
 }

@@ -1,13 +1,5 @@
 ﻿namespace TextBased_Dungeon_Game
 {
-    public enum SceneType
-    {
-        StartScene,
-        StatusScene,
-        InventoryScene,
-        EquipmentScene,
-        EndPoint,
-    }
     class SceneManager
     {
         List<Scene> _scenes = new List<Scene>();
@@ -22,7 +14,10 @@
             _scenes.Add(new StartScene(SceneType.StartScene));
             _scenes.Add(new StatusScene(SceneType.StatusScene));
             _scenes.Add(new InventoryScene(SceneType.InventoryScene));
+            _scenes.Add(new ShopScene(SceneType.ShopScene));
             _scenes.Add(new EquipmentScene(SceneType.EquipmentScene));
+            _scenes.Add(new BuyScene(SceneType.BuyScene));
+
 
         }
 

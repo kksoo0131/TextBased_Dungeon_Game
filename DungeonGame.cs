@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TextBased_Dungeon_Game
+﻿namespace TextBased_Dungeon_Game
 {
     internal class DungeonGame
     {
         public SceneManager sceneManager;
         public static Warrior player = new Warrior();
+        public static Shop shop = new Shop();
         public DungeonGame()
         {
             GameInit();
@@ -18,6 +13,7 @@ namespace TextBased_Dungeon_Game
 
         public void GameInit()
         {
+            Console.SetWindowSize(100, 40);
             sceneManager = new SceneManager();
         }
         public void GameStart()
