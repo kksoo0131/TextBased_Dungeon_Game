@@ -12,10 +12,13 @@
                 // Reflection 사용법 익히기
             }
             _scenes.Add(new StartScene(SceneType.StartScene));
+
             _scenes.Add(new StatusScene(SceneType.StatusScene));
             _scenes.Add(new InventoryScene(SceneType.InventoryScene));
             _scenes.Add(new ShopScene(SceneType.ShopScene));
             _scenes.Add(new DungeonEnterScene(SceneType.DungeonEnterScene));
+            _scenes.Add(new RestScene(SceneType.RestScene));
+
             _scenes.Add(new EquipmentScene(SceneType.EquipmentScene));
             _scenes.Add(new BuyScene(SceneType.BuyScene));
             _scenes.Add(new SellScene(SceneType.SellScene));
