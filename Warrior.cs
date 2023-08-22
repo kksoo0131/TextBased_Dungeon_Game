@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
+
+
 
 namespace TextBased_Dungeon_Game
 {
+    [Serializable]
     class Warrior
     {
         public Warrior() 
@@ -120,11 +119,26 @@ namespace TextBased_Dungeon_Game
             {
                 EquipItem(i);
             }
-            Console.WriteLine((int)(sellitem.Price * 0.85f));
-            Gold += (int)(sellitem.Price * 0.85f);
+            
+            int price = (int)(sellitem.Price * 0.85f);
+            Gold += price;
+            DungeonGame.message += () => Console.WriteLine($"{sellitem.Name}을 {price} G 에 판매 하였습니다.");
             Inventory.DeleteItem(sellitem);
             
             
+        }
+
+         public void Rest()
+        {
+            if (Gold >= 500)
+            {
+                Gold -= 500;
+                DungeonGame.message += () => Console.WriteLine("휴식을 완료했습니다.");
+            }
+            else
+            {
+                DungeonGame.message += () => Console.WriteLine("Gold 가 부족합니다.");
+            }
         }
      
     }

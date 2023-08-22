@@ -30,7 +30,7 @@ namespace TextBased_Dungeon_Game
         Attack,
         Defense,
     }
-
+    [Serializable]
     class Item : IComparable<Item>
     {
         public Item(string _name, ItemType _type, string _Info, int _price)
@@ -95,6 +95,7 @@ namespace TextBased_Dungeon_Game
         }
     }
 
+    [Serializable]
     class Weapon : Item
 
     {
@@ -106,6 +107,7 @@ namespace TextBased_Dungeon_Game
         
     }
 
+    [Serializable]
     class Armor : Item
     {
         public Armor(string _name, ItemType _type, string _Info, int _price, int _defense) : base(_name, _type, _Info, _price)

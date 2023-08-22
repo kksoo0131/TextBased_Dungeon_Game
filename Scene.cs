@@ -15,6 +15,7 @@ namespace TextBased_Dungeon_Game
         InventoryScene,
         ShopScene,
         DungeonEnterScene,
+        RestScene,
 
         //나머지
         EquipmentScene,
@@ -54,7 +55,7 @@ namespace TextBased_Dungeon_Game
     class StartScene : Scene
     {
         public StartScene(SceneType _type) : base(_type) { }
-        int[] options = { 1, 2, 3, 4 };
+        int[] options = { 1, 2, 3, 4, 5 };
         
         public override int DrawScene()
         {
@@ -65,7 +66,7 @@ namespace TextBased_Dungeon_Game
 
         public string MakeText()
         {
-            return "스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다. \n\n1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n\n원하시는 행동을 입력해주세요.";
+            return "스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다. \n\n1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기\n\n원하시는 행동을 입력해주세요.";
         }
 
     }
@@ -157,6 +158,7 @@ namespace TextBased_Dungeon_Game
                     // 해당 장비가 장착중 -> 장착 해제
                     // 장착 해제 -> 장착중으로 변경함
                     DungeonGame.player.EquipItem(index - 1);
+                    DungeonGame.PlayerSave();
                     return (int)SceneType.EquipmentScene;   
             }
         }
@@ -205,7 +207,7 @@ namespace TextBased_Dungeon_Game
         {
             Console.Clear();
             Console.WriteLine(MakeText());
-
+            DungeonGame.PrintMessage();
             // options를 아이템 Count갯수만큼 추가해야됨
             options = new int[DungeonGame.shop.Count() + 1];
             options[0] = 0;
@@ -223,6 +225,8 @@ namespace TextBased_Dungeon_Game
                     Item? item = DungeonGame.shop.BuyItem(index - 1);
                     if (item != null)
                     {
+                        DungeonGame.PlayerSave();
+                        DungeonGame.ShopSave();
                         DungeonGame.player.Inventory.AddItem(item);
                     }
                     
@@ -245,6 +249,7 @@ namespace TextBased_Dungeon_Game
         {
             Console.Clear();
             Console.WriteLine(MakeText());
+            DungeonGame.PrintMessage();
 
             // options를 아이템 Count갯수만큼 추가해야됨
             options = new int[DungeonGame.player.Inventory.Count() + 1];
@@ -261,6 +266,7 @@ namespace TextBased_Dungeon_Game
                     return (int)SceneType.ShopScene;
                 default:
                     DungeonGame.player.SellItem(index - 1);
+                    DungeonGame.PlayerSave();
                     return (int)SceneType.SellScene;
             }
         }
@@ -301,7 +307,6 @@ namespace TextBased_Dungeon_Game
 
         }
     }
-
     class DungeonClearScene : Scene
     {
         public DungeonClearScene(SceneType _type) : base(_type) { }
@@ -311,6 +316,7 @@ namespace TextBased_Dungeon_Game
         {
             Console.Clear();
             Console.WriteLine(MakeText());
+            DungeonGame.PlayerSave();
             return InputKey(options);
         }
 
@@ -320,7 +326,6 @@ namespace TextBased_Dungeon_Game
         }
 
     }
-
     class DungeonFailScene : Scene
     {
         public DungeonFailScene(SceneType _type) : base(_type) { }
@@ -330,6 +335,7 @@ namespace TextBased_Dungeon_Game
         {
             Console.Clear();
             Console.WriteLine(MakeText());
+            DungeonGame.PlayerSave();
             return InputKey(options);
         }
 
@@ -339,4 +345,29 @@ namespace TextBased_Dungeon_Game
         }
 
     }
+    class RestScene : Scene
+    {
+        public RestScene(SceneType _type) : base(_type) { }
+        int[] options = { 0, 1 };
+
+        public override int DrawScene()
+        {
+            Console.Clear();
+            Console.WriteLine(MakeText());
+            DungeonGame.PrintMessage();
+            DungeonGame.PlayerSave();
+            if (InputKey(options) == 1)
+            {
+                DungeonGame.player.Rest();
+                return (int)SceneType.RestScene;
+            }
+            return (int)SceneType.StartScene;
+        }
+
+        public string MakeText()
+        {
+            return $"휴식하기\n500 G 를 내면 체력을 회복할 수 있습니다. (보유 골드 : {DungeonGame.player.Gold} G\n\n1. 휴식하기\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+        }
+    }
+
 }

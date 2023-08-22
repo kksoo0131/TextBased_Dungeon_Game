@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace TextBased_Dungeon_Game
 {
+    [Serializable]
     //아이템 리스트를 관리하는 클래스
     internal class Inventory
     {
+
         protected List<Item> itemlist = new List<Item>();
 
         public void AddItem(Item _item)
@@ -142,9 +144,11 @@ namespace TextBased_Dungeon_Game
         }
 
     }
-    
+
+    [Serializable]
     class Shop : Inventory
     {
+
         public Shop()
         {
             AddItem(new Armor("수련자 갑옷", ItemType.Armor, "수련에 도움을 주는 갑옷입니다.", 1000, 5));
@@ -211,7 +215,7 @@ namespace TextBased_Dungeon_Game
         {
             if (itemlist[index].IsSell)
             {
-                Console.WriteLine("이미 구매한 아이템입니다.");
+                DungeonGame.message += () => Console.WriteLine("이미 구매한 아이템입니다.");
                 return null;
             }
 
@@ -219,12 +223,12 @@ namespace TextBased_Dungeon_Game
             {
                 DungeonGame.player.Gold -= itemlist[index].Price;
                 itemlist[index].IsSell = true;
-                Console.WriteLine("구매를 완료했습니다.");
+                DungeonGame.message += () => Console.WriteLine($"{itemlist[index].Name}를 구매 완료했습니다.");
                 return itemlist[index];
             }
             else
             {
-                Console.WriteLine("Gold 가 부족합니다.");
+                DungeonGame.message += () => Console.WriteLine("Gold 가 부족합니다.");
                 return null;
             }
                 
