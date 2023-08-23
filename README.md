@@ -23,6 +23,10 @@
 Enum ScenType과 SceneManager 클래스를 이용해서 화면의 전환을 구현했습니다.
 
 SceneManager은 List로 각 Scene을 관리하고 SceneType()을 통해서 해당 scene에 접근할 수 있습니다.
+[DungeonGame](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/main/DungeonGame.cs)
+[SceneManager](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/main/SceneManager.cs)
+[Scene](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/main/Scene.cs)
+
 
 <br/>
 
@@ -43,6 +47,7 @@ DrawScene()메서드는 Scene 클래스의 메소드로 각 Scene에서 오버�
 
 캐릭터의 상태를 보는 StatusScene에서는 캐릭터 정보 문자열을 받아서 화면에 출력할 String을 만들고 출력합니다.
 
+
 ### 선택8. 장착 개선
 
 Warrior 클래스에 Itemtype에 따라서 객체를 하나씩 생성했고
@@ -51,6 +56,7 @@ EquipItem()메서드를 통해 아이템을 장착할때 이미 장착하고 있
 
 장착하는 아이템의 능력치를 받을 프로퍼티를 만들어서 따로 저장했습니다.
 
+[Warrior](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/main/Warrior.cs)
 <br/>
 <br/>
 
@@ -67,6 +73,7 @@ MakeItemInfo() 메서드에서 StringBuilder를 사용해 각 칸의 길이를 �
 
 InventoryScene, ShopScene등에서 해당 메서드들을 이용해 출력할 String을 만들고 출력합니다.
 
+[Inventory](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/main/Inventory.cs)
 <br/>
 <br/>
 
@@ -86,6 +93,8 @@ InventoryScene, ShopScene등에서 해당 메서드들을 이용해 출력할 St
 
 입력받은 열거형 SortingInventory에 따라서 비교를 수행하는 CompareBySortingInventory()메서드를 만들었습니다
 
+[Item](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/main/Item.cs)
+
 <br/>
 <br/>
 
@@ -100,6 +109,8 @@ BuyItem() 메서드로 아이템 구매를 구현했습니다.
 <br/>
 
 아이템 판매는 Warrior클래스에서 SellItem()메서드로 구현했습니다.
+
+[Shop](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/main/Inventory.cs)
 
 <br/>
 <br/>
