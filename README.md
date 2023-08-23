@@ -124,6 +124,7 @@ BuyItem() 메서드로 아이템 구매를 구현했습니다.
 
 Scene클래스를 상속받은 DungeonEnterScene, DungeonClearScene, DungeonFailScene, RestScene을 만들어 주었습니다.
 
+[DungeonGame](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/main/DungeonGame.cs)
 <br/>
 <br/>
 
@@ -134,3 +135,4 @@ DungeonGame 클래스에 PlayerSave(), ShopSave(), Read() 메서드를 만들었
 player, shop 클래스들을 모두 [Serializable] 를 붙힌 후 
 
 직렬화 하여 파일로 저장하고 불러오는 기능을 구현했습니다.
+[DungeonGame](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/main/DungeonGame.cs)
