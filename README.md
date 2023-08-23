@@ -23,8 +23,11 @@
 Enum ScenType과 SceneManager 클래스를 이용해서 화면의 전환을 구현했습니다.
 
 SceneManager은 List로 각 Scene을 관리하고 SceneType()을 통해서 해당 scene에 접근할 수 있습니다.
+
 [DungeonGame](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/main/DungeonGame.cs)
+
 [SceneManager](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/main/SceneManager.cs)
+
 [Scene](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/main/Scene.cs)
 
 
