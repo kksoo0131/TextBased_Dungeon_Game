@@ -32,7 +32,6 @@ namespace TextBased_Dungeon_Game
         //Type 리플렉션을 사용할때 인터페이스로는 형변환이 불가능하기 때문에
         //인스턴스를 생성할수 있는 클래스로 변경하고 메서드를 가상메서드로 선언
         string WrongInputText = "잘못된 입력입니다";
-        public Scene(SceneType _type) { Type = _type; }
         SceneType Type { get; set; }
         public virtual int DrawScene() { return 0; }
         public virtual int InputKey(int[] options)
@@ -54,7 +53,6 @@ namespace TextBased_Dungeon_Game
     }
     class StartScene : Scene
     {
-        public StartScene(SceneType _type) : base(_type) { }
         int[] options = { 1, 2, 3, 4, 5 };
         
         public override int DrawScene()
@@ -72,7 +70,6 @@ namespace TextBased_Dungeon_Game
     }
     class StatusScene : Scene
     {
-        public StatusScene(SceneType _type) : base(_type) { }
         int[] options = { 0 };
 
         public override int DrawScene()
@@ -93,7 +90,6 @@ namespace TextBased_Dungeon_Game
     }
     class InventoryScene : Scene
     {
-        public InventoryScene(SceneType _type) : base(_type) { }
 
         int[] options = { 0, 1, 2, 3, 4, 5};
 
@@ -132,7 +128,6 @@ namespace TextBased_Dungeon_Game
     }
     class EquipmentScene : Scene
     {
-        public EquipmentScene(SceneType _type) : base(_type) { }
 
         int[] options = { 0 };
 
@@ -170,7 +165,6 @@ namespace TextBased_Dungeon_Game
     }
     class ShopScene : Scene
     {
-        public ShopScene(SceneType _type) : base(_type) { }
         int[] options = { 0, 1, 2};
 
         public override int DrawScene()
@@ -199,7 +193,6 @@ namespace TextBased_Dungeon_Game
     }
     class BuyScene : Scene
     {
-        public BuyScene(SceneType _type) : base(_type) { }
 
         int[] options = { 0 };
 
@@ -241,7 +234,6 @@ namespace TextBased_Dungeon_Game
     }
     class SellScene : Scene
     {
-        public SellScene(SceneType _type) : base(_type) { }
 
         int[] options = { 0 };
 
@@ -278,7 +270,6 @@ namespace TextBased_Dungeon_Game
     }
     class DungeonEnterScene : Scene
     {
-        public DungeonEnterScene(SceneType _type) : base(_type) { }
         int[] options = { 0, 1, 2, 3};
 
         public override int DrawScene()
@@ -309,7 +300,6 @@ namespace TextBased_Dungeon_Game
     }
     class DungeonClearScene : Scene
     {
-        public DungeonClearScene(SceneType _type) : base(_type) { }
         int[] options = { 0 };
 
         public override int DrawScene()
@@ -328,7 +318,6 @@ namespace TextBased_Dungeon_Game
     }
     class DungeonFailScene : Scene
     {
-        public DungeonFailScene(SceneType _type) : base(_type) { }
         int[] options = { 0 };
 
         public override int DrawScene()
@@ -347,7 +336,6 @@ namespace TextBased_Dungeon_Game
     }
     class RestScene : Scene
     {
-        public RestScene(SceneType _type) : base(_type) { }
         int[] options = { 0, 1 };
 
         public override int DrawScene()
