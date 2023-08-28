@@ -10,6 +10,7 @@ namespace TextBased_Dungeon_Game
         public static DungeonGame Instance;
         public static Warrior player;
         public static Shop shop;
+        public static Dungeon dungeon;
 
         public static Action message;
         public DungeonGame()
@@ -23,6 +24,7 @@ namespace TextBased_Dungeon_Game
         {
             Console.SetWindowSize(100, 40);
             sceneManager = new SceneManager();
+            dungeon = new Dungeon();
             Read();
         }
         public void GameStart()

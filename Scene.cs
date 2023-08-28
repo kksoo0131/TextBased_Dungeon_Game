@@ -251,7 +251,7 @@ namespace TextBased_Dungeon_Game
     }
     class DungeonEnterScene : Scene
     {
-        int[] options = { 0, 1, 2, 3};
+        int[] options = { 0, 1, 2, 3, 4};
 
         public override int DrawScene()
         {
@@ -268,6 +268,8 @@ namespace TextBased_Dungeon_Game
                     return DungeonGame.Instance.EnterDungeon(2);
                 case 3:
                     return DungeonGame.Instance.EnterDungeon(3);
+                case 4:
+                    return (int)SceneType.BattleScene;
                 default:
                     return (int)SceneType.StartScene;
             }
@@ -372,11 +374,13 @@ namespace TextBased_Dungeon_Game
             Console.WriteLine(MakeText());
             DungeonGame.PrintMessage();
 
-            switch (InputKey(options))
+            int key = InputKey(options);
+            switch (key)
             {
-                case 1:
-                    return StartBattle();
+                case 0:
+                    return (int)SceneType.BattleScene;
                 default:
+                    DungeonGame.player.AttackMonstser(DungeonGame.dungeon.monsterList[key - 1]);
                     return AttackResult();
                     // 몬스터 선택에 따른 결과 출력
 
@@ -384,29 +388,36 @@ namespace TextBased_Dungeon_Game
         }
 
         public int AttackResult()
-        {
+        { 
+            // 플레이어가 몬스터 번호를 입력하면
+            // 몬스터 리스트의 해당 인덱스에 있는 몬스터가
+            // 플레이어가 주는 데미지를 받음
             options = new int[] { 0 };
             Console.Clear();
-            Console.WriteLine(MakeText());
+            Console.WriteLine($"Battle!!\n\n");
             DungeonGame.PrintMessage();
+            Console.WriteLine("\n\n0. 다음");
 
             switch (InputKey(options))
             {
-                case 0:
-                    return 0;// EnemyPhase 실행
                 default:
-                    return 0;
+                    return EnemyPhase();
             }
+        }
+
+        public int EnemyPhase()
+        {
+            //앞 인덱스의 몬스터부터 공격함 마지막 인덱스의 몬스터가 공격하면 플레이어의 차례가됨
         }
 
         public string MakeText()
         {
-            return $"Battle!!\n\n\n\n\n[내정보]\n{DungeonGame.player.PlayerInfo()}\n\n1. 공격\n\n원하시는 행동을 입력해주세요.";
+            return $"Battle!!\n\n{DungeonGame.dungeon.MonsterListInfo()}\n\n[내정보]\n\n{DungeonGame.player.PlayerInfo()}\n\n1. 공격\n\n원하시는 행동을 입력해주세요.";
         }
 
         public string MakeBattleText()
         {
-            return $"Battle!!\n\n\n\n\n[내정보]\n{DungeonGame.player.PlayerInfo()}\n\n0. 취소\n\n원하시는 행동을 입력해주세요.";
+            return $"Battle!!\n\n{DungeonGame.dungeon.MonsterSelectInfo()}\n\n[내정보]\n\n{DungeonGame.player.PlayerInfo()}\n\n0. 취소\n\n원하시는 행동을 입력해주세요.";
         }
     }
 }
