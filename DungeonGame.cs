@@ -67,7 +67,7 @@ namespace TextBased_Dungeon_Game
                     // 스트림을 역직렬화해서 player에 정보를 넣어준다.
                 }
             }
-            catch (SerializationException)
+            catch (FileNotFoundException)
             {
                 player = new Warrior();
             }
@@ -81,13 +81,12 @@ namespace TextBased_Dungeon_Game
                     // 스트림을 역직렬화해서 player에 정보를 넣어준다.
                 }
             }
-            catch (SerializationException)
+            catch (FileNotFoundException)
             {
                 shop = new Shop();
             }
 
         }
-
         static public void PrintMessage()
         {
             if (message != null)
