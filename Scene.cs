@@ -45,10 +45,6 @@ namespace TextBased_Dungeon_Game
 
             return input;
         }
-        static void WriteLine(string str)
-        {
-            Console.SetCursorPosition(50, 20);
-        }
 
     }
     class StartScene : Scene
@@ -251,7 +247,7 @@ namespace TextBased_Dungeon_Game
     }
     class DungeonEnterScene : Scene
     {
-        int[] options = { 0, 1, 2, 3, 4};
+        int[] options = { 0, 1};
 
         public override int DrawScene()
         {
@@ -263,12 +259,6 @@ namespace TextBased_Dungeon_Game
                 case 0:
                     return (int)SceneType.StartScene;
                 case 1:
-                    return DungeonGame.Instance.EnterDungeon(1);
-                case 2:
-                    return DungeonGame.Instance.EnterDungeon(2);
-                case 3:
-                    return DungeonGame.Instance.EnterDungeon(3);
-                case 4:
                     return (int)SceneType.BattleScene;
                 default:
                     return (int)SceneType.StartScene;
@@ -367,14 +357,14 @@ namespace TextBased_Dungeon_Game
             // 플레이어가 몬스터 번호를 입력하면
             // 몬스터 리스트의 해당 인덱스에 있는 몬스터가
             // 플레이어가 주는 데미지를 받음
-            options = new int[DungeonGame.shop.Count() + 1];
+            options = new int[DungeonGame.dungeon.Count() + 1];
             options[0] = 0;
-            for (int i = 1; i <= DungeonGame.shop.Count(); i++)
+            for (int i = 1; i <= DungeonGame.dungeon.Count(); i++)
             {
                 options[i] = i;
             }
             Console.Clear();
-            Console.WriteLine(MakeText());
+            Console.WriteLine(MakeBattleText());
             DungeonGame.PrintMessage();
 
             int key = InputKey(options);
@@ -383,7 +373,13 @@ namespace TextBased_Dungeon_Game
                 case 0:
                     return (int)SceneType.BattleScene;
                 default:
-                    DungeonGame.player.AttackUnit(DungeonGame.dungeon.monsterList[key - 1]);
+                    Unit unit = DungeonGame.dungeon.GetUnit(key - 1);
+                    if (unit.IsDead == true)
+                    {
+                        DungeonGame.message += () => Console.WriteLine("이미 죽은 몬스터 입니다.");
+                        return PlayerPhase();
+                    }
+                    DungeonGame.player.AttackUnit(unit);
                     return AttackResult();
                     // 몬스터 선택에 따른 결과 출력
 
@@ -402,7 +398,7 @@ namespace TextBased_Dungeon_Game
             switch (InputKey(options))
             {
                 default:
-                    return MonsterPhase(0);
+                    return DungeonGame.dungeon.DungeonClear() ? BattleResult(true) : MonsterPhase(0);
             }
         }
 
@@ -410,20 +406,57 @@ namespace TextBased_Dungeon_Game
         {
             options = new int[] { 0 };
             Console.Clear();
+            
+            while (i < DungeonGame.dungeon.Count() && DungeonGame.dungeon.GetUnit(i).IsDead )
+            {
+                i++;
+            }
+
+            if (i >= DungeonGame.dungeon.Count())
+            {
+                return BattleResult(true);
+            }
+
             Console.WriteLine($"Battle!!\n\n");
-            DungeonGame.dungeon.monsterList[i].AttackUnit(DungeonGame.player);
+            DungeonGame.dungeon.GetUnit(i).AttackUnit(DungeonGame.player);
             DungeonGame.PrintMessage();
+
+            if(DungeonGame.player.Health <= 0)
+            {
+                return BattleResult(false);
+            }
             Console.WriteLine("\n\n0. 다음");
 
             switch (InputKey(options))
             {
                 default:
-                    return ++i < DungeonGame.dungeon.monsterList.Count ? MonsterPhase(i) : PlayerPhase();
+                    return ++i < DungeonGame.dungeon.Count() ? MonsterPhase(i) : PlayerPhase();
             }
         }
 
+        public int BattleResult(bool _result)
+        {
+            options = new int[] { 0 };
+            Console.Clear();
 
+            if (_result)
+            {
+                Console.WriteLine(MakeVictoryText());
+            }
+            else
+            {
+                Console.WriteLine(MakeLoseText());
+            }
 
+            switch (InputKey(options))
+            {
+                case 0:
+                    return (int)SceneType.StartScene;
+                default:
+                    return (int)SceneType.StartScene;
+            }
+
+        }
         public string MakeText()
         {
             return $"Battle!!\n\n{DungeonGame.dungeon.MonsterListInfo()}\n\n[내정보]\n\n{DungeonGame.player.PlayerInfo()}\n\n1. 공격\n\n원하시는 행동을 입력해주세요.";
@@ -432,6 +465,16 @@ namespace TextBased_Dungeon_Game
         public string MakeBattleText()
         {
             return $"Battle!!\n\n{DungeonGame.dungeon.MonsterSelectInfo()}\n\n[내정보]\n\n{DungeonGame.player.PlayerInfo()}\n\n0. 취소\n\n원하시는 행동을 입력해주세요.";
+        }
+
+        public string MakeVictoryText()
+        {
+            return $"Baltte!! - Result\n\nVictory\n\n던전에서 몬스터 {DungeonGame.dungeon.Count()}마리를 잡았습니다.\n\n{DungeonGame.player.PlayerInfo()}\n\n0. 다음";
+        }
+
+        public string MakeLoseText()
+        {
+            return $"Baltte!! - Result\n\nLose\n\n{DungeonGame.player.PlayerInfo()}\n\n0. 다음";
         }
     }
 }

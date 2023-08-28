@@ -98,7 +98,7 @@ namespace TextBased_Dungeon_Game
             }
         }
 
-        public int EnterDungeon(int i)
+      /*  public int EnterDungeon(int i)
         {
             int dungeonDefense;
             Random dice = new Random();
@@ -159,7 +159,7 @@ namespace TextBased_Dungeon_Game
             player.Defense += 1;
 
             return (int)SceneType.DungeonClearScene;
-        }
+        }*/
 
  
     }
