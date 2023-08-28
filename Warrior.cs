@@ -16,7 +16,7 @@ namespace TextBased_Dungeon_Game
             Health = 100;
             Gold = 1500;
             Exp = 0;
-            NeededExp = 10;
+            NeededExp = CalculateExpNeeded();
             Inventory.AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
             Inventory.AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 5));
         }
@@ -169,9 +169,9 @@ namespace TextBased_Dungeon_Game
             Health = MaxHealth;
         }
 
-        private int CalculateExpNeeded() // 레벨업에 필요한 경험치
+        private int CalculateExpNeeded() // 레벨업에 필요한 경험치 계산식
         {
-            return Level * 5;
+            return Level * 10;
         }
 
     }
