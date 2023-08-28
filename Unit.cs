@@ -38,11 +38,11 @@ namespace TextBased_Dungeon_Game
         {
             Random rand = new Random();
 
-            float errorFloat = (Attack + AddAttack) * 0.1f;
+            float errorFloat = (Attack ) * 0.1f;
             int errorInt = (int)errorFloat;
             int errorDamage = errorInt < errorFloat ? errorInt + 1 : errorInt;
 
-            int damage = rand.Next(Attack + AddAttack - errorDamage, Attack + AddAttack + errorDamage);
+            int damage = rand.Next(Attack  - errorDamage, Attack  + errorDamage);
 
             DungeonGame.message += () => Console.WriteLine($"{Name}의 공격!");
 

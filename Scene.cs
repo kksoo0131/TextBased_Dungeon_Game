@@ -401,14 +401,14 @@ namespace TextBased_Dungeon_Game
             switch (InputKey(options))
             {
                 default:
-                    return EnemyPhase();
+                    return 0;
             }
         }
 
-        public int EnemyPhase()
+      /*  public int EnemyPhase()
         {
             //앞 인덱스의 몬스터부터 공격함 마지막 인덱스의 몬스터가 공격하면 플레이어의 차례가됨
-        }
+        }*/
 
         public string MakeText()
         {
