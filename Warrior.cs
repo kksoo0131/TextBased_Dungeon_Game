@@ -141,7 +141,7 @@ namespace TextBased_Dungeon_Game
             }
         }
 
-        public void AttackMonstser(Unit m)
+        public new void AttackUnit(Unit m)
         {
             Random rand = new Random();
 

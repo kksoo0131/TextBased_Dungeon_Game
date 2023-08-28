@@ -8,8 +8,8 @@ namespace TextBased_Dungeon_Game
 
         public SceneManager sceneManager;
         public static DungeonGame Instance;
-        public static Warrior player;
-        public static Shop shop;
+        public Warrior player;
+        public Shop shop;
         public static Dungeon dungeon;
 
         public static Action message;
@@ -23,9 +23,9 @@ namespace TextBased_Dungeon_Game
         public void GameInit()
         {
             Console.SetWindowSize(100, 40);
-            sceneManager = new SceneManager();
             dungeon = new Dungeon();
             Read();
+            sceneManager = new SceneManager();
         }
         public void GameStart()
         {
@@ -44,7 +44,7 @@ namespace TextBased_Dungeon_Game
             using (Stream stream = new FileStream("player_info.bin", FileMode.Create, FileAccess.Write))
             {
                 // 스트림을 생성 , 파일을 생성해서 쓰기모드에 들어간다.(파일을 출력할 스트림을 생성)
-                formatter.Serialize(stream, player);
+                formatter.Serialize(stream, Instance.player);
                 // player 객체의 정보를 직렬화하여 stream에 저장한다.
             }
         }
@@ -53,7 +53,7 @@ namespace TextBased_Dungeon_Game
             IFormatter formatter = new BinaryFormatter();
             using (Stream stream = new FileStream("shop_info.bin", FileMode.Create, FileAccess.Write))
             {
-                formatter.Serialize(stream, shop);
+                formatter.Serialize(stream, Instance.shop);
             }
         }
         public void Read()
@@ -98,7 +98,7 @@ namespace TextBased_Dungeon_Game
             }
         }
 
-        public int EnterDungeon(int i)
+      /*  public int EnterDungeon(int i)
         {
             int dungeonDefense;
             Random dice = new Random();
@@ -159,7 +159,7 @@ namespace TextBased_Dungeon_Game
             player.Defense += 1;
 
             return (int)SceneType.DungeonClearScene;
-        }
+        }*/
 
  
     }

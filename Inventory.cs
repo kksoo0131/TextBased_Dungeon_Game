@@ -219,9 +219,9 @@ namespace TextBased_Dungeon_Game
                 return null;
             }
 
-            if (DungeonGame.player.Gold >= itemlist[index].Price)
+            if (DungeonGame.Instance.player.Gold >= itemlist[index].Price)
             {
-                DungeonGame.player.Gold -= itemlist[index].Price;
+                DungeonGame.Instance.player.Gold -= itemlist[index].Price;
                 itemlist[index].IsSell = true;
                 DungeonGame.message += () => Console.WriteLine($"{itemlist[index].Name}를 구매 완료했습니다.");
                 return itemlist[index];
