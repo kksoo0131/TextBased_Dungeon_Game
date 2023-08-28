@@ -7,10 +7,13 @@ namespace TextBased_Dungeon_Game
     [Serializable]
     class Warrior : Unit
     {
-        public Warrior() : base("", 1, 10, 5, 100)
+        public Warrior() : base("", 1, 10, 5, 100, 100)
         {
             Chad = "전사";
             Gold = 1500;
+            Exp = 0;
+            ExpNeeded = CalculateExpNeeded();
+            
             Inventory.AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
             Inventory.AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 5));
         }
@@ -27,6 +30,10 @@ namespace TextBased_Dungeon_Game
         public int PrevHealth { get; set; }
         public int PrevGold { get; set; }
 
+        public int Exp { get; set; } // 추가: 경험치
+
+        public int ExpNeeded { get; set; } // 추가: 다음 레벨까지 필요한 경험치
+
         public string PlayerInfo()
         {
             StringBuilder sb = new StringBuilder();
@@ -34,7 +41,8 @@ namespace TextBased_Dungeon_Game
             sb.Append($"Lv.{Level}\n{Name}({Chad})\n\n");
             sb.Append(AddAttack > 0 ? $"공격력: {Attack + AddAttack} (+{AddAttack})\n\n" : $"공격력: {Attack}\n\n");
             sb.Append(AddDefense > 0 ? $"방어력 : {Defense + AddDefense} (+{AddDefense})\n\n" : $"방어력: {Defense}\n\n");
-            sb.Append($"체력: {Health}\n\nGold: {Gold} G\n\n");
+            sb.Append($"체력: {Health} / {MaxHealth}\n\nGold: {Gold} G\n\n");
+            sb.Append($"경험치: {Exp} / {ExpNeeded}\n\n");
             return sb.ToString();
         }
 
@@ -148,6 +156,30 @@ namespace TextBased_Dungeon_Game
             m.Attacked(damage);
         }
 
+        public void GetExp(int amount)  // 경험치 얻는 메서드
+        {
+            Exp += amount;
+            if (Exp >= ExpNeeded)
+            {
+                LevelUp();
+                Exp = 0;
+            }
+        }
 
+        private void LevelUp()  // 레벨 업
+        {
+            Level++;
+            Exp -= ExpNeeded;
+            ExpNeeded = CalculateExpNeeded();
+            Attack += 1;
+            Defense += 2;
+            MaxHealth += 20;
+            Health = MaxHealth;
+        }
+
+        private int CalculateExpNeeded() // 레벨 업에 필요한 경험치
+        {
+            return Level * 10;
+        }
     }
 }
