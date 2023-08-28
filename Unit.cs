@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextBased_Dungeon_Game
 {
+    [Serializable]
     internal class Unit
     {
         public Unit(string name, int level, int attack, int defense, int health)
