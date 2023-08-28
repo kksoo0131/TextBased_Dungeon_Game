@@ -354,16 +354,19 @@ namespace TextBased_Dungeon_Game
             switch (InputKey(options))
             {
                 case 1:
-                    return StartBattle();
+                    return PlayerPhase();
                 default:
                     return (int)SceneType.BattleScene;
             }
 
         }
 
-        public int StartBattle()
+        public int PlayerPhase()
         {
             //몬스터의 수 만큼 options를 추가
+            // 플레이어가 몬스터 번호를 입력하면
+            // 몬스터 리스트의 해당 인덱스에 있는 몬스터가
+            // 플레이어가 주는 데미지를 받음
             options = new int[DungeonGame.shop.Count() + 1];
             options[0] = 0;
             for (int i = 1; i <= DungeonGame.shop.Count(); i++)
@@ -380,7 +383,7 @@ namespace TextBased_Dungeon_Game
                 case 0:
                     return (int)SceneType.BattleScene;
                 default:
-                    DungeonGame.player.AttackMonstser(DungeonGame.dungeon.monsterList[key - 1]);
+                    DungeonGame.player.AttackUnit(DungeonGame.dungeon.monsterList[key - 1]);
                     return AttackResult();
                     // 몬스터 선택에 따른 결과 출력
 
@@ -389,9 +392,7 @@ namespace TextBased_Dungeon_Game
 
         public int AttackResult()
         { 
-            // 플레이어가 몬스터 번호를 입력하면
-            // 몬스터 리스트의 해당 인덱스에 있는 몬스터가
-            // 플레이어가 주는 데미지를 받음
+            
             options = new int[] { 0 };
             Console.Clear();
             Console.WriteLine($"Battle!!\n\n");
@@ -401,14 +402,27 @@ namespace TextBased_Dungeon_Game
             switch (InputKey(options))
             {
                 default:
-                    return 0;
+                    return MonsterPhase(0);
             }
         }
 
-      /*  public int EnemyPhase()
+        public int MonsterPhase(int i)
         {
-            //앞 인덱스의 몬스터부터 공격함 마지막 인덱스의 몬스터가 공격하면 플레이어의 차례가됨
-        }*/
+            options = new int[] { 0 };
+            Console.Clear();
+            Console.WriteLine($"Battle!!\n\n");
+            DungeonGame.dungeon.monsterList[i].AttackUnit(DungeonGame.player);
+            DungeonGame.PrintMessage();
+            Console.WriteLine("\n\n0. 다음");
+
+            switch (InputKey(options))
+            {
+                default:
+                    return ++i < DungeonGame.dungeon.monsterList.Count ? MonsterPhase(i) : PlayerPhase();
+            }
+        }
+
+
 
         public string MakeText()
         {
