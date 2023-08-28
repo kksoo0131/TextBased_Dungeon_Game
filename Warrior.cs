@@ -5,15 +5,11 @@
 namespace TextBased_Dungeon_Game
 {
     [Serializable]
-    class Warrior
+    class Warrior : Unit
     {
-        public Warrior() 
-        { 
-            Level = 1;
+        public Warrior() : base("", 1, 10, 5, 100)
+        {
             Chad = "전사";
-            Attack = 10;
-            Defense = 5;
-            Health = 100;
             Gold = 1500;
             Inventory.AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
             Inventory.AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 5));
@@ -21,16 +17,12 @@ namespace TextBased_Dungeon_Game
 
 
         public Inventory Inventory = new Inventory();
-        public int Level { get; set; }
         public string Chad { get; set; }
-        public int Attack { get; set; }
-        public int Defense { get; set; }
-        public int Health { get; set; }
         public int Gold { get; set; }
         public int AddAttack { get; set; }
         public int AddDefense { get; set; }
-        public Item EquipWeapon { get; set; }
-        public Item EquipArmor { get; set; }
+        public Item? EquipWeapon { get; set; }
+        public Item? EquipArmor { get; set; }
 
         public int PrevHealth { get; set; }
         public int PrevGold { get; set; }
@@ -39,7 +31,7 @@ namespace TextBased_Dungeon_Game
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"{Level}\n\nChad({Chad})\n\n");
+            sb.Append($"Lv.{Level}\n{Name}({Chad})\n\n");
             sb.Append(AddAttack > 0 ? $"공격력: {Attack + AddAttack} (+{AddAttack})\n\n" : $"공격력: {Attack}\n\n");
             sb.Append(AddDefense > 0 ? $"방어력 : {Defense + AddDefense} (+{AddDefense})\n\n" : $"방어력: {Defense}\n\n");
             sb.Append($"체력: {Health}\n\nGold: {Gold} G\n\n");
@@ -60,7 +52,7 @@ namespace TextBased_Dungeon_Game
             {
                 if (target.Type == ItemType.Weapon)
                 {
-                    if(EquipWeapon != null)
+                    if (EquipWeapon != null)
                     {
                         EquipWeapon.IsEquip = false;
                     }
@@ -68,7 +60,7 @@ namespace TextBased_Dungeon_Game
                 }
                 else
                 {
-                    if(EquipArmor != null)
+                    if (EquipArmor != null)
                     {
                         EquipArmor.IsEquip = false;
                     }
@@ -119,16 +111,16 @@ namespace TextBased_Dungeon_Game
             {
                 EquipItem(i);
             }
-            
+
             int price = (int)(sellitem.Price * 0.85f);
             Gold += price;
             DungeonGame.message += () => Console.WriteLine($"{sellitem.Name}을 {price} G 에 판매 하였습니다.");
             Inventory.DeleteItem(sellitem);
-            
-            
+
+
         }
 
-         public void Rest()
+        public void Rest()
         {
             if (Gold >= 500)
             {
@@ -140,6 +132,22 @@ namespace TextBased_Dungeon_Game
                 DungeonGame.message += () => Console.WriteLine("Gold 가 부족합니다.");
             }
         }
-     
+
+        public void AttackMonstser(Unit m)
+        {
+            Random rand = new Random();
+
+            float errorFloat = (Attack + AddAttack) * 0.1f;
+            int errorInt = (int)errorFloat;
+            int errorDamage = errorInt < errorFloat ? errorInt + 1 : errorInt;
+
+            int damage = rand.Next(Attack + AddAttack - errorDamage, Attack + AddAttack + errorDamage);
+
+            DungeonGame.message += () => Console.WriteLine($"{Name}의 공격!");
+
+            m.Attacked(damage);
+        }
+
+
     }
 }
