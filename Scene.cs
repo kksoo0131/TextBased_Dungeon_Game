@@ -601,6 +601,8 @@ namespace TextBased_Dungeon_Game
             _player.GetExp(dungeon.Count() * 5);  // 몬스터 한 마리당 5의 경험치
             Console.WriteLine("[보상 정산]\n");
             Console.WriteLine("골드 + 300 G\n\n0. 다음");  // 유동적으로 바꿀 필요 있음.
+            _player.Gold += 300;
+
         }
 
         public string MakeLoseText()
