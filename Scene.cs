@@ -59,8 +59,100 @@ namespace TextBased_Dungeon_Game
 
             return array;
         }
+        public void DrawUI()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < Console.WindowHeight; i++)
+            {
+                Console.SetCursorPosition(0, i);
+                Console.WriteLine("l");
+                Console.SetCursorPosition(33, i);
+                Console.WriteLine("l");
+                Console.SetCursorPosition(Console.WindowWidth-1, i);
+                Console.WriteLine("l");
+            }
+
+            for (int i =0;i< Console.WindowWidth/2; i++)
+            {
+                sb.Append("ㅡ");
+            }
+            Console.SetCursorPosition(0, 0);
+            Console.Write(sb.ToString());
+            Console.SetCursorPosition(0, Console.WindowHeight - 16);
+            Console.Write(sb.ToString());
+            Console.SetCursorPosition(0, Console.WindowHeight -1);
+            Console.Write(sb.ToString());
+
+            
+        }
+        public void WriteTopMessage(string str)
+        {
+            string[] strArray = str.Split('\n');
+            int xPos = 3;
+            int yPos = 3;
+            
+            for(int i =0; i< strArray.Length; i++)
+            {
+                Console.SetCursorPosition(xPos, yPos++);
+                Console.WriteLine(strArray[i]);
+            }
+        }
+        public void WriteSelectMessage(string str)
+        {
+            string[] strArray = str.Split('\n');
+            int xPos = 3;
+            int yPos = Console.WindowHeight - 16;
+
+            for (int i = 0; i < strArray.Length; i++)
+            {
+                Console.SetCursorPosition(xPos, yPos+=2);
+                Console.WriteLine(strArray[i]);
+            }
+        }
+        public void WriteLeftMessage(string str)
+        {
+            string[] strArray = str.Split('\n');
+            int xPos = 3;
+            int yPos = 1;
+
+            for (int i = 0; i < strArray.Length; i++)
+            {
+                Console.SetCursorPosition(xPos, yPos += 1);
+                Console.WriteLine(strArray[i]);
+            }
+        }
+        public void WriteMessage(string str)
+        {
+            str += DungeonGame.Instance.PrintMessage();
+            string[] strArray = str.Split('\n');
+            int xPos = Console.WindowWidth / 2 - 23;
+            int yPos = Console.WindowHeight - 16;
+
+            for (int i = 0; i < strArray.Length; i++)
+            {
+                Console.SetCursorPosition(xPos, yPos+=2);
+                Console.WriteLine(strArray[i]);
+            }
+            Console.SetCursorPosition(xPos, yPos+=2);
+        }
+        public void WriteRightMessage(string str)
+        {
+            string[] strArray = str.Split('\n');
+            int xPos = Console.WindowWidth / 2 - 23;
+            int yPos = 1;
+
+            for (int i = 0; i < strArray.Length; i++)
+            {
+                Console.SetCursorPosition(xPos, yPos += 2);
+                Console.WriteLine(strArray[i]);
+            }
+        }
+
 
     }
+
+
     class StartScene : Scene
     {
         public StartScene() : base() { }    
@@ -68,12 +160,14 @@ namespace TextBased_Dungeon_Game
         {
             options = new int[] { 1, 2, 3, 4, 5 };
             Console.Clear();
-            Console.WriteLine(MakeText());
+            DrawUI();
+            WriteText();
             return InputKey(options);
         }
-        public string MakeText()
+        public void WriteText()
         {
-            return "스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다. \n\n1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기\n\n원하시는 행동을 입력해주세요.";
+            WriteSelectMessage("1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기");
+            WriteMessage("스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.\n원하시는 행동을 입력해주세요.");
         }
 
     }
@@ -84,17 +178,16 @@ namespace TextBased_Dungeon_Game
         {
             options = new int[] { 0 };
             Console.Clear();
-            Console.WriteLine(MakeText());
+            DrawUI();
+            WriteText();
             return InputKey(options);
         }
 
-        public string MakeText()
+        public void WriteText()
         {
-           
-            return $"상태 보기\n캐릭터의 정보가 표시됩니다.\n\n{DungeonGame.Instance.player.PlayerInfo()}0. 나가기\n\n원하시는 행동을 입력해주세요";
-            // 버그 해결
-            // 괄호 안에 DungeonGame.player.PlayerInfo를 넣으면 델리게이트에 메서드 이름을 추가할때의 형식으로 메서드 이름이 들어가게됨
-            // DungeonGame.player.PlayerInfo() 는 메서드의 리턴값이 들어가게된다.
+            WriteSelectMessage("0. 나가기");
+            WriteLeftMessage($"{DungeonGame.Instance.player.PlayerInfo()}");
+            WriteMessage("상태 보기\n캐릭터의 정보가 표시됩니다\n원하시는 행동을 입력해주세요.");
         }
     }
     class InventoryScene : Scene
@@ -105,7 +198,8 @@ namespace TextBased_Dungeon_Game
             _inventory = _player.Inventory;
             options = new int[] { 0, 1, 2, 3, 4, 5};
             Console.Clear();
-            Console.WriteLine(MakeText());
+            DrawUI();
+            WriteText();
 
             switch (InputKey(options))
             {
@@ -133,7 +227,7 @@ namespace TextBased_Dungeon_Game
         public int EquipmentInfo()
         {
             Console.Clear();
-            Console.WriteLine(MakeEquipText());
+            WriteEquipText();
 
             // options를 아이템 Count갯수만큼 추가해야됨
             options = new int[_inventory.Count() + 1];
@@ -157,14 +251,18 @@ namespace TextBased_Dungeon_Game
             }
         }
 
-        public string MakeText()
+        public void WriteText()
         {
-            return $"인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{_inventory.MakeItemList()}\n\n1. 장착 관리\n2. 이름\n3. 장착순\n4. 공격력\n5. 방어력\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            WriteLeftMessage($"{_inventory.MakeItemList()}");
+            WriteSelectMessage("1. 장착 관리\n2. 이름\n3. 장착순\n4. 공격력\n5. 방어력\n0. 나가기");
+            WriteMessage("인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n원하시는 행동을 입력해주세요.");
         }
 
-        public string MakeEquipText()
+        public void WriteEquipText()
         {
-            return $"인벤토리 - 장착 관리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{_inventory.MakeEquipList()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            WriteLeftMessage($"{_inventory.MakeEquipList()}");
+            WriteSelectMessage("0. 나가기");
+            WriteMessage("인벤토리 - 장착 관리\n보유 중인 아이템을 관리할 수 있습니다.\n원하시는 행동을 입력해주세요.");
         }
     }
     class ShopScene : Scene
@@ -175,7 +273,8 @@ namespace TextBased_Dungeon_Game
             _shop = DungeonGame.Instance.shop;
             options = new int[] { 0, 1, 2};
             Console.Clear();
-            Console.WriteLine(MakeText());
+            DrawUI();
+            WriteText();
 
             switch (InputKey(options))
             {
@@ -192,7 +291,7 @@ namespace TextBased_Dungeon_Game
         public int BuyItem()
         {
             Console.Clear();
-            Console.WriteLine(MakeBuyText());
+            WriteBuyText();
             DungeonGame.Instance.PrintMessage();
             // options를 아이템 Count갯수만큼 추가해야됨
             options = new int[_shop.Count() + 1];
@@ -222,7 +321,7 @@ namespace TextBased_Dungeon_Game
         public int SellItem()
         {
             Console.Clear();
-            Console.WriteLine(MakeSellText());
+            WriteSellText();
             DungeonGame.Instance.PrintMessage();
 
             // options를 아이템 Count갯수만큼 추가해야됨
@@ -244,18 +343,28 @@ namespace TextBased_Dungeon_Game
                     return SellItem();
             }
         }
-        public string MakeText()
+
+        public void WriteText()
         {
-            return $"상점\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{_player.Gold} G\n\n{_shop.MakeItemList()}\n\n1. 아이템 구매\n2. 아이템 판매\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            WriteLeftMessage($"{_shop.MakeItemList()}");
+            WriteSelectMessage("1. 아이템 구매\n2. 아이템 판매\n0. 나가기");
+            WriteMessage($"상점\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
         }
-        public string MakeBuyText()
+
+        public void WriteBuyText()
         {
-            return $"상점 - 아이템 구매\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{_player.Gold} G\n\n{_shop.MakeShopList()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            WriteLeftMessage($"{_shop.MakeShopList()}");
+            WriteSelectMessage("0. 나가기");
+            WriteMessage($"상점 - 아이템 구매\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
         }
-        public string MakeSellText()
+
+        public void WriteSellText()
         {
-            return $"상점 - 아이템 판매\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{_player.Gold} G\n\n{_player.Inventory.MakeSellList()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            WriteLeftMessage($"{_player.Inventory.MakeSellList()}");
+            WriteSelectMessage("0. 나가기");
+            WriteMessage($"상점 - 아이템 판매\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
         }
+
     }
     class DungeonEnterScene : Scene
     {
@@ -264,7 +373,8 @@ namespace TextBased_Dungeon_Game
         {
             options = new int[] { 0, 1};
             Console.Clear();
-            Console.WriteLine(MakeText());
+            DrawUI();
+            WriteText();
 
             switch (InputKey(options))
             {
@@ -276,49 +386,15 @@ namespace TextBased_Dungeon_Game
                     return (int)SceneType.StartScene;
             }
         }
-        public string MakeText()
+        public void WriteText()
         {
-            return "던전입장\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n\n1. 쉬운 던전      | 방어력 5 이상 권장\n0. 나가기\n\n원하시는 행동을 입력해주세요";
-
+            WriteLeftMessage($"1. 쉬운 던전      | 방어력 5 이상 권장");
+            WriteSelectMessage("0. 나가기");
+            WriteMessage("던전입장\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n원하시는 행동을 입력해주세요");
         }
+
+     
     }
-    /*class DungeonClearScene : Scene
-    {
-        public override int DrawScene()
-        {
-            options = new int[] { 0 };
-            Console.Clear();
-            Console.WriteLine(MakeText());
-            DungeonGame.PlayerSave();
-            return InputKey(options);
-        }
-
-        public string MakeText()
-        {
-
-            return $"던전 클리어\n축하합니다!!\n던전을 클리어 하였습니다.\n\n[탐험 결과]\n체력 {_player.PrevHealth} -> {_player.Health}\nGold {_player.PrevGold} G -> {_player.Gold} G\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
-
-        }
-
-    }
-    class DungeonFailScene : Scene
-    {
-        int[] options = { 0 };
-
-        public override int DrawScene()
-        {
-            Console.Clear();
-            Console.WriteLine(MakeText());
-            DungeonGame.PlayerSave();
-            return InputKey(options);
-        }
-
-        public string MakeText()
-        {
-            return $"던전 실패\n방어력이 부족해 던전에서 실패했습니다.\n방어력을 높혀 다시 도전해 주세요.\n\n[탐험 결과]\n체력 {_player.PrevHealth} -> {_player.Health}\nGold {_player.PrevGold} G -> {_player.Gold} G\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
-        }
-
-    }*/
     class RestScene : Scene
     {
         public RestScene() : base() { }
@@ -326,7 +402,8 @@ namespace TextBased_Dungeon_Game
         {
             options = new int[] { 0, 1 };
             Console.Clear();
-            Console.WriteLine(MakeText());
+            DrawUI();
+            WriteText();
             DungeonGame.Instance.PrintMessage();
             DungeonGame.Instance.PlayerSave();
             if (InputKey(options) == 1)
@@ -337,10 +414,13 @@ namespace TextBased_Dungeon_Game
             return (int)SceneType.StartScene;
         }
 
-        public string MakeText()
+        public void WriteText()
         {
-            return $"휴식하기\n500 G 를 내면 체력을 회복할 수 있습니다. (보유 골드 : {_player.Gold} G\n\n1. 휴식하기\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            WriteSelectMessage("1.휴식하기\n0.나가기");
+            WriteMessage($"휴식하기\n500 G 를 내면 체력을 회복할 수 있습니다.\n보유 골드 : {_player.Gold} G\n원하시는 행동을 입력해주세요.");
         }
+
+
     }
     class PlayerPhaseScene : Scene 
     {
@@ -355,7 +435,8 @@ namespace TextBased_Dungeon_Game
         public int PlayerPhase()
         {
             Console.Clear();
-            Console.WriteLine(MakeText());
+            DrawUI();
+            WriteText();
             DungeonGame.Instance.PrintMessage();
 
             options = new int[] { 1, 2 };
@@ -371,7 +452,6 @@ namespace TextBased_Dungeon_Game
 
         }
        
-      
         public int PlayerPhaseAttack()
         {
             //몬스터의 수 만큼 options를 추가
@@ -380,7 +460,8 @@ namespace TextBased_Dungeon_Game
             // 플레이어가 주는 데미지를 받음
 
             Console.Clear();
-            Console.WriteLine(MakeBattleText());
+            DrawUI();
+            WriteBattleText();
             DungeonGame.Instance.PrintMessage();
 
             int key = InputKey(MakeOption(dungeon.Count()));
@@ -392,7 +473,8 @@ namespace TextBased_Dungeon_Game
                     Unit unit = dungeon.GetUnit(key - 1);
                     if (unit.IsDead == true)
                     {
-                        DungeonGame.Instance.message += () => Console.WriteLine("이미 죽은 몬스터 입니다.");
+
+                        DungeonGame.Instance.message.Append("이미 죽은 몬스터 입니다.\n");
                         return PlayerPhaseAttack();
                     }
                     _player.AttackUnit(unit);
@@ -405,7 +487,8 @@ namespace TextBased_Dungeon_Game
         public int PlayerSelectSkill()
         {
             Console.Clear();
-            Console.WriteLine(MakeSkillText());
+            DrawUI();
+            WriteSkillText();
             DungeonGame.Instance.PrintMessage();
 
             int key = InputKey(MakeOption(_player.SkillCount));
@@ -416,7 +499,7 @@ namespace TextBased_Dungeon_Game
                 default:
                     if (_player.MP < _player.skillList[key - 1].mp)
                     {
-                        DungeonGame.Instance.message += (() => Console.WriteLine("MP가 부족합니다!"));
+                        DungeonGame.Instance.message.Append("MP가 부족합니다!\n");
                         return PlayerSelectSkill();
                     }
                     if (_player.skillList[key-1].type == SkillType.Random)
@@ -442,7 +525,8 @@ namespace TextBased_Dungeon_Game
         public int SelectSkillTarget(int index, int count)
         {
             Console.Clear();
-            Console.WriteLine(MakeSkillTargetText());
+            DrawUI();
+            WriteSkillTargetText();
             DungeonGame.Instance.PrintMessage();
 
             int key = InputKey(MakeOption(dungeon.Count()));
@@ -454,12 +538,12 @@ namespace TextBased_Dungeon_Game
                     Unit _unit = dungeon.GetUnit(key-1);
                     if (_player.targetList.Contains(_unit))
                     {
-                        DungeonGame.Instance.message += () => Console.WriteLine("이미 선택한 대상입니다.");
+                        DungeonGame.Instance.message.Append("이미 선택한 대상입니다.\n");
                         return SelectSkillTarget(index, count);
                     }
                     else if (_unit.IsDead == true)
                     {
-                        DungeonGame.Instance.message += () => Console.WriteLine("이미 죽은 몬스터 입니다.");
+                        DungeonGame.Instance.message.Append("이미 죽은 몬스터 입니다.\n");
                         return PlayerPhaseAttack();
                     }
 
@@ -478,9 +562,10 @@ namespace TextBased_Dungeon_Game
             
             options = new int[] { 0 };
             Console.Clear();
-            Console.WriteLine($"Battle!!\n\n");
-            DungeonGame.Instance.PrintMessage();
-            Console.WriteLine("\n\n0. 다음");
+            DrawUI();
+            WriteAttackResultText();
+
+
 
             switch (InputKey(options))
             {
@@ -489,26 +574,43 @@ namespace TextBased_Dungeon_Game
             }
         }
 
-        
-        
-        public string MakeText()
+        public void WriteText()
         {
-            return $"Battle!!\n\n{dungeon.MonsterListInfo()}\n\n[내정보]\n\n{_player.PlayerInfo()}\n\n1. 공격\n\n2. 스킬\n\n원하시는 행동을 입력해주세요.";
+            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteSelectMessage("1. 공격\n\n2. 스킬");
+            WriteRightMessage($"{dungeon.MonsterListInfo()}");
+            WriteMessage("Battle!!\n");
         }
 
-        public string MakeBattleText()
+        public void WriteAttackResultText()
         {
-            return $"Battle!!\n\n{dungeon.MonsterSelectInfo()}\n\n[내정보]\n\n{_player.PlayerInfo()}\n\n0. 취소\n\n원하시는 행동을 입력해주세요.";
+            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteSelectMessage("0. 다음");
+            WriteRightMessage($"{dungeon.MonsterSelectInfo()}");
+            WriteMessage("Battle!!\n");
+        }
+        public void WriteBattleText()
+        {
+            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteSelectMessage("0. 취소");
+            WriteRightMessage($"{dungeon.MonsterSelectInfo()}");
+            WriteMessage("Battle!!\n");
         }
 
-        public string MakeSkillText()
+        public void WriteSkillText()
         {
-            return $"Battle!!\n\n{dungeon.MonsterListInfo()}\n\n[내정보]\n\n{_player.PlayerInfo()}\n\n{_player.PlayerSkillInfo()}0.취소\n\n원하시는 행동을 입력해주세요.";
+            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteSelectMessage($"{_player.PlayerSkillInfo()}0.취소");
+            WriteRightMessage($"{dungeon.MonsterListInfo()}");
+            WriteMessage("Battle!!\n");
         }
 
-        public string MakeSkillTargetText()
+        public void WriteSkillTargetText()
         {
-            return $"Battle!!\n\n{dungeon.MonsterSelectInfo()}\n\n[내정보]\n\n{_player.PlayerInfo()}\n\n0.취소\n\n원하시는 행동을 입력해주세요.";
+            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteSelectMessage($"0.취소");
+            WriteRightMessage($"{dungeon.MonsterSelectInfo()}");
+            WriteMessage("Battle!!\n");
         }
 
     }
@@ -540,10 +642,9 @@ namespace TextBased_Dungeon_Game
             if(i < dungeon.Count()) 
             {
                 Console.Clear();
-                Console.WriteLine($"Battle!!\n\n");
+                DrawUI();
                 dungeon.GetUnit(i).AttackUnit(_player);
-                DungeonGame.Instance.PrintMessage();
-                Console.WriteLine("\n\n0. 다음");
+                WriteText();
 
                 switch (InputKey(options))
                 {
@@ -559,8 +660,15 @@ namespace TextBased_Dungeon_Game
 
             return (int)SceneType.PlayerPhaseScene;
             
+        }
 
-            
+  
+        public void WriteText()
+        {
+            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteSelectMessage("0. 다음");
+            WriteRightMessage($"{dungeon.MonsterListInfo()}");
+            WriteMessage("Battle!!\n");
         }
     }
     class BattleResultScene : Scene
@@ -581,11 +689,12 @@ namespace TextBased_Dungeon_Game
 
             if (_result)
             {
-                MakeVictoryText();
+                WriteVictoryText();
+                _player.GetExp(dungeon.Count() * 5);  // 몬스터 한 마리당 5의 경험치
             }
             else
             {
-                Console.WriteLine(MakeLoseText());
+                WriteLoseText();
             }
 
             dungeon.Clear();
@@ -600,20 +709,19 @@ namespace TextBased_Dungeon_Game
 
         }
 
-        public void MakeVictoryText()
+        public void WriteVictoryText()
         {
-
-            Console.WriteLine("[던전 결과]\n");
-            Console.WriteLine($"몬스터 {dungeon.Count()}마리를 잡았습니다! 경험치 {dungeon.Count() * 5} 증가!\n\n");
-            _player.GetExp(dungeon.Count() * 5);  // 몬스터 한 마리당 5의 경험치
-            Console.WriteLine("[보상 정산]\n");
-            Console.WriteLine("골드 + 300 G\n\n0. 다음");  // 유동적으로 바꿀 필요 있음.
-            DungeonGame.Instance.dungeon.Clear();
+            WriteLeftMessage($"[던전 결과]\n몬스터 {dungeon.Count()}마리를 잡았습니다! 경험치 {dungeon.Count() * 5} 증가!\n");
+            WriteSelectMessage("0. 다음");
+            WriteMessage("[보상 정산]\n골드 + 300 G\n원하시는 행동을 입력해주세요");
         }
 
-        public string MakeLoseText()
+        public void WriteLoseText()
         {
-            return $"Baltte!! - Result\n\nLose\n\n{_player.PlayerInfo()}\n\n0. 다음";
+            WriteLeftMessage($"{_player.PlayerInfo()}");
+            WriteSelectMessage("0. 다음");
+            WriteRightMessage($"Baltte!! - Result\nLose");
+            WriteMessage("[보상 정산]\n골드 + 300 G\n원하시는 행동을 입력해주세요");
         }
     }
 }

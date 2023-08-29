@@ -90,10 +90,10 @@ namespace TextBased_Dungeon_Game
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"{Name}의 공격!\n Lv.{_unit.Level} {_unit.Name}을 공격했습니다. [데미지 : {damage}]");
+            sb.Append($"{Name}의 공격!\n Lv.{_unit.Level} {_unit.Name}을 공격했습니다. [데미지 : {damage}]\n");
             sb.Append(result ? $" - 치명타 공격!!\n" : "\n");
 
-            DungeonGame.Instance.message += () => Console.WriteLine(sb.ToString());
+            DungeonGame.Instance.message.Append(sb);
 
             _unit.Attacked(damage);
 
@@ -104,7 +104,7 @@ namespace TextBased_Dungeon_Game
 
             if (IsAvoid())
             {
-                sb.Append($"Lv.{Level} {Name} 를 공격했지만 아무일도 일어나지 않았습니다.");
+                sb.Append($"Lv.{Level} {Name} 를 공격했지만 아무일도 일어나지 않았습니다.\n");
             }
             else
             {
@@ -113,22 +113,22 @@ namespace TextBased_Dungeon_Game
 
                 if (Health <= 0)
                 {
-                    sb.Append("Dead");
+                    sb.Append("Dead\n");
                     IsDead = true;
                     DungeonGame.Instance.dungeon.DeadCount += 1;
                 }
                 else
                 {
-                    sb.Append($"{Health}");
+                    sb.Append($"{Health}\n");
                 }
             }
-            
-            
 
-            
-            DungeonGame.Instance.message += () => Console.WriteLine(sb.ToString());
 
-            
+
+
+            DungeonGame.Instance.message.Append(sb);
+
+
         }
     }
 }

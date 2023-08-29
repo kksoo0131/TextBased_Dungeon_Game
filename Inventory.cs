@@ -213,11 +213,10 @@ namespace TextBased_Dungeon_Game
 
         public Item? BuyItem(int index)
         {
-            Action action = DungeonGame.Instance.message;
 
             if (itemlist[index].IsSell)
             {
-                action += () => Console.WriteLine("이미 구매한 아이템입니다.");
+                DungeonGame.Instance.message.Append("이미 구매한 아이템입니다.\n");
                 return null;
             }
 
@@ -225,12 +224,12 @@ namespace TextBased_Dungeon_Game
             {
                 DungeonGame.Instance.player.Gold -= itemlist[index].Price;
                 itemlist[index].IsSell = true;
-                action += () => Console.WriteLine($"{itemlist[index].Name}를 구매 완료했습니다.");
+                DungeonGame.Instance.message.Append($"{itemlist[index].Name}를 구매 완료했습니다.\n");
                 return itemlist[index];
             }
             else
             {
-                action += () => Console.WriteLine("Gold 가 부족합니다.");
+                DungeonGame.Instance.message.Append("Gold 가 부족합니다.\n");
                 return null;
             }
                 
