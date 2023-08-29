@@ -44,8 +44,16 @@ namespace TextBased_Dungeon_Game
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"Lv.{Level} {Name} HP {Health}\n");
-
+            sb.Append($"Lv.{Level} {Name} ");
+            if (IsDead)
+            {
+                sb.Append("Dead\n");
+            }
+            else
+            {
+                sb.Append($"HP {Health}\n");
+            }
+            
             return sb.ToString();
         }
 
@@ -76,6 +84,7 @@ namespace TextBased_Dungeon_Game
             {
                 sb.Append("Dead");
                 IsDead = true;
+                DungeonGame.dungeon.DeadCount++;
             }
             else
             {
