@@ -191,6 +191,7 @@ namespace TextBased_Dungeon_Game
             Defense += 2;
             MaxHealth += 20;
             Health = MaxHealth;
+            Console.WriteLine("축하합니다! 레벨업!");
         }
         private int CalculateExpNeeded() // 레벨 업에 필요한 경험치
         {
