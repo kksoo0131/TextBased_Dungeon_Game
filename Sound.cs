@@ -5,18 +5,82 @@ class SoundPlayer
 {
     private static WaveOutEvent outputDevice;
 
-    public static async Task PlaySoundAsync(string audioFileName)
+    public static async Task Bgm(string audioFileName)
     {
         string audioFilePath = "BGM.mp3";
         string fullPath = Path.Combine(@"C:\Users\User\source\repos\kksoo0131\TextBased_Dungeon_Game\bin\Debug\net6.0", audioFilePath);
-        
+
+        // 사운드 반복재생
+        while (true) 
+        {
+            using (var audioFile = new AudioFileReader(audioFilePath))
+            {
+                outputDevice = new WaveOutEvent();
+                outputDevice.Init(audioFile);
+                outputDevice.Play();
+                outputDevice.Volume = 0.3f;
+
+                while (outputDevice.PlaybackState == PlaybackState.Playing)
+                {
+                    await Task.Delay(100);
+                }
+            }
+        }
+    }
+
+    public static async Task SoundsDungeon(string audioFileName)
+    {
+        string audioFilePath = "Dungeon.mp3";
+        string fullPath = Path.Combine(@"C:\Users\User\source\repos\kksoo0131\TextBased_Dungeon_Game\bin\Debug\net6.0", audioFilePath);
+     
+        while (true)
+        {
+            using (var audioFile = new AudioFileReader(audioFilePath))
+            {
+                outputDevice = new WaveOutEvent();
+                outputDevice.Init(audioFile);
+                outputDevice.Play();
+                outputDevice.Volume = 0.3f;
+
+                while (outputDevice.PlaybackState == PlaybackState.Playing)
+                {
+                    await Task.Delay(100);
+                }
+            }
+        }
+    }
+    public static async Task SoundsClear(string audioFileName)
+    {
+        string audioFilePath = "Clear.mp3";
+        string fullPath = Path.Combine(@"C:\Users\User\source\repos\kksoo0131\TextBased_Dungeon_Game\bin\Debug\net6.0", audioFilePath);
+
         using (var audioFile = new AudioFileReader(audioFilePath))
         {
             outputDevice = new WaveOutEvent();
             outputDevice.Init(audioFile);
             outputDevice.Play();
             outputDevice.Volume = 0.25f;
-            
+
+
+            while (outputDevice.PlaybackState == PlaybackState.Playing)
+            {
+                await Task.Delay(100);
+            }
+        }
+    }
+
+    public static async Task SoundsAttack(string audioFileName)
+    {
+        string audioFilePath = "Attack.mp3";
+        string fullPath = Path.Combine(@"C:\Users\User\source\repos\kksoo0131\TextBased_Dungeon_Game\bin\Debug\net6.0", audioFilePath);
+
+        using (var audioFile = new AudioFileReader(audioFilePath))
+        {
+            outputDevice = new WaveOutEvent();
+            outputDevice.Init(audioFile);
+            outputDevice.Play();
+            outputDevice.Volume = 0.25f;
+
 
             while (outputDevice.PlaybackState == PlaybackState.Playing)
             {
