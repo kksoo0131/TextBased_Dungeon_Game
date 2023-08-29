@@ -60,15 +60,18 @@ namespace TextBased_Dungeon_Game
         public StartScene() : base() { }
         
         public override int DrawScene()
-        {
+        {         
             options = new int[] { 1, 2, 3, 4, 5 };
             Console.Clear();
             Console.WriteLine(MakeText());
             return InputKey(options);
+            
         }
 
         public string MakeText()
         {
+            SoundPlayer.StopSound();
+            SoundPlayer.PlaySoundAsync("");
             return "스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다. \n\n1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기\n\n원하시는 행동을 입력해주세요.";
         }
 
