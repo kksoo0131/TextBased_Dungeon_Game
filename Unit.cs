@@ -85,7 +85,7 @@ namespace TextBased_Dungeon_Game
             {
                 sb.Append("Dead");
                 IsDead = true;
-                DungeonGame.Instance.dungeon.DeadCount++;
+                DungeonGame.Instance.dungeon.DeadCount+=1;
             }
             else
             {

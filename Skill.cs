@@ -11,6 +11,8 @@ namespace TextBased_Dungeon_Game
         Target,
         Random,
     }
+
+    [Serializable]
     public abstract class Skill
     {
         public string name;
@@ -34,6 +36,7 @@ namespace TextBased_Dungeon_Game
         // Skill은 스킬마다 대상 몬스터가 달라지니까 Unit의 List를 받는다.
         public abstract void Use(List<Unit> _units, int _attack);
     }
+    [Serializable]
 
     public class AlphaStrike : Skill
     {
@@ -52,7 +55,7 @@ namespace TextBased_Dungeon_Game
             }
         }
     }
-
+    [Serializable]
     public class DoubleStrike : Skill
     {
         public DoubleStrike() : base("더블 스트라이크", " * 1.5로 2명의 적을 랜덤으로 공격합니다.", 15, 2, SkillType.Random) { }
