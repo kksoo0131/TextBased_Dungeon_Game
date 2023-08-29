@@ -154,9 +154,8 @@ namespace TextBased_Dungeon_Game
             int rewardRate = dice.Next(attack, attack * 2 + 1) / 100 + 1;
             player.Gold += (int)reward* rewardRate;
             player.Health -= hpReduction;
-            player.Level += 1;
-            player.Attack += 1;
-            player.Defense += 1;
+            
+
 
             return (int)SceneType.DungeonClearScene;
         }
