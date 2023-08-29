@@ -3,7 +3,6 @@
     class SceneManager
     {
         List<Scene> _scenes = new List<Scene>();
-
         public SceneManager()
         {
             for (int i =0; i< (int)SceneType.EndPoint; i++)

@@ -15,15 +15,21 @@ namespace TextBased_Dungeon_Game
             monsterList.Add(new Unit("대포미니언", 5, 10, 0, 25, 25));
             monsterList.Add(new Unit("공허충", 3, 10, 0, 10, 10));
             DeadCount = 0;
+            Result = true;
 
         }
 
          List<Unit> monsterList = new List<Unit>();
 
+        public bool Result { get; set; } 
         public int DeadCount { get; set; }
         public Unit GetUnit(int index)
         {
             return monsterList[index];
+        }
+        public List<Unit> GetUnitList()
+        {
+            return monsterList;
         }
         public int Count()
         {
