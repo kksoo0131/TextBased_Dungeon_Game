@@ -67,8 +67,9 @@ namespace TextBased_Dungeon_Game
             int damage = (int)(_attack * 1.5f);
             Random ran = new Random();
 
-            int count = Math.Max(_units.Count, targetCount);
-            for(int i =0; i< targetCount; i++)
+            int count = Math.Min(_units.Count, targetCount);
+
+            for(int i =0; i< count; i++)
             {
                 int randInt = ran.Next(0, _units.Count);
                 

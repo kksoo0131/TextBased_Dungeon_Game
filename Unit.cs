@@ -59,7 +59,7 @@ namespace TextBased_Dungeon_Game
             
             return sb.ToString();
         }
-        public void AttackUnit(Unit m)
+        public void AttackUnit(Unit _unit)
         {
             Random rand = new Random();
 
@@ -69,15 +69,14 @@ namespace TextBased_Dungeon_Game
 
             int damage = rand.Next(Attack  - errorDamage, Attack  + errorDamage);
 
-            DungeonGame.Instance.message += () => Console.WriteLine($"{Name}의 공격!");
+            DungeonGame.Instance.message += () => Console.WriteLine($"{Name}의 공격!\n Lv.{_unit.Level} {_unit.Name}을 공격했습니다. [데미지 : {damage}]\n");
 
-            m.Attacked(damage);
+            _unit.Attacked(damage);
         }
         public void Attacked(int i)
         {
             StringBuilder sb = new StringBuilder();
             
-            sb.Append($"Lv.{Level} {Name}을 공격했습니다. [데미지 : {i}]\n");
             sb.Append($"Lv.{Level} {Name} HP {Health} -> ");
             Health -= i;
 

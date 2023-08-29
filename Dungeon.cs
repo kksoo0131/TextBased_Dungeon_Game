@@ -66,5 +66,10 @@ namespace TextBased_Dungeon_Game
 
             return sb.ToString();
         }
+
+        public void Clear()
+        {
+            monsterList.Clear();
+        }
     }
 }
