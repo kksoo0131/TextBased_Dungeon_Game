@@ -7,21 +7,20 @@ using System.Threading.Tasks;
 namespace TextBased_Dungeon_Game
 {
     public enum SceneType
-    {
-        
+    {    
         StartScene,
-
-        // 스타트 씬 메뉴 4개
+        // 스타트 씬 메뉴
         StatusScene,
         InventoryScene,
         ShopScene,
         DungeonEnterScene,
         RestScene,
         //나머지
-       /* DungeonClearScene,
-        DungeonFailScene,*/
-        BattleScene,
-
+        /* DungeonClearScene,
+         DungeonFailScene,*/
+        PlayerPhaseScene,
+        MonsterPhaseScene,
+        BattleResultScene,
         //마지막은 EndPoint여야함
         EndPoint,
     }
@@ -31,16 +30,13 @@ namespace TextBased_Dungeon_Game
 
         //Type 리플렉션을 사용할때 인터페이스로는 형변환이 불가능하기 때문에
         //인스턴스를 생성할수 있는 클래스로 변경하고 메서드를 가상메서드로 선언
-        string WrongInputText = "잘못된 입력입니다";
-        SceneType Type { get; set; }
         public Scene()
         {
             _player = DungeonGame.Instance.player; 
         }
-
         protected Warrior _player;
-
         protected int[] options;
+
         public virtual int DrawScene() { return 0; }
         public virtual int InputKey(int[] options)
         {
@@ -48,17 +44,26 @@ namespace TextBased_Dungeon_Game
 
             while (!int.TryParse(Console.ReadLine(), out input) || !options.Contains(input))
             {
-                Console.WriteLine(WrongInputText);
+                Console.WriteLine("잘못된 입력입니다");
             }
 
             return input;
+        }
+        public virtual int[] MakeOption(int count)
+        {
+            int[] array = new int[count + 1];
+            for (int i = 0; i < count + 1; i++)
+            {
+                array[i] = i;
+            }
+
+            return array;
         }
 
     }
     class StartScene : Scene
     {
-        public StartScene() : base() { }
-        
+        public StartScene() : base() { }    
         public override int DrawScene()
         {
             options = new int[] { 1, 2, 3, 4, 5 };
@@ -66,7 +71,6 @@ namespace TextBased_Dungeon_Game
             Console.WriteLine(MakeText());
             return InputKey(options);
         }
-
         public string MakeText()
         {
             return "스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다. \n\n1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기\n\n원하시는 행동을 입력해주세요.";
@@ -167,7 +171,6 @@ namespace TextBased_Dungeon_Game
     }
     class ShopScene : Scene
     {
-
         Shop _shop;
         public ShopScene() : base() 
         {
@@ -273,12 +276,11 @@ namespace TextBased_Dungeon_Game
                 case 0:
                     return (int)SceneType.StartScene;
                 case 1:
-                    return (int)SceneType.BattleScene;
+                    return (int)SceneType.PlayerPhaseScene;
                 default:
                     return (int)SceneType.StartScene;
             }
         }
-
         public string MakeText()
         {
             return "던전입장\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n\n1. 쉬운 던전      | 방어력 5 이상 권장\n0. 나가기\n\n원하시는 행동을 입력해주세요";
@@ -343,55 +345,57 @@ namespace TextBased_Dungeon_Game
             return $"휴식하기\n500 G 를 내면 체력을 회복할 수 있습니다. (보유 골드 : {_player.Gold} G\n\n1. 휴식하기\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
         }
     }
-    class BattleScene : Scene 
+    class PlayerPhaseScene : Scene 
     {
         Dungeon dungeon;
-        public BattleScene() : base() { }
+        public PlayerPhaseScene() : base() { dungeon = DungeonGame.Instance.dungeon; }
         public override int DrawScene()
         {
-            dungeon = DungeonGame.Instance.dungeon;
+            return PlayerPhase();
+        }
+
+        public int PlayerPhase()
+        {
             Console.Clear();
             Console.WriteLine(MakeText());
             DungeonGame.Instance.PrintMessage();
 
-            options = new int[] { 1 };
+            options = new int[] { 1, 2 };
             switch (InputKey(options))
             {
                 case 1:
-                    return PlayerPhase();
+                    return PlayerPhaseAttack();
+                case 2:
+                    return PlayerSelectSkill();
                 default:
-                    return (int)SceneType.BattleScene;
+                    return (int)SceneType.PlayerPhaseScene;
             }
 
         }
-
-        public int PlayerPhase()
+       
+      
+        public int PlayerPhaseAttack()
         {
             //몬스터의 수 만큼 options를 추가
             // 플레이어가 몬스터 번호를 입력하면
             // 몬스터 리스트의 해당 인덱스에 있는 몬스터가
             // 플레이어가 주는 데미지를 받음
-            options = new int[dungeon.Count() + 1];
-            options[0] = 0;
-            for (int i = 1; i <= dungeon.Count(); i++)
-            {
-                options[i] = i;
-            }
+
             Console.Clear();
             Console.WriteLine(MakeBattleText());
             DungeonGame.Instance.PrintMessage();
 
-            int key = InputKey(options);
+            int key = InputKey(MakeOption(dungeon.Count()));
             switch (key)
             {
                 case 0:
-                    return (int)SceneType.BattleScene;
+                    return (int)SceneType.PlayerPhaseScene;
                 default:
                     Unit unit = dungeon.GetUnit(key - 1);
                     if (unit.IsDead == true)
                     {
                         DungeonGame.Instance.message += () => Console.WriteLine("이미 죽은 몬스터 입니다.");
-                        return PlayerPhase();
+                        return PlayerPhaseAttack();
                     }
                     _player.AttackUnit(unit);
                     return AttackResult();
@@ -400,6 +404,77 @@ namespace TextBased_Dungeon_Game
             }
         }
 
+        public int PlayerSelectSkill()
+        {
+            Console.Clear();
+            Console.WriteLine(MakeSkillText());
+            DungeonGame.Instance.PrintMessage();
+
+            int key = InputKey(MakeOption(_player.SkillCount));
+            switch (key)
+            {
+                case 0:
+                    return (int)SceneType.PlayerPhaseScene;
+                default:
+                    if (_player.MP < _player.skillList[key - 1].mp)
+                    {
+                        DungeonGame.Instance.message += (() => Console.WriteLine("MP가 부족합니다!"));
+                        return PlayerSelectSkill();
+                    }
+                    if (_player.skillList[key-1].type == SkillType.Random)
+                    {
+                        foreach (Unit i in dungeon.GetUnitList())
+                        {
+                            if (!i.IsDead)
+                            {
+                                _player.targetList.Add(i);
+                            }
+                        }
+                        _player.UseSkill(key - 1);
+                        return AttackResult();
+                    }
+                    else
+                    {
+                        return SelectSkillTarget(key - 1, _player.skillList[key - 1].targetCount);
+                    }
+                    
+            }
+        }
+
+        public int SelectSkillTarget(int index, int count)
+        {
+            Console.Clear();
+            Console.WriteLine(MakeSkillTargetText());
+            DungeonGame.Instance.PrintMessage();
+
+            int key = InputKey(MakeOption(dungeon.Count()));
+            switch (key)
+            {
+                case 0:
+                    return PlayerSelectSkill();
+                default:
+                    Unit _unit = dungeon.GetUnit(key-1);
+                    if (_player.targetList.Contains(_unit))
+                    {
+                        DungeonGame.Instance.message += () => Console.WriteLine("이미 선택한 대상입니다.");
+                        return SelectSkillTarget(index, count);
+                    }
+                    else if (_unit.IsDead == true)
+                    {
+                        DungeonGame.Instance.message += () => Console.WriteLine("이미 죽은 몬스터 입니다.");
+                        return PlayerPhaseAttack();
+                    }
+
+                    _player.targetList.Add(_unit);
+                    if (--count > 0) return SelectSkillTarget(index, count);
+                    _player.UseSkill(index);
+                    // 스킬을 사용하기위해 내가 선택한 target들이 저장되야함
+                    return AttackResult();
+                    // 선택된 타겟을 저장하면서 count가 0이 될때까지 계속 선택
+            }
+
+
+        }
         public int AttackResult()
         { 
             
@@ -412,40 +487,84 @@ namespace TextBased_Dungeon_Game
             switch (InputKey(options))
             {
                 default:
-                    return dungeon.DungeonClear() ? BattleResult(true) : MonsterPhase(0);
+                    return dungeon.DungeonClear() ? (int)SceneType.BattleResultScene : (int)SceneType.MonsterPhaseScene;
             }
+        }
+
+        
+        
+        public string MakeText()
+        {
+            return $"Battle!!\n\n{dungeon.MonsterListInfo()}\n\n[내정보]\n\n{_player.PlayerInfo()}\n\n1. 공격\n\n2. 스킬\n\n원하시는 행동을 입력해주세요.";
+        }
+
+        public string MakeBattleText()
+        {
+            return $"Battle!!\n\n{dungeon.MonsterSelectInfo()}\n\n[내정보]\n\n{_player.PlayerInfo()}\n\n0. 취소\n\n원하시는 행동을 입력해주세요.";
+        }
+
+        public string MakeSkillText()
+        {
+            return $"Battle!!\n\n{dungeon.MonsterListInfo()}\n\n[내정보]\n\n{_player.PlayerInfo()}\n\n{_player.PlayerSkillInfo()}0.취소\n\n원하시는 행동을 입력해주세요.";
+        }
+
+        public string MakeSkillTargetText()
+        {
+            return $"Battle!!\n\n{dungeon.MonsterSelectInfo()}\n\n[내정보]\n\n{_player.PlayerInfo()}\n\n0.취소\n\n원하시는 행동을 입력해주세요.";
+        }
+
+    }
+    class MonsterPhaseScene : Scene
+    {
+        Dungeon dungeon;
+        public MonsterPhaseScene() : base() { dungeon = DungeonGame.Instance.dungeon; }
+
+        public override int DrawScene()
+        {
+            return MonsterPhase(0);
         }
 
         public int MonsterPhase(int i)
         {
             options = new int[] { 0 };
             Console.Clear();
-            
-            while (i < dungeon.Count() && dungeon.GetUnit(i).IsDead )
+
+            while (i < dungeon.Count() && dungeon.GetUnit(i).IsDead)
             {
                 i++;
             }
 
             if (i >= dungeon.Count())
             {
-                return BattleResult(true);
+                return (int)SceneType.BattleResultScene;
             }
 
             Console.WriteLine($"Battle!!\n\n");
             dungeon.GetUnit(i).AttackUnit(_player);
             DungeonGame.Instance.PrintMessage();
 
-            if(_player.Health <= 0)
+            if (_player.Health <= 0)
             {
-                return BattleResult(false);
+                dungeon.Result = false;
+                return (int)SceneType.BattleResultScene;
             }
             Console.WriteLine("\n\n0. 다음");
 
             switch (InputKey(options))
             {
                 default:
-                    return ++i < dungeon.Count() ? MonsterPhase(i) : PlayerPhase();
+                    return ++i < dungeon.Count() ? MonsterPhase(i) : (int)SceneType.PlayerPhaseScene;
             }
+        }
+    }
+    class BattleResultScene : Scene
+    { 
+
+        Dungeon dungeon;
+        public BattleResultScene() { dungeon = DungeonGame.Instance.dungeon; }
+        public override int DrawScene()
+        {
+            return BattleResult(dungeon.Result);
         }
 
         public int BattleResult(bool _result)
@@ -470,15 +589,6 @@ namespace TextBased_Dungeon_Game
                     return (int)SceneType.StartScene;
             }
 
-        }
-        public string MakeText()
-        {
-            return $"Battle!!\n\n{dungeon.MonsterListInfo()}\n\n[내정보]\n\n{_player.PlayerInfo()}\n\n1. 공격\n\n원하시는 행동을 입력해주세요.";
-        }
-
-        public string MakeBattleText()
-        {
-            return $"Battle!!\n\n{dungeon.MonsterSelectInfo()}\n\n[내정보]\n\n{_player.PlayerInfo()}\n\n0. 취소\n\n원하시는 행동을 입력해주세요.";
         }
 
         public string MakeVictoryText()
