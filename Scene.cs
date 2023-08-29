@@ -597,8 +597,8 @@ namespace TextBased_Dungeon_Game
         {
 
             Console.WriteLine("[던전 결과]\n");
-            Console.WriteLine($"몬스터 {DungeonGame.dungeon.Count()}마리를 잡았습니다! 경험치 {DungeonGame.dungeon.Count() * 5} 증가!\n\n");
-            _player.GetExp(DungeonGame.dungeon.Count() * 5);  // 몬스터 한 마리당 5의 경험치
+            Console.WriteLine($"몬스터 {dungeon.Count()}마리를 잡았습니다! 경험치 {dungeon.Count() * 5} 증가!\n\n");
+            _player.GetExp(dungeon.Count() * 5);  // 몬스터 한 마리당 5의 경험치
             Console.WriteLine("[보상 정산]\n");
             Console.WriteLine("골드 + 300 G\n\n0. 다음");  // 유동적으로 바꿀 필요 있음.
         }

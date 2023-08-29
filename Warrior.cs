@@ -7,7 +7,7 @@ namespace TextBased_Dungeon_Game
     [Serializable]
     class Warrior : Unit
     {
-        public Warrior() : base("전사전사전사", 1, 10, 5, 100)
+        public Warrior() : base("전사전사전사", 1, 10, 5, 100, 100)
         {
             Chad = "전사";
             Gold = 1500;
