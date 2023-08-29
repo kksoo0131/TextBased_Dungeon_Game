@@ -457,7 +457,7 @@ namespace TextBased_Dungeon_Game
 
             if (_result)
             {
-                Console.WriteLine(MakeVictoryText());
+                MakeVictoryText();
             }
             else
             {
@@ -483,9 +483,14 @@ namespace TextBased_Dungeon_Game
             return $"Battle!!\n\n{DungeonGame.dungeon.MonsterSelectInfo()}\n\n[내정보]\n\n{_player.PlayerInfo()}\n\n0. 취소\n\n원하시는 행동을 입력해주세요.";
         }
 
-        public string MakeVictoryText()
+        public void MakeVictoryText()
         {
-            return $"Baltte!! - Result\n\nVictory\n\n던전에서 몬스터 {DungeonGame.dungeon.Count()}마리를 잡았습니다.\n\n{_player.PlayerInfo()}\n\n0. 다음";
+            Console.WriteLine("[던전 결과]\n");
+            Console.WriteLine($"몬스터 {DungeonGame.dungeon.Count()}마리를 잡았습니다! 경험치 {DungeonGame.dungeon.Count() * 5} 증가!\n\n");
+            _player.GetExp(DungeonGame.dungeon.Count() * 5);  // 몬스터 한 마리당 5의 경험치
+            Console.WriteLine("[보상 정산]\n");
+            Console.WriteLine("골드 + 300 G\n\n0. 다음");  // 유동적으로 바꿀 필요 있음.
+
         }
 
         public string MakeLoseText()
