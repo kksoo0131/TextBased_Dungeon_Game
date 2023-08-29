@@ -150,7 +150,7 @@ namespace TextBased_Dungeon_Game
                     // 해당 장비가 장착중 -> 장착 해제
                     // 장착 해제 -> 장착중으로 변경함
                     _player.EquipItem(index - 1);
-                    DungeonGame.PlayerSave();
+                    DungeonGame.Instance.PlayerSave();
                     return EquipmentInfo();
             }
         }
@@ -167,15 +167,14 @@ namespace TextBased_Dungeon_Game
     }
     class ShopScene : Scene
     {
+
+        Shop _shop;
         public ShopScene() : base() 
         {
-            
-        }
-        Shop _shop;
-
-        public override int DrawScene()
-        {
             _shop = DungeonGame.Instance.shop;
+        }
+        public override int DrawScene()
+        {         
             options = new int[] { 0, 1, 2};
             Console.Clear();
             Console.WriteLine(MakeText());
@@ -192,12 +191,11 @@ namespace TextBased_Dungeon_Game
                     return (int)SceneType.ShopScene;
             }
         }
-
         public int BuyItem()
         {
             Console.Clear();
             Console.WriteLine(MakeBuyText());
-            DungeonGame.PrintMessage();
+            DungeonGame.Instance.PrintMessage();
             // options를 아이템 Count갯수만큼 추가해야됨
             options = new int[_shop.Count() + 1];
             options[0] = 0;
@@ -215,8 +213,8 @@ namespace TextBased_Dungeon_Game
                     Item? item = _shop.BuyItem(index - 1);
                     if (item != null)
                     {
-                        DungeonGame.PlayerSave();
-                        DungeonGame.ShopSave();
+                        DungeonGame.Instance.PlayerSave();
+                        DungeonGame.Instance.ShopSave();
                         _player.Inventory.AddItem(item);
                     }
 
@@ -227,7 +225,7 @@ namespace TextBased_Dungeon_Game
         {
             Console.Clear();
             Console.WriteLine(MakeSellText());
-            DungeonGame.PrintMessage();
+            DungeonGame.Instance.PrintMessage();
 
             // options를 아이템 Count갯수만큼 추가해야됨
             options = new int[_player.Inventory.Count() + 1];
@@ -244,7 +242,7 @@ namespace TextBased_Dungeon_Game
                     return (int)SceneType.ShopScene;
                 default:
                     _player.SellItem(index - 1);
-                    DungeonGame.PlayerSave();
+                    DungeonGame.Instance.PlayerSave();
                     return SellItem();
             }
         }
@@ -283,7 +281,7 @@ namespace TextBased_Dungeon_Game
 
         public string MakeText()
         {
-            return "던전입장\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n\n1. 쉬운 던전      | 방어력 5 이상 권장\n2. 일반 던전      | 방어력 11 이상 권장\n3. 어려운 던전     | 방어력 17 이상 권장\n0. 나가기\n\n원하시는 행동을 입력해주세요";
+            return "던전입장\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n\n1. 쉬운 던전      | 방어력 5 이상 권장\n0. 나가기\n\n원하시는 행동을 입력해주세요";
 
         }
     }
@@ -330,8 +328,8 @@ namespace TextBased_Dungeon_Game
             options = new int[] { 0, 1 };
             Console.Clear();
             Console.WriteLine(MakeText());
-            DungeonGame.PrintMessage();
-            DungeonGame.PlayerSave();
+            DungeonGame.Instance.PrintMessage();
+            DungeonGame.Instance.PlayerSave();
             if (InputKey(options) == 1)
             {
                 _player.Rest();
@@ -347,12 +345,14 @@ namespace TextBased_Dungeon_Game
     }
     class BattleScene : Scene 
     {
+        Dungeon dungeon;
         public BattleScene() : base() { }
         public override int DrawScene()
         {
+            dungeon = DungeonGame.Instance.dungeon;
             Console.Clear();
             Console.WriteLine(MakeText());
-            DungeonGame.PrintMessage();
+            DungeonGame.Instance.PrintMessage();
 
             options = new int[] { 1 };
             switch (InputKey(options))
@@ -371,15 +371,15 @@ namespace TextBased_Dungeon_Game
             // 플레이어가 몬스터 번호를 입력하면
             // 몬스터 리스트의 해당 인덱스에 있는 몬스터가
             // 플레이어가 주는 데미지를 받음
-            options = new int[DungeonGame.dungeon.Count() + 1];
+            options = new int[dungeon.Count() + 1];
             options[0] = 0;
-            for (int i = 1; i <= DungeonGame.dungeon.Count(); i++)
+            for (int i = 1; i <= dungeon.Count(); i++)
             {
                 options[i] = i;
             }
             Console.Clear();
             Console.WriteLine(MakeBattleText());
-            DungeonGame.PrintMessage();
+            DungeonGame.Instance.PrintMessage();
 
             int key = InputKey(options);
             switch (key)
@@ -387,10 +387,10 @@ namespace TextBased_Dungeon_Game
                 case 0:
                     return (int)SceneType.BattleScene;
                 default:
-                    Unit unit = DungeonGame.dungeon.GetUnit(key - 1);
+                    Unit unit = dungeon.GetUnit(key - 1);
                     if (unit.IsDead == true)
                     {
-                        DungeonGame.message += () => Console.WriteLine("이미 죽은 몬스터 입니다.");
+                        DungeonGame.Instance.message += () => Console.WriteLine("이미 죽은 몬스터 입니다.");
                         return PlayerPhase();
                     }
                     _player.AttackUnit(unit);
@@ -406,13 +406,13 @@ namespace TextBased_Dungeon_Game
             options = new int[] { 0 };
             Console.Clear();
             Console.WriteLine($"Battle!!\n\n");
-            DungeonGame.PrintMessage();
+            DungeonGame.Instance.PrintMessage();
             Console.WriteLine("\n\n0. 다음");
 
             switch (InputKey(options))
             {
                 default:
-                    return DungeonGame.dungeon.DungeonClear() ? BattleResult(true) : MonsterPhase(0);
+                    return dungeon.DungeonClear() ? BattleResult(true) : MonsterPhase(0);
             }
         }
 
@@ -421,19 +421,19 @@ namespace TextBased_Dungeon_Game
             options = new int[] { 0 };
             Console.Clear();
             
-            while (i < DungeonGame.dungeon.Count() && DungeonGame.dungeon.GetUnit(i).IsDead )
+            while (i < dungeon.Count() && dungeon.GetUnit(i).IsDead )
             {
                 i++;
             }
 
-            if (i >= DungeonGame.dungeon.Count())
+            if (i >= dungeon.Count())
             {
                 return BattleResult(true);
             }
 
             Console.WriteLine($"Battle!!\n\n");
-            DungeonGame.dungeon.GetUnit(i).AttackUnit(_player);
-            DungeonGame.PrintMessage();
+            dungeon.GetUnit(i).AttackUnit(_player);
+            DungeonGame.Instance.PrintMessage();
 
             if(_player.Health <= 0)
             {
@@ -444,7 +444,7 @@ namespace TextBased_Dungeon_Game
             switch (InputKey(options))
             {
                 default:
-                    return ++i < DungeonGame.dungeon.Count() ? MonsterPhase(i) : PlayerPhase();
+                    return ++i < dungeon.Count() ? MonsterPhase(i) : PlayerPhase();
             }
         }
 
@@ -473,17 +473,17 @@ namespace TextBased_Dungeon_Game
         }
         public string MakeText()
         {
-            return $"Battle!!\n\n{DungeonGame.dungeon.MonsterListInfo()}\n\n[내정보]\n\n{_player.PlayerInfo()}\n\n1. 공격\n\n원하시는 행동을 입력해주세요.";
+            return $"Battle!!\n\n{dungeon.MonsterListInfo()}\n\n[내정보]\n\n{_player.PlayerInfo()}\n\n1. 공격\n\n원하시는 행동을 입력해주세요.";
         }
 
         public string MakeBattleText()
         {
-            return $"Battle!!\n\n{DungeonGame.dungeon.MonsterSelectInfo()}\n\n[내정보]\n\n{_player.PlayerInfo()}\n\n0. 취소\n\n원하시는 행동을 입력해주세요.";
+            return $"Battle!!\n\n{dungeon.MonsterSelectInfo()}\n\n[내정보]\n\n{_player.PlayerInfo()}\n\n0. 취소\n\n원하시는 행동을 입력해주세요.";
         }
 
         public string MakeVictoryText()
         {
-            return $"Baltte!! - Result\n\nVictory\n\n던전에서 몬스터 {DungeonGame.dungeon.Count()}마리를 잡았습니다.\n\n{_player.PlayerInfo()}\n\n0. 다음";
+            return $"Baltte!! - Result\n\nVictory\n\n던전에서 몬스터 {dungeon.Count()}마리를 잡았습니다.\n\n{_player.PlayerInfo()}\n\n0. 다음";
         }
 
         public string MakeLoseText()

@@ -5,14 +5,14 @@ namespace TextBased_Dungeon_Game
 {
     internal class DungeonGame
     {
+        //DungeonGame == GameManager ,싱글톤 클래스.
+        public static DungeonGame Instance;
 
         public SceneManager sceneManager;
-        public static DungeonGame Instance;
         public Warrior player;
         public Shop shop;
-        public static Dungeon dungeon;
-
-        public static Action message;
+        public Dungeon dungeon;
+        public Action message;
         public DungeonGame()
         {
             Instance = this;
@@ -37,7 +37,7 @@ namespace TextBased_Dungeon_Game
             
         }
 
-        static public void PlayerSave()
+        public void PlayerSave()
         {
             IFormatter formatter = new BinaryFormatter();
             // 파일 저장을 위한 BinaryFormatter객체 생성
@@ -48,7 +48,7 @@ namespace TextBased_Dungeon_Game
                 // player 객체의 정보를 직렬화하여 stream에 저장한다.
             }
         }
-        static public void ShopSave()
+        public void ShopSave()
         {
             IFormatter formatter = new BinaryFormatter();
             using (Stream stream = new FileStream("shop_info.bin", FileMode.Create, FileAccess.Write))
@@ -89,12 +89,12 @@ namespace TextBased_Dungeon_Game
             }
 
         }
-        static public void PrintMessage()
+        public void PrintMessage()
         {
-            if (message != null)
+            if (Instance.message != null)
             {
-                message();
-                message = null;
+                Instance.message();
+                Instance.message = null;
             }
         }
 

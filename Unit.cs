@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace TextBased_Dungeon_Game
 {
+    enum MonsterType
+    {
+        //여기에 유닛을 상속받은 몬스터들의 클래스이름을 추가.
+    }
     [Serializable]
     internal class Unit
     {
@@ -53,7 +57,7 @@ namespace TextBased_Dungeon_Game
 
             int damage = rand.Next(Attack  - errorDamage, Attack  + errorDamage);
 
-            DungeonGame.message += () => Console.WriteLine($"{Name}의 공격!");
+            DungeonGame.Instance.message += () => Console.WriteLine($"{Name}의 공격!");
 
             m.Attacked(damage);
         }
@@ -70,7 +74,7 @@ namespace TextBased_Dungeon_Game
             {
                 sb.Append("Dead");
                 IsDead = true;
-                DungeonGame.dungeon.DeadCount++;
+                DungeonGame.Instance.dungeon.DeadCount++;
             }
             else
             {
@@ -78,7 +82,7 @@ namespace TextBased_Dungeon_Game
             }
 
             
-            DungeonGame.message += () => Console.WriteLine(sb.ToString());
+            DungeonGame.Instance.message += () => Console.WriteLine(sb.ToString());
 
             
         }

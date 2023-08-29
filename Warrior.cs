@@ -7,10 +7,11 @@ namespace TextBased_Dungeon_Game
     [Serializable]
     class Warrior : Unit
     {
-        public Warrior() : base("", 1, 10, 5, 100, 100)
+        public Warrior() : base("", 1, 10, 5, 100)
         {
             Chad = "전사";
             Gold = 1500;
+            MaxHealth = 100;
             Exp = 0;
             ExpNeeded = CalculateExpNeeded();
             
@@ -26,6 +27,7 @@ namespace TextBased_Dungeon_Game
         public int AddDefense { get; set; }
         public Item? EquipWeapon { get; set; }
         public Item? EquipArmor { get; set; }
+        public int MaxHealth { get; set; }
 
         public int PrevHealth { get; set; }
         public int PrevGold { get; set; }
@@ -122,7 +124,7 @@ namespace TextBased_Dungeon_Game
 
             int price = (int)(sellitem.Price * 0.85f);
             Gold += price;
-            DungeonGame.message += () => Console.WriteLine($"{sellitem.Name}을 {price} G 에 판매 하였습니다.");
+            DungeonGame.Instance.message += () => Console.WriteLine($"{sellitem.Name}을 {price} G 에 판매 하였습니다.");
             Inventory.DeleteItem(sellitem);
 
 
@@ -133,11 +135,11 @@ namespace TextBased_Dungeon_Game
             if (Gold >= 500)
             {
                 Gold -= 500;
-                DungeonGame.message += () => Console.WriteLine("휴식을 완료했습니다.");
+                DungeonGame.Instance.message += () => Console.WriteLine("휴식을 완료했습니다.");
             }
             else
             {
-                DungeonGame.message += () => Console.WriteLine("Gold 가 부족합니다.");
+                DungeonGame.Instance.message += () => Console.WriteLine("Gold 가 부족합니다.");
             }
         }
 
@@ -151,7 +153,7 @@ namespace TextBased_Dungeon_Game
 
             int damage = rand.Next(Attack + AddAttack - errorDamage, Attack + AddAttack + errorDamage);
 
-            DungeonGame.message += () => Console.WriteLine($"{Name}의 공격!");
+            DungeonGame.Instance.message += () => Console.WriteLine($"{Name}의 공격!");
 
             m.Attacked(damage);
         }
