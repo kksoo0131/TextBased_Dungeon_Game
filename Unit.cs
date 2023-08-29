@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace TextBased_Dungeon_Game
 {
+    enum MonsterType
+    {
+        //여기에 유닛을 상속받은 몬스터들의 클래스이름을 추가.
+    }
     [Serializable]
-    internal class Unit
+    public class Unit
     {
         public Unit(string name, int level, int attack, int defense, int health, int maxHealth)
         {
@@ -20,7 +24,6 @@ namespace TextBased_Dungeon_Game
             IsDead = false;
             
         }
-
         public string Name { get; set; }
         public int Level { get; set; }
         public int Attack { get; set; }
@@ -56,22 +59,20 @@ namespace TextBased_Dungeon_Game
             
             return sb.ToString();
         }
-
         public void AttackUnit(Unit m)
         {
             Random rand = new Random();
 
-            float errorFloat = (Attack ) * 0.1f;
+            float errorFloat = (Attack) * 0.1f;
             int errorInt = (int)errorFloat;
             int errorDamage = errorInt < errorFloat ? errorInt + 1 : errorInt;
 
             int damage = rand.Next(Attack  - errorDamage, Attack  + errorDamage);
 
-            DungeonGame.message += () => Console.WriteLine($"{Name}의 공격!");
+            DungeonGame.Instance.message += () => Console.WriteLine($"{Name}의 공격!");
 
             m.Attacked(damage);
         }
-
         public void Attacked(int i)
         {
             StringBuilder sb = new StringBuilder();
@@ -84,7 +85,7 @@ namespace TextBased_Dungeon_Game
             {
                 sb.Append("Dead");
                 IsDead = true;
-                DungeonGame.dungeon.DeadCount++;
+                DungeonGame.Instance.dungeon.DeadCount++;
             }
             else
             {
@@ -92,7 +93,7 @@ namespace TextBased_Dungeon_Game
             }
 
             
-            DungeonGame.message += () => Console.WriteLine(sb.ToString());
+            DungeonGame.Instance.message += () => Console.WriteLine(sb.ToString());
 
             
         }
