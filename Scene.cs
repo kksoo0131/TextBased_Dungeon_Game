@@ -300,7 +300,9 @@ namespace TextBased_Dungeon_Game
 
         public string MakeText()
         {
-            return $"던전 클리어\n축하합니다!!\n쉬운 던전을 클리어 하였습니다.\n\n[탐험 결과]\n체력 {_player.PrevHealth} -> {_player.Health}\nGold {_player.PrevGold} G -> {_player.Gold} G\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+
+            return $"던전 클리어\n축하합니다!!\n던전을 클리어 하였습니다.\n\n[탐험 결과]\n체력 {_player.PrevHealth} -> {_player.Health}\nGold {_player.PrevGold} G -> {_player.Gold} G\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+
         }
 
     }
