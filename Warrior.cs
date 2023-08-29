@@ -125,7 +125,7 @@ namespace TextBased_Dungeon_Game
             }
         }
 
-        public int SetAttackPower(bool critical)
+        public new int SetAttackPower(bool critical)
         {
             Random rand = new Random();
 
@@ -139,11 +139,7 @@ namespace TextBased_Dungeon_Game
             return critical ? (int)(damage * 1.6f) : damage;
         }
 
-        public bool IsCritical()
-        {
-            Random rand = new Random();
-            return rand.Next(0, 101) < 15 ? true : false;
-        }
+        
         public new void AttackUnit(Unit _unit)
         {
             bool result = IsCritical();
