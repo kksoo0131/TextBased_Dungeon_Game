@@ -24,7 +24,7 @@ namespace TextBased_Dungeon_Game
 
         public void GameInit()
         {
-            Console.SetWindowSize(100, 40);
+            Console.SetWindowSize(120, 40);
             player = new Warrior();
             player.PlayerInit();
             sceneManager = new SceneManager();
