@@ -98,7 +98,7 @@ namespace TextBased_Dungeon_Game
                 str.Append($"- {index++} ");
 
                 str.Append(MakeItemInfo(_item));
-
+                str.Insert(str.Length - 30, "\n");
                 // 인벤토리에서 처음 추가해줄 때 각각 무기와 갑옷으로 선언해주었기 때문에 굳이 다시 캐스팅 할 필요가 없음.
                 //if (_item.Type == ItemType.Weapon)
                 //{
@@ -165,9 +165,8 @@ namespace TextBased_Dungeon_Game
             AddItem(new Armor("수련자 갑옷", ItemType.Armor, "수련에 도움을 주는 갑옷입니다.", 1000, 5));
             AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 9));
             AddItem(new Armor("스파르타의 갑옷", ItemType.Armor, "스파르타의 전사들이 사용했다는 전설의 갑옷입니다.", 3500, 15));
-            AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
-            AddItem(new Weapon("청동 도끼", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 1500, 5));
-            AddItem(new Weapon("스파르타의 창", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 4000, 7));
+            AddItem(new Weapon("청동 도끼", ItemType.Weapon, "쉽게 볼 수 없는 도끼입니다.", 1500, 5));
+            AddItem(new Weapon("스파르타의 창", ItemType.Weapon, "스파르타의 전사들이 사용했다는 전설의 창입니다.", 4000, 7));
 
         }
         public new string MakeItemList()
@@ -179,7 +178,7 @@ namespace TextBased_Dungeon_Game
             foreach (Item _item in itemlist)
             {
                 str.Append("- ");
-                str.Append($"{MakeItemInfo(_item)} |");
+                str.Append($"{MakeItemInfo(_item)}");
                 str.Append("\n");
             }
 
@@ -189,6 +188,7 @@ namespace TextBased_Dungeon_Game
         {
             StringBuilder str = new StringBuilder();
             str.Append(base.MakeItemInfo(_item));
+            str.Insert(str.Length - 30, "\n");
             str.Append(_item.IsSell ? "구매완료" : $"{_item.Price} G");
 
             return str.ToString();

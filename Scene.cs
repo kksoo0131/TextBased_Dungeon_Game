@@ -44,10 +44,14 @@ namespace TextBased_Dungeon_Game
         public virtual int InputKey(int[] options)
         {
             int input;
+            int x = Console.GetCursorPosition().Left;
+            int y = Console.GetCursorPosition().Top;
 
             while (!int.TryParse(Console.ReadLine(), out input) || !options.Contains(input))
             {
+                Console.SetCursorPosition(x, y + 1);
                 Console.WriteLine("잘못된 입력입니다");
+                Console.SetCursorPosition(x, y + 1);
             }
 
             return input;
@@ -62,33 +66,67 @@ namespace TextBased_Dungeon_Game
 
             return array;
         }
-        public void DrawUI()
+
+        public string MakeVerticalLine()
         {
             StringBuilder sb = new StringBuilder();
 
-            for (int i = 0; i < Console.WindowHeight; i++)
+            for (int i = 0; i < Console.WindowHeight-2; i++)
             {
-                Console.SetCursorPosition(0, i);
-                Console.WriteLine("l");
-                Console.SetCursorPosition(33, i);
-                Console.WriteLine("l");
-                Console.SetCursorPosition(Console.WindowWidth-1, i);
-                Console.WriteLine("l");
+                int posX = 0;
+                sb.Append($"\u001b[38;2;255;{255 / Console.WindowHeight * i};80m│");
+                while(posX++ < Console.WindowWidth / 2 - 30)
+                {
+                    sb.Append(' ');
+                }    
+                sb.Append($"\u001b[38;2;255;{255 / Console.WindowHeight * i};80m│");
+                while (posX++ < Console.WindowWidth-4)
+                {
+                    sb.Append(' ');
+                }
+                sb.Append($"\u001b[38;2;255;{255 / Console.WindowHeight * i};80m│");
+                sb.Append("\n");
             }
 
-            for (int i =0;i< Console.WindowWidth/2; i++)
-            {
-                sb.Append("ㅡ");
-            }
-            Console.SetCursorPosition(0, 0);
-            Console.Write(sb.ToString());
-            Console.SetCursorPosition(0, Console.WindowHeight - 16);
-            Console.Write(sb.ToString());
-            Console.SetCursorPosition(0, Console.WindowHeight -1);
-            Console.Write(sb.ToString());
-
-            
+            return sb.ToString();
         }
+
+        public string HorizontalLine()
+        {
+            StringBuilder sb = new StringBuilder();
+            int posY = 0;
+            for (int i = 0; i < Console.WindowWidth; i++)
+            {
+                sb.Append($"\u001b[38;2;255;{255 / Console.WindowWidth * i};80m─");
+            }
+            while (posY++ < Console.WindowHeight - 16)
+            {
+                sb.Append("\n");
+            }
+            for (int i = 0; i < Console.WindowWidth; i++)
+            {
+                sb.Append($"\u001b[38;2;255;{255 / Console.WindowWidth * i};80m─");
+            }
+            while (posY++ < Console.WindowHeight - 2)
+            {
+                sb.Append("\n");
+            }
+            for (int i = 0; i < Console.WindowWidth; i++)
+            {
+                sb.Append($"\u001b[38;2;255;{255 / Console.WindowWidth * i};80m─");
+            }
+
+            return sb.ToString();
+        }
+        public void DrawUI()
+        {
+            Console.SetCursorPosition(0, 0);
+            Console.Write(MakeVerticalLine());
+            Console.SetCursorPosition(0, 0);
+            Console.Write(HorizontalLine());
+            Console.ResetColor();
+        }
+
         public void WriteTopMessage(string str)
         {
             string[] strArray = str.Split('\n');
@@ -143,7 +181,7 @@ namespace TextBased_Dungeon_Game
         {
             string[] strArray = str.Split('\n');
             int xPos = Console.WindowWidth / 2 - 23;
-            int yPos = 1;
+            int yPos = 0;
 
             for (int i = 0; i < strArray.Length; i++)
             {
@@ -165,15 +203,7 @@ namespace TextBased_Dungeon_Game
             options = new int[] { 1, 2, 3, 4, 5 };
             SoundPlayer.StopSound();
             SoundPlayer.Bgm("");
-            Console.Clear();
-
-     
-            for (int i = 0; i <= 255; i += 5)
-            {
-                string s = "──────────────────────────────────────────────────────";
-                Console.Write($"\u001b[38;2;255;{i};80m{s.Substring(i / 5, 1)}");
-            }
-          
+            Console.Clear();          
             DrawUI();
             WriteText();
             return InputKey(options);
@@ -192,6 +222,9 @@ namespace TextBased_Dungeon_Game
         public string MakeLogo()
         {
             StringBuilder sb = new StringBuilder();
+            sb.Append("\n");
+            sb.Append("\n");
+
             for (int i = 0; i <= 255; i += 8)
             {
                 string s = "┌──────────────────────────────┐";
@@ -311,6 +344,7 @@ namespace TextBased_Dungeon_Game
         public int EquipmentInfo()
         {
             Console.Clear();
+            DrawUI();
             WriteEquipText();
 
             // options를 아이템 Count갯수만큼 추가해야됨
@@ -337,14 +371,14 @@ namespace TextBased_Dungeon_Game
 
         public void WriteText()
         {
-            WriteLeftMessage($"{_inventory.MakeItemList()}");
+            WriteRightMessage($"{_inventory.MakeItemList()}");
             WriteSelectMessage("1. 장착 관리\n2. 이름\n3. 장착순\n4. 공격력\n5. 방어력\n0. 나가기");
             WriteMessage("인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n원하시는 행동을 입력해주세요.");
         }
 
         public void WriteEquipText()
         {
-            WriteLeftMessage($"{_inventory.MakeEquipList()}");
+            WriteRightMessage($"{_inventory.MakeEquipList()}");
             WriteSelectMessage("0. 나가기");
             WriteMessage("인벤토리 - 장착 관리\n보유 중인 아이템을 관리할 수 있습니다.\n원하시는 행동을 입력해주세요.");
         }
@@ -376,6 +410,7 @@ namespace TextBased_Dungeon_Game
         public int BuyItem()
         {
             Console.Clear();
+            DrawUI();
             WriteBuyText();
             DungeonGame.Instance.PrintMessage();
             // options를 아이템 Count갯수만큼 추가해야됨
@@ -406,6 +441,7 @@ namespace TextBased_Dungeon_Game
         public int SellItem()
         {
             Console.Clear();
+            DrawUI();
             WriteSellText();
             DungeonGame.Instance.PrintMessage();
 
@@ -431,21 +467,21 @@ namespace TextBased_Dungeon_Game
 
         public void WriteText()
         {
-            WriteLeftMessage($"{_shop.MakeItemList()}");
+            WriteRightMessage($"{_shop.MakeItemList()}");
             WriteSelectMessage("1. 아이템 구매\n2. 아이템 판매\n0. 나가기");
             WriteMessage($"상점\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
         }
 
         public void WriteBuyText()
         {
-            WriteLeftMessage($"{_shop.MakeShopList()}");
+            WriteRightMessage($"{_shop.MakeShopList()}");
             WriteSelectMessage("0. 나가기");
-            WriteMessage($"상점 - 아이템 구매\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
+            WriteMessage($"상점 - 아이템 구매\n필요한 아이템을 얻을 수 있는 상점입니다.\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
         }
 
         public void WriteSellText()
         {
-            WriteLeftMessage($"{_player.Inventory.MakeSellList()}");
+            WriteRightMessage($"{_player.Inventory.MakeSellList()}");
             WriteSelectMessage("0. 나가기");
             WriteMessage($"상점 - 아이템 판매\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
         }

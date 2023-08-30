@@ -9,20 +9,7 @@ namespace TextBased_Dungeon_Game
     {
         public Warrior() : base("전사전사전사", 1, 10, 5, 100, 100)
         {
-            Chad = "전사";
-            Gold = 1500;
-            MaxHealth = 100;
-            MaxMP = 50;
-            MP = 50;
-            Exp = 0;
-            ExpNeeded = CalculateExpNeeded();
-            SkillCount = 0;
-
-
-            Inventory.AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
-            Inventory.AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 5));
-            AddSkill(new AlphaStrike());
-            AddSkill(new DoubleStrike());
+            PlayerInit();
         }
 
         public Inventory Inventory = new Inventory();
@@ -182,7 +169,7 @@ namespace TextBased_Dungeon_Game
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"{Name}의 공격!\n Lv.{_unit.Level} {_unit.Name}을 공격했습니다. [데미지 : {damage}]");
+            sb.Append($"{Name}의 공격!\nLv.{_unit.Level} {_unit.Name}을 공격했습니다. [데미지 : {damage}]");
             sb.Append(result ? $" - 치명타 공격!!\n" : "\n");
             DungeonGame.Instance.message.Append($"{sb.ToString()}");
             

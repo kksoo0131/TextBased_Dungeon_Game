@@ -90,7 +90,7 @@ namespace TextBased_Dungeon_Game
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"{Name}의 공격!\n Lv.{_unit.Level} {_unit.Name}을 공격했습니다. [데미지 : {damage}]\n");
+            sb.Append($"{Name}의 공격!\nLv.{_unit.Level} {_unit.Name}을 공격했습니다. [데미지 : {damage}]");
             sb.Append(result ? $" - 치명타 공격!!\n" : "\n");
 
             DungeonGame.Instance.message.Append(sb);
