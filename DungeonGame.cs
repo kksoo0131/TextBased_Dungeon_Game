@@ -1,16 +1,20 @@
-﻿namespace TextBased_Dungeon_Game
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
+
+namespace TextBased_Dungeon_Game
 {
     internal class DungeonGame
     {
+        //DungeonGame == GameManager ,싱글톤 클래스.
+        public static DungeonGame Instance;
 
         public SceneManager sceneManager;
         public static DataManager dataManager;
-        public static DungeonGame Instance;
-        public static Warrior player;
-        public static Shop shop;
-        public static Dungeon dungeon;
-
-        public static Action message;
+        public Warrior player;
+        public Shop shop;
+        public Dungeon dungeon;
+        public StringBuilder message = new StringBuilder();
         public DungeonGame()
         {
             Instance = this;
@@ -34,6 +38,7 @@
             int nextScene = 0;
             while (true)
             {
+                Console.SetWindowSize(120, 40);
                 nextScene = sceneManager.SceneList((SceneType)nextScene).DrawScene();
             }
 
@@ -91,16 +96,15 @@
         //    }
 
         //}
-        static public void PrintMessage()
+
+        public string PrintMessage()
         {
-            if (message != null)
-            {
-                message();
-                message = null;
-            }
+            string str = message.ToString();
+            message.Clear();
+            return str;
         }
 
-        public int EnterDungeon(int i)
+      /*  public int EnterDungeon(int i)
         {
             int dungeonDefense;
             Random dice = new Random();
@@ -156,12 +160,11 @@
             int rewardRate = dice.Next(attack, attack * 2 + 1) / 100 + 1;
             player.Gold += (int)reward * rewardRate;
             player.Health -= hpReduction;
-            player.Level += 1;
-            player.Attack += 1;
-            player.Defense += 1;
+            
+
 
             return (int)SceneType.DungeonClearScene;
-        }
+        }*/
 
 
     }

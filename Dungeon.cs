@@ -10,13 +10,39 @@ namespace TextBased_Dungeon_Game
     {
         public Dungeon()
         {
-            monsterList.Add(new Unit("미니언", 2, 10, 0, 15));
-            monsterList.Add(new Unit("대포미니언", 5, 10, 0, 25));
-            monsterList.Add(new Unit("공허충", 3, 10, 0, 10));
+
+            Init();
+
         }
 
-        public List<Unit> monsterList = new List<Unit>();
+         List<Unit> monsterList = new List<Unit>();
 
+        public void Init()
+        {
+            monsterList.Add(new Unit("미니언", 2, 10, 0, 15, 15));
+            monsterList.Add(new Unit("대포미니언", 5, 10, 0, 25, 25));
+            monsterList.Add(new Unit("공허충", 3, 10, 0, 10, 10));
+            DeadCount = 0;
+            Result = true;
+        }
+        public bool Result { get; set; } 
+        public int DeadCount { get; set; }
+        public Unit GetUnit(int index)
+        {
+            return monsterList[index];
+        }
+        public List<Unit> GetUnitList()
+        {
+            return monsterList;
+        }
+        public int Count()
+        {
+            return monsterList.Count;
+        }        
+        public bool DungeonClear()
+        {
+            return DeadCount >= Count();
+        }
         public string MonsterListInfo()
         {
             StringBuilder sb = new StringBuilder();
@@ -34,11 +60,16 @@ namespace TextBased_Dungeon_Game
 
             for(int i =0; i< monsterList.Count; i++) 
             {
-                sb.Append($"{i + 1} ");
+                sb.Append($"{i + 1}. ");
                 sb.Append(monsterList[i].MonsterInfo());
             }
 
             return sb.ToString();
+        }
+
+        public void Clear()
+        {
+            monsterList.Clear();
         }
     }
 }

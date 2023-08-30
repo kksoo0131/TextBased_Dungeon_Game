@@ -227,22 +227,23 @@ namespace TextBased_Dungeon_Game
 
         public Item? BuyItem(int index)
         {
+
             if (itemlist[index].IsSell)
             {
-                DungeonGame.message += () => Console.WriteLine("이미 구매한 아이템입니다.");
+                DungeonGame.Instance.message.Append("이미 구매한 아이템입니다.\n");
                 return null;
             }
 
-            if (DungeonGame.player.Gold >= itemlist[index].Price)
+            if (DungeonGame.Instance.player.Gold >= itemlist[index].Price)
             {
-                DungeonGame.player.Gold -= itemlist[index].Price;
+                DungeonGame.Instance.player.Gold -= itemlist[index].Price;
                 itemlist[index].IsSell = true;
-                DungeonGame.message += () => Console.WriteLine($"{itemlist[index].Name}를 구매 완료했습니다.");
+                DungeonGame.Instance.message.Append($"{itemlist[index].Name}를 구매 완료했습니다.\n");
                 return itemlist[index];
             }
             else
             {
-                DungeonGame.message += () => Console.WriteLine("Gold 가 부족합니다.");
+                DungeonGame.Instance.message.Append("Gold 가 부족합니다.\n");
                 return null;
             }
                 
