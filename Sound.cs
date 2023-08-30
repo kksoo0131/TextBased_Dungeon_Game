@@ -8,12 +8,13 @@ class SoundPlayer
     public static async Task Bgm(string audioFileName)
     {
         string audioFilePath = "BGM.mp3";
-        string fullPath = Path.Combine(@"C:\Users\User\source\repos\kksoo0131\TextBased_Dungeon_Game\.vscode", audioFilePath);
+        string fullPath = Path.Combine(@"C:\Users\Kks\source\repos\TextBased_Dungeon_Game\.vscode", audioFilePath);
+        //string fullPath = Path.Combine(@"C:\Users\User\source\repos\kksoo0131\TextBased_Dungeon_Game\.vscode", audioFilePath);
 
         // 사운드 반복재생
         while (true)
         {
-            using (var audioFile = new AudioFileReader(audioFilePath))
+            using (var audioFile = new AudioFileReader(fullPath))
             {
                 outputDevice = new WaveOutEvent();
                 outputDevice.Init(audioFile);

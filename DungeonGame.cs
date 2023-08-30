@@ -25,10 +25,10 @@ namespace TextBased_Dungeon_Game
         public void GameInit()
         {
             Console.SetWindowSize(100, 40);
-            sceneManager = new SceneManager();
-            dataManager = new DataManager();
             player = new Warrior();
             player.PlayerInit();
+            sceneManager = new SceneManager();
+            dataManager = new DataManager();
             shop = new Shop();
             dungeon = new Dungeon();
             //Read();
