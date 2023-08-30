@@ -63,8 +63,7 @@ namespace TextBased_Dungeon_Game
             str.Append($"{temp} | ");
 
             temp.Clear();
-            temp.Append($"{_potion.Info} | ");
-            while (temp.Length < 30) temp.Append(" ");
+            temp.Append($"{_potion.Info}");
             str.Append(temp);
             str.Append($"보유 : {_potion.Quantity}개");
             return str.ToString();

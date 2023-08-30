@@ -365,7 +365,8 @@ namespace TextBased_Dungeon_Game
         public int PotionInventoryInfo()  // 포션 인벤토리
         {
             Console.Clear();
-            Console.WriteLine(MakePotionText());
+            DrawUI();
+            WritePotionText();
 
             // options를 포션 Count만큼 추가
             options = new int[_potionInventory.Count() + 1];
@@ -382,7 +383,7 @@ namespace TextBased_Dungeon_Game
                     return (int)SceneType.InventoryScene;
                 default:
                     _player.DrinkPotion(index - 1);
-                    DungeonGame.Instance.PlayerSave();
+                    // DungeonGame.Instance.PlayerSave();
                     return PotionInventoryInfo();
             }
         }
@@ -390,18 +391,20 @@ namespace TextBased_Dungeon_Game
         {
             WriteRightMessage($"{_inventory.MakeItemList()}");
             WriteSelectMessage("1. 장착 관리\n2. 포션 인벤토리\n3. 이름\n4. 장착순\n5. 공격력\n6. 방어력");
-            WriteMessage("인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n원하시는 행동을 입력해주세요.");
+            WriteMessage("[인벤토리]\n보유 중인 아이템을 관리할 수 있습니다.\n원하시는 행동을 입력해주세요.");
         }
         public void WriteEquipText()
         {
             WriteRightMessage($"{_inventory.MakeEquipList()}");
             WriteSelectMessage("0. 나가기");
-            WriteMessage("인벤토리 - 장착 관리\n보유 중인 아이템을 관리할 수 있습니다.\n원하시는 행동을 입력해주세요.");
+            WriteMessage("[인벤토리 - 장착 관리]\n보유 중인 아이템을 관리할 수 있습니다.\n원하시는 행동을 입력해주세요.");
         }
 
-        public string MakePotionText()
+        public void WritePotionText()
         {
-            return $"포션 인벤토리 - 포션 사용\n보유 중인 포션을 사용할 수 있습니다.\n\n{_potionInventory.MakePotionList()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            WriteRightMessage($"{_potionInventory.MakePotionList()}");
+            WriteSelectMessage("1. 포션 사용\n0. 나가기");
+            WriteMessage($"[포션 인벤토리]\n보유 중인 포션을 사용할 수 있습니다.\n원하시는 행동을 입력해주세요.");
         }  
     }
 
