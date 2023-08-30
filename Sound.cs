@@ -1,9 +1,6 @@
 ﻿using NAudio.Wave;
 using NAudio.Midi;
 
-using NAudio.Wave;
-using NAudio.Midi;
-
 class SoundPlayer
 {
     private static WaveOutEvent outputDevice;
@@ -11,7 +8,7 @@ class SoundPlayer
     public static async Task Bgm(string audioFileName)
     {
         string audioFilePath = "BGM.mp3";
-        string fullPath = Path.Combine(@"C:\Users\User\source\repos\kksoo0131\TextBased_Dungeon_Game\bin\Debug\net6.0", audioFilePath);
+        string fullPath = Path.Combine(@"C:\Users\User\source\repos\kksoo0131\TextBased_Dungeon_Game\.vscode", audioFilePath);
 
         // 사운드 반복재생
         while (true)
@@ -34,7 +31,7 @@ class SoundPlayer
     public static async Task SoundsDungeon(string audioFileName)
     {
         string audioFilePath = "Dungeon.mp3";
-        string fullPath = Path.Combine(@"C:\Users\User\source\repos\kksoo0131\TextBased_Dungeon_Game\bin\Debug\net6.0", audioFilePath);
+        string fullPath = Path.Combine(@"C:\Users\User\source\repos\kksoo0131\TextBased_Dungeon_Game\.vscode", audioFilePath);
 
         while (true)
         {
@@ -55,7 +52,7 @@ class SoundPlayer
     public static async Task SoundsClear(string audioFileName)
     {
         string audioFilePath = "Clear.mp3";
-        string fullPath = Path.Combine(@"C:\Users\User\source\repos\kksoo0131\TextBased_Dungeon_Game\bin\Debug\net6.0", audioFilePath);
+        string fullPath = Path.Combine(@"C:\Users\User\source\repos\kksoo0131\TextBased_Dungeon_Game\.vscode", audioFilePath);
 
         using (var audioFile = new AudioFileReader(audioFilePath))
         {
@@ -75,7 +72,7 @@ class SoundPlayer
     public static async Task SoundsAttack(string audioFileName)
     {
         string audioFilePath = "Attack.mp3";
-        string fullPath = Path.Combine(@"C:\Users\User\source\repos\kksoo0131\TextBased_Dungeon_Game\bin\Debug\net6.0", audioFilePath);
+        string fullPath = Path.Combine(@"C:\Users\User\source\repos\kksoo0131\TextBased_Dungeon_Game\.vscode", audioFilePath);
 
         using (var audioFile = new AudioFileReader(audioFilePath))
         {
