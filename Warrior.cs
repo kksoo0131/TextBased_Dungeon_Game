@@ -32,7 +32,6 @@ namespace TextBased_Dungeon_Game
                 base.Attack = value;
             }
         }
-        public int MaxHealth { get; set; }
         public int MP { get; set; }
         public int MaxMP { get; set; }
         public int Gold { get; set; }
