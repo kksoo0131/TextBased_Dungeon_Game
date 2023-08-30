@@ -21,7 +21,7 @@ namespace TextBased_Dungeon_Game
         {
             monsterList.Add(new Wolf());
             monsterList.Add(new Chicken());
-            monsterList.Add(new Unit("공허충", 3, 10, 0, 10, 10));
+            monsterList.Add(new WildBoar());
             DeadCount = 0;
             Result = true;
         }
@@ -72,4 +72,6 @@ namespace TextBased_Dungeon_Game
             monsterList.Clear();
         }
     }
+
+    
 }

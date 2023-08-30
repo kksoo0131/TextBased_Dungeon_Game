@@ -35,10 +35,11 @@ namespace TextBased_Dungeon_Game
         }
         public void GameStart()
         {
-            int nextScene = 0;
+            int nextScene = (int)SceneType.CreateCharacterScene;
             while (true)
             {
                 Console.SetWindowSize(120, 40);
+                Console.Clear();
                 nextScene = sceneManager.SceneList((SceneType)nextScene).DrawScene();
             }
 

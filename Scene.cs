@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace TextBased_Dungeon_Game
 {
     public enum SceneType
-    {    
+    {
         StartScene,
         // 스타트 씬 메뉴
         StatusScene,
@@ -24,11 +24,13 @@ namespace TextBased_Dungeon_Game
         PlayerPhaseScene,
         MonsterPhaseScene,
         BattleResultScene,
+        CreateCharacterScene,
         //마지막은 EndPoint여야함
         EndPoint,
     }
     class Scene
-    {   // 인터페이스에서는 모든 멤버가 암시적으로 public이고,
+    {   
+        // 인터페이스에서는 모든 멤버가 암시적으로 public이고,
         // 클래스나 메서드에서는 모든 멤버가 암시적으로 internal이다.
 
         //Type 리플렉션을 사용할때 인터페이스로는 형변환이 불가능하기 때문에
@@ -66,7 +68,48 @@ namespace TextBased_Dungeon_Game
 
             return array;
         }
+        public void DrawUI()
+        {
+            Console.SetCursorPosition(0, 0);
+            Console.Write(MakeVerticalLine());
+            Console.SetCursorPosition(0, 0);
+            Console.Write(HorizontalLine());
+            Console.ResetColor();
+        }
+        public string MakeLogo()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("\n");
+            sb.Append("\n");
 
+            for (int i = 0; i <= 255; i += 8)
+            {
+                string s = "┌──────────────────────────────┐";
+                sb.Append($"\u001b[38;2;255;{i};80m{s.Substring(i / 8, 1)}");
+            }
+            sb.Append("\n");
+            for (int i = 0; i <= 255; i += 8)
+            {
+                string s = "│  WELCOME TO SPARTA VILLAGE   │";
+                sb.Append($"\u001b[38;2;255;{i};100m{s.Substring(i / 8, 1)}");
+            }
+            sb.Append("\n");
+            for (int i = 255; i >= 0; i -= 13)
+            {
+                string s = "■■■■■■■■■■■■■■■■■■■■■";
+                sb.Append($"\u001b[38;2;0;{i};150m{s.Substring(i / 13, 1)}");
+            }
+            sb.Append("\n");
+            for (int i = 0; i <= 255; i += 8)
+            {
+                string s = "└──────────────────────────────┘";
+                sb.Append($"\u001b[38;2;255;{i};80m{s.Substring(i / 8, 1)}");
+            }
+            sb.Append("\n");
+            sb.Append("\n");
+
+            return sb.ToString();
+        }
         public string MakeVerticalLine()
         {
             StringBuilder sb = new StringBuilder();
@@ -90,7 +133,6 @@ namespace TextBased_Dungeon_Game
 
             return sb.ToString();
         }
-
         public string HorizontalLine()
         {
             StringBuilder sb = new StringBuilder();
@@ -118,15 +160,6 @@ namespace TextBased_Dungeon_Game
 
             return sb.ToString();
         }
-        public void DrawUI()
-        {
-            Console.SetCursorPosition(0, 0);
-            Console.Write(MakeVerticalLine());
-            Console.SetCursorPosition(0, 0);
-            Console.Write(HorizontalLine());
-            Console.ResetColor();
-        }
-
         public void WriteTopMessage(string str)
         {
             string[] strArray = str.Split('\n');
@@ -190,25 +223,53 @@ namespace TextBased_Dungeon_Game
             }
         }
 
-
     }
 
-
-    class StartScene : Scene
+    class CreateCharacterScene : Scene
     {
-        int[] options;
-        public StartScene() : base() { }    
+        public CreateCharacterScene() : base() { }
         public override int DrawScene()
-        {         
-            options = new int[] { 1, 2, 3, 4, 5 };
+        {
+            return Start();
+        }
+
+        public int Start()
+        {
             SoundPlayer.StopSound();
             SoundPlayer.Bgm("");
-            Console.Clear();          
+            Console.Clear();
             DrawUI();
             WriteText();
-            return InputKey(options);
+            _player.Name = Console.ReadLine();
+            return (int)SceneType.StartScene;
+        }
+        public void WriteText()
+        {
+            WriteRightMessage(MakeLogo());
+            Console.ResetColor();
+            WriteSelectMessage("캐릭터 생성 중 ...");
+            WriteMessage("스파르타 마을에 오신 여러분 환영합니다.\n원하시는 이름을 설정해주세요.");
 
+        }
 
+        
+    }
+    class StartScene : Scene
+    {
+        public StartScene() : base() { }    
+        public override int DrawScene()
+        {
+            return Start();
+        }
+
+        public int Start()
+        {
+            SoundPlayer.StopSound();
+            SoundPlayer.Bgm("");
+            Console.Clear();
+            DrawUI();
+            WriteText();
+            return InputKey(MakeOption((int)SceneType.SaveRoadScene));
         }
         public void WriteText()
         {
@@ -218,86 +279,15 @@ namespace TextBased_Dungeon_Game
             WriteMessage("스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.\n원하시는 행동을 입력해주세요.");
 
         }
-
-        public string MakeLogo()
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append("\n");
-            sb.Append("\n");
-
-            for (int i = 0; i <= 255; i += 8)
-            {
-                string s = "┌──────────────────────────────┐";
-                sb.Append($"\u001b[38;2;255;{i};80m{s.Substring(i / 8, 1)}");
-            }
-            sb.Append("\n");
-            for (int i = 0; i <= 255; i += 8)
-            {
-                string s = "│  WELCOME TO SPARTA VILLAGE   │";
-                sb.Append($"\u001b[38;2;255;{i};100m{s.Substring(i / 8, 1)}");
-            }
-            sb.Append("\n");
-            for (int i = 255; i >= 0; i -= 13)
-            {
-                string s = "■■■■■■■■■■■■■■■■■■■■■";
-                sb.Append($"\u001b[38;2;0;{i};150m{s.Substring(i / 13, 1)}");
-            }
-            sb.Append("\n");
-            for (int i = 0; i <= 255; i += 8)
-            {
-                string s = "└──────────────────────────────┘";
-                sb.Append($"\u001b[38;2;255;{i};80m{s.Substring(i / 8, 1)}");
-            }
-            sb.Append("\n");
-            sb.Append("\n");
-
-            return sb.ToString();
-
-            /*
-            
-            Console.WriteLine();
-            for (int i = 0; i <= 255; i += 8)
-            {
-                string s = "┌──────────────────────────────┐";
-                Console.Write($"\u001b[38;2;255;{i};80m{s.Substring(i / 8, 1)}");      
-            }
-            Console.WriteLine();
-
-            for (int i = 0; i <= 255; i += 8)
-            {
-                string s = "│  WELCOME TO SPARTA VILLAGE   │";
-                Console.Write($"\u001b[38;2;255;{i};100m{s.Substring(i / 8, 1)}");
-            }
-            for (int i = 255; i >= 0; i -= 13)
-            {
-                string s = "■■■■■■■■■■■■■■■■■■■■■";
-                Console.Write($"\u001b[38;2;0;{i};150m{s.Substring(i / 13, 1)}");
-            }
-            Console.WriteLine();
-            for (int i = 0; i <= 255; i += 8)
-            {
-                string s = "└──────────────────────────────┘";
-                Console.Write($"\u001b[38;2;255;{i};80m{s.Substring(i / 8, 1)}");
-            }
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.ResetColor();
-
-            return "스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다. \n\n1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기\n\n원하시는 행동을 입력해주세요.";
-*/
-        }
-
     }
     class StatusScene : Scene
     {
         public StatusScene() : base() { }
         public override int DrawScene()
         {
-            options = new int[] { 0 };
-            Console.Clear();
             DrawUI();
             WriteText();
-            return InputKey(options);
+            return InputKey(MakeOption(0));
         }
 
         public void WriteText()
@@ -313,12 +303,10 @@ namespace TextBased_Dungeon_Game
         public override int DrawScene()
         {
             _inventory = _player.Inventory;
-            options = new int[] { 0, 1, 2, 3, 4, 5};
-            Console.Clear();
             DrawUI();
             WriteText();
 
-            switch (InputKey(options))
+            switch (InputKey(MakeOption(5)))
             {
                 
                 case 0:
@@ -346,16 +334,8 @@ namespace TextBased_Dungeon_Game
             Console.Clear();
             DrawUI();
             WriteEquipText();
+            int index = InputKey(MakeOption(_inventory.Count()));
 
-            // options를 아이템 Count갯수만큼 추가해야됨
-            options = new int[_inventory.Count() + 1];
-            options[0] = 0;
-            for (int i = 1; i <= _inventory.Count(); i++)
-            {
-                options[i] = i;
-            }
-
-            int index = InputKey(options);
             switch (index)
             {
                 case 0:
@@ -368,14 +348,12 @@ namespace TextBased_Dungeon_Game
                     return EquipmentInfo();
             }
         }
-
         public void WriteText()
         {
             WriteRightMessage($"{_inventory.MakeItemList()}");
             WriteSelectMessage("1. 장착 관리\n2. 이름\n3. 장착순\n4. 공격력\n5. 방어력\n0. 나가기");
             WriteMessage("인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n원하시는 행동을 입력해주세요.");
         }
-
         public void WriteEquipText()
         {
             WriteRightMessage($"{_inventory.MakeEquipList()}");
@@ -389,12 +367,10 @@ namespace TextBased_Dungeon_Game
         public override int DrawScene()
         {
             _shop = DungeonGame.Instance.shop;
-            options = new int[] { 0, 1, 2};
-            Console.Clear();
             DrawUI();
             WriteText();
 
-            switch (InputKey(options))
+            switch (InputKey(MakeOption(2)))
             {
                 case 0:
                     return (int)SceneType.StartScene;
@@ -412,16 +388,7 @@ namespace TextBased_Dungeon_Game
             Console.Clear();
             DrawUI();
             WriteBuyText();
-            DungeonGame.Instance.PrintMessage();
-            // options를 아이템 Count갯수만큼 추가해야됨
-            options = new int[_shop.Count() + 1];
-            options[0] = 0;
-            for (int i = 1; i <= _shop.Count(); i++)
-            {
-                options[i] = i;
-            }
-
-            int index = InputKey(options);
+            int index = InputKey(MakeOption(_shop.Count()));
             switch (index)
             {
                 case 0:
@@ -443,17 +410,7 @@ namespace TextBased_Dungeon_Game
             Console.Clear();
             DrawUI();
             WriteSellText();
-            DungeonGame.Instance.PrintMessage();
-
-            // options를 아이템 Count갯수만큼 추가해야됨
-            options = new int[_player.Inventory.Count() + 1];
-            options[0] = 0;
-            for (int i = 1; i <= _player.Inventory.Count(); i++)
-            {
-                options[i] = i;
-            }
-
-            int index = InputKey(options);
+            int index = InputKey(MakeOption(_player.Inventory.Count()));
             switch (index)
             {
                 case 0:
@@ -492,12 +449,10 @@ namespace TextBased_Dungeon_Game
         public DungeonEnterScene() : base() { }
         public override int DrawScene()
         {
-            options = new int[] { 0, 1};
-            Console.Clear();
             DrawUI();
             WriteText();
 
-            switch (InputKey(options))
+            switch (InputKey(MakeOption(1)))
             {
                 case 0:
                     return (int)SceneType.StartScene;
@@ -521,13 +476,10 @@ namespace TextBased_Dungeon_Game
         public RestScene() : base() { }
         public override int DrawScene()
         {
-            options = new int[] { 0, 1 };
-            Console.Clear();
             DrawUI();
             WriteText();
-            DungeonGame.Instance.PrintMessage();
             //DungeonGame.Instance.PlayerSave();
-            if (InputKey(options) == 1)
+            if (InputKey(MakeOption(1)) == 1)
             {
                 _player.Rest();
                 return (int)SceneType.RestScene;
@@ -734,17 +686,15 @@ namespace TextBased_Dungeon_Game
             WriteMessage("Battle!!\n");
         }
     }
-
     class SaveRoadScene : Scene
     {
-        int[] options = { 0, 1, 2 };
 
         public override int DrawScene()
         {
             Console.Clear();
             Console.WriteLine(MakeText());
             
-            switch(InputKey(options)) 
+            switch(InputKey(MakeOption(2))) 
             {
                 case 0:
                     return (int)SceneType.StartScene;
@@ -793,7 +743,6 @@ namespace TextBased_Dungeon_Game
             return "불러오기";
         }
     }
-
     class MonsterPhaseScene : Scene
     {
         Dungeon dungeon;
