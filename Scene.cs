@@ -231,6 +231,7 @@ namespace TextBased_Dungeon_Game
         public CreateCharacterScene() : base() { }
         public override int DrawScene()
         {
+            Prologue.PlayPrologue();
             return Start();
         }
 
@@ -382,7 +383,7 @@ namespace TextBased_Dungeon_Game
                     return (int)SceneType.InventoryScene;
                 default:
                     _player.DrinkPotion(index - 1);
-                    DungeonGame.Instance.PlayerSave();
+                    //DungeonGame.Instance.PlayerSave();
                     return PotionInventoryInfo();
             }
         }
