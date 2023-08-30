@@ -231,7 +231,6 @@ namespace TextBased_Dungeon_Game
         public CreateCharacterScene() : base() { }
         public override int DrawScene()
         {
-            Prologue.PlayPrologue();
             return Start();
         }
 
@@ -243,6 +242,7 @@ namespace TextBased_Dungeon_Game
             DrawUI();
             WriteText();
             _player.Name = Console.ReadLine();
+            Prologue.PlayPrologue();
             return (int)SceneType.StartScene;
         }
         public void WriteText()
