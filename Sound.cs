@@ -1,9 +1,6 @@
 ﻿using NAudio.Wave;
 using NAudio.Midi;
 
-using NAudio.Wave;
-using NAudio.Midi;
-
 class SoundPlayer
 {
     private static WaveOutEvent outputDevice;

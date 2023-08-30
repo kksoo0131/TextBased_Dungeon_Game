@@ -65,9 +65,15 @@ namespace TextBased_Dungeon_Game
             options = new int[] { 1, 2, 3, 4, 5 };
             Console.Clear();
             Console.WriteLine(MakeText());
+                      Console.WriteLine();
+            for (int i = 0; i <= 255; i += 5)
+            {
+                string s = "──────────────────────────────────────────────────────";
+                Console.Write($"\u001b[38;2;255;{i};80m{s.Substring(i / 5, 1)}");
+            }
             return InputKey(options);
 
-         
+
         }
 
         public string MakeText()
