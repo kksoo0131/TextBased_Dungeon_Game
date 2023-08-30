@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,12 +12,13 @@ namespace TextBased_Dungeon_Game
         
         StartScene,
 
-        // 스타트 씬 메뉴 4개
+        // 스타트 씬 메뉴 6개
         StatusScene,
         InventoryScene,
         ShopScene,
         DungeonEnterScene,
         RestScene,
+        SaveRoadScene,
         //나머지
         DungeonClearScene,
         DungeonFailScene,
@@ -53,7 +55,7 @@ namespace TextBased_Dungeon_Game
     }
     class StartScene : Scene
     {
-        int[] options = { 1, 2, 3, 4, 5 };
+        int[] options = { 1, 2, 3, 4, 5, 6 };
         
         public override int DrawScene()
         {
@@ -64,7 +66,7 @@ namespace TextBased_Dungeon_Game
 
         public string MakeText()
         {
-            return "스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다. \n\n1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기\n\n원하시는 행동을 입력해주세요.";
+            return "스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다. \n\n1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기\n6. 저장하기 & 불러오기\n\n원하시는 행동을 입력해주세요.";
         }
 
     }
@@ -143,14 +145,15 @@ namespace TextBased_Dungeon_Game
                     // 해당 장비가 장착중 -> 장착 해제
                     // 장착 해제 -> 장착중으로 변경함
                     DungeonGame.player.EquipItem(index - 1);
-                    DungeonGame.PlayerSave();
+                    //DungeonGame.PlayerSave();
                     return EquipmentInfo();
             }
         }
 
         public string MakeText()
         {
-            return $"인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{DungeonGame.player.Inventory.MakeItemList()}\n\n1. 장착 관리\n2. 이름\n3. 장착순\n4. 공격력\n5. 방어력\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            if (DungeonGame.player.Inventory.Count() != 0) return $"인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{DungeonGame.player.Inventory.MakeItemList()}\n\n1. 장착 관리\n2. 이름\n3. 장착순\n4. 공격력\n5. 방어력\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            return "인벤토리가 비어있습니다.";
         }
 
         public string MakeEquipText()
@@ -203,8 +206,8 @@ namespace TextBased_Dungeon_Game
                     Item? item = DungeonGame.shop.BuyItem(index - 1);
                     if (item != null)
                     {
-                        DungeonGame.PlayerSave();
-                        DungeonGame.ShopSave();
+                        //DungeonGame.PlayerSave();
+                        //DungeonGame.ShopSave();
                         DungeonGame.player.Inventory.AddItem(item);
                     }
 
@@ -232,7 +235,7 @@ namespace TextBased_Dungeon_Game
                     return (int)SceneType.ShopScene;
                 default:
                     DungeonGame.player.SellItem(index - 1);
-                    DungeonGame.PlayerSave();
+                    //DungeonGame.PlayerSave();
                     return SellItem();
             }
         }
@@ -289,7 +292,7 @@ namespace TextBased_Dungeon_Game
         {
             Console.Clear();
             Console.WriteLine(MakeText());
-            DungeonGame.PlayerSave();
+            //DungeonGame.PlayerSave();
             return InputKey(options);
         }
 
@@ -307,7 +310,7 @@ namespace TextBased_Dungeon_Game
         {
             Console.Clear();
             Console.WriteLine(MakeText());
-            DungeonGame.PlayerSave();
+            //DungeonGame.PlayerSave();
             return InputKey(options);
         }
 
@@ -326,7 +329,7 @@ namespace TextBased_Dungeon_Game
             Console.Clear();
             Console.WriteLine(MakeText());
             DungeonGame.PrintMessage();
-            DungeonGame.PlayerSave();
+            //DungeonGame.PlayerSave();
             if (InputKey(options) == 1)
             {
                 DungeonGame.player.Rest();
@@ -340,6 +343,66 @@ namespace TextBased_Dungeon_Game
             return $"휴식하기\n500 G 를 내면 체력을 회복할 수 있습니다. (보유 골드 : {DungeonGame.player.Gold} G\n\n1. 휴식하기\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
         }
     }
+
+    class SaveRoadScene : Scene
+    {
+        int[] options = { 0, 1, 2 };
+
+        public override int DrawScene()
+        {
+            Console.Clear();
+            Console.WriteLine(MakeText());
+            
+            switch(InputKey(options)) 
+            {
+                case 0:
+                    return (int)SceneType.StartScene;
+                case 1:
+                    return Save();
+                case 2:
+                    return Load();
+                default:
+                    return (int)SceneType.SaveRoadScene;
+
+            }
+        }
+
+        public int Save()
+        {
+            Console.Clear();
+            Console.WriteLine(MakeSaveText());
+            DungeonGame.dataManager.PlayerSave();
+            //DungeonGame.dataManager.InventorySave();
+
+            return DrawScene();
+        }
+
+        public int Load()
+        {
+            Console.Clear();
+            Console.WriteLine(MakeLoadText());
+            DungeonGame.dataManager.PlayerLoad();
+            //DungeonGame.dataManager.InventoryLoad();
+
+            return DrawScene();
+        }
+
+        public string MakeText()
+        {
+            return "저장하거나 불러오시겠습니까? \n\n0. 나가기\n1. 저장하기\n2. 불러오기\n\n원하시는 행동을 입력해주세요.";
+        }
+
+        public string MakeSaveText()
+        {
+            return "저장하기";
+        }
+
+        public string MakeLoadText()
+        {
+            return "불러오기";
+        }
+    }
+
     class BattleScene : Scene 
     {
         int[] options;

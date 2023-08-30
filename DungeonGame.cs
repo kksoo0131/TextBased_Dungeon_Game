@@ -1,12 +1,10 @@
-﻿using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-
-namespace TextBased_Dungeon_Game
+﻿namespace TextBased_Dungeon_Game
 {
     internal class DungeonGame
     {
 
         public SceneManager sceneManager;
+        public static DataManager dataManager;
         public static DungeonGame Instance;
         public static Warrior player;
         public static Shop shop;
@@ -24,8 +22,12 @@ namespace TextBased_Dungeon_Game
         {
             Console.SetWindowSize(100, 40);
             sceneManager = new SceneManager();
+            dataManager = new DataManager();
+            player = new Warrior();
+            player.PlayerInit();
+            shop = new Shop();
             dungeon = new Dungeon();
-            Read();
+            //Read();
         }
         public void GameStart()
         {
@@ -34,61 +36,61 @@ namespace TextBased_Dungeon_Game
             {
                 nextScene = sceneManager.SceneList((SceneType)nextScene).DrawScene();
             }
-            
-        }
-
-        static public void PlayerSave()
-        {
-            IFormatter formatter = new BinaryFormatter();
-            // 파일 저장을 위한 BinaryFormatter객체 생성
-            using (Stream stream = new FileStream("player_info.bin", FileMode.Create, FileAccess.Write))
-            {
-                // 스트림을 생성 , 파일을 생성해서 쓰기모드에 들어간다.(파일을 출력할 스트림을 생성)
-                formatter.Serialize(stream, player);
-                // player 객체의 정보를 직렬화하여 stream에 저장한다.
-            }
-        }
-        static public void ShopSave()
-        {
-            IFormatter formatter = new BinaryFormatter();
-            using (Stream stream = new FileStream("shop_info.bin", FileMode.Create, FileAccess.Write))
-            {
-                formatter.Serialize(stream, shop);
-            }
-        }
-        public void Read()
-        {
-            IFormatter formatter = new BinaryFormatter();
-            
-            try
-            {
-                using (Stream stream = new FileStream("player_info.bin", FileMode.Open, FileAccess.Read))
-                {
-                    // 스트림을 생성, 파일을 오픈해서 읽기모드에 들어간다. (파일을 입력받는 스트림을 생성)
-                    player = (Warrior)formatter.Deserialize(stream);
-                    // 스트림을 역직렬화해서 player에 정보를 넣어준다.
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                player = new Warrior();
-            }
-
-            try
-            {
-                using (Stream stream = new FileStream("shop_info.bin", FileMode.Open, FileAccess.Read))
-                {
-                    // 스트림을 생성, 파일을 오픈해서 읽기모드에 들어간다. (파일을 입력받는 스트림을 생성)
-                    shop = (Shop)formatter.Deserialize(stream);
-                    // 스트림을 역직렬화해서 player에 정보를 넣어준다.
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                shop = new Shop();
-            }
 
         }
+
+        //static public void PlayerSave()
+        //{
+        //    IFormatter formatter = new BinaryFormatter();
+        //    // 파일 저장을 위한 BinaryFormatter객체 생성
+        //    using (Stream stream = new FileStream("player_info.bin", FileMode.Create, FileAccess.Write))
+        //    {
+        //        // 스트림을 생성 , 파일을 생성해서 쓰기모드에 들어간다.(파일을 출력할 스트림을 생성)
+        //        formatter.Serialize(stream, player);
+        //        // player 객체의 정보를 직렬화하여 stream에 저장한다.
+        //    }
+        //}
+        //static public void ShopSave()
+        //{
+        //    IFormatter formatter = new BinaryFormatter();
+        //    using (Stream stream = new FileStream("shop_info.bin", FileMode.Create, FileAccess.Write))
+        //    {
+        //        formatter.Serialize(stream, shop);
+        //    }
+        //}
+        //public void Read()
+        //{
+        //    IFormatter formatter = new BinaryFormatter();
+
+        //    try
+        //    {
+        //        using (Stream stream = new FileStream("player_info.bin", FileMode.Open, FileAccess.Read))
+        //        {
+        //            // 스트림을 생성, 파일을 오픈해서 읽기모드에 들어간다. (파일을 입력받는 스트림을 생성)
+        //            player = (Warrior)formatter.Deserialize(stream);
+        //            // 스트림을 역직렬화해서 player에 정보를 넣어준다.
+        //        }
+        //    }
+        //    catch (FileNotFoundException)
+        //    {
+        //        player = new Warrior();
+        //    }
+
+        //    try
+        //    {
+        //        using (Stream stream = new FileStream("shop_info.bin", FileMode.Open, FileAccess.Read))
+        //        {
+        //            // 스트림을 생성, 파일을 오픈해서 읽기모드에 들어간다. (파일을 입력받는 스트림을 생성)
+        //            shop = (Shop)formatter.Deserialize(stream);
+        //            // 스트림을 역직렬화해서 player에 정보를 넣어준다.
+        //        }
+        //    }
+        //    catch (FileNotFoundException)
+        //    {
+        //        shop = new Shop();
+        //    }
+
+        //}
         static public void PrintMessage()
         {
             if (message != null)
@@ -127,12 +129,12 @@ namespace TextBased_Dungeon_Game
 
             if (benefit < 0 && dice.Next(0, 100) < 40)
             {
-                player.Health -= hpReduction/2;
+                player.Health -= hpReduction / 2;
                 // 실패 씬 리턴
                 return (int)SceneType.DungeonFailScene;
             }
 
-            
+
             int reward = 0;
 
             switch (i)
@@ -152,7 +154,7 @@ namespace TextBased_Dungeon_Game
 
             int attack = player.Attack;
             int rewardRate = dice.Next(attack, attack * 2 + 1) / 100 + 1;
-            player.Gold += (int)reward* rewardRate;
+            player.Gold += (int)reward * rewardRate;
             player.Health -= hpReduction;
             player.Level += 1;
             player.Attack += 1;
@@ -161,6 +163,6 @@ namespace TextBased_Dungeon_Game
             return (int)SceneType.DungeonClearScene;
         }
 
- 
+
     }
 }

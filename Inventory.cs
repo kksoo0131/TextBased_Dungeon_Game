@@ -10,8 +10,7 @@ namespace TextBased_Dungeon_Game
     //아이템 리스트를 관리하는 클래스
     internal class Inventory
     {
-
-        protected List<Item> itemlist = new List<Item>();
+        public List<Item> itemlist = new List<Item>();
 
         public void AddItem(Item _item)
         {
@@ -33,6 +32,11 @@ namespace TextBased_Dungeon_Game
             return itemlist.Count;
         }
 
+        public void Clear()
+        {
+            itemlist.Clear();
+        }
+
         public string MakeEquipList()
         {
             StringBuilder str = new StringBuilder();
@@ -44,16 +48,19 @@ namespace TextBased_Dungeon_Game
             {
                 str.Append($"- {index++} ");
 
-                if (_item.Type == ItemType.Weapon)
-                {
-                    Weapon weapon = (Weapon)_item;
-                    str.Append(MakeItemInfo(weapon));
-                }
-                else
-                {
-                    Armor armor = (Armor)_item;
-                    str.Append(MakeItemInfo(armor));
-                }
+                str.Append(MakeItemInfo(_item));
+
+                // 인벤토리에서 처음 추가해줄 때 각각 무기와 갑옷으로 선언해주었기 때문에 굳이 다시 캐스팅 할 필요가 없음.
+                //if (_item.Type == ItemType.Weapon)
+                //{
+                //    Weapon weapon = (Weapon)_item;
+                //    str.Append(MakeItemInfo(weapon));
+                //}
+                //else
+                //{
+                //    Armor armor = (Armor)_item;
+                //    str.Append(MakeItemInfo(armor));
+                //}
 
                 str.Append("\n");
 
@@ -90,16 +97,20 @@ namespace TextBased_Dungeon_Game
             {
                 str.Append($"- {index++} ");
 
-                if (_item.Type == ItemType.Weapon)
-                {
-                    Weapon weapon = (Weapon)_item;
-                    str.Append(MakeItemInfo(weapon));
-                }
-                else
-                {
-                    Armor armor = (Armor)_item;
-                    str.Append(MakeItemInfo(armor));
-                }
+                str.Append(MakeItemInfo(_item));
+
+                // 인벤토리에서 처음 추가해줄 때 각각 무기와 갑옷으로 선언해주었기 때문에 굳이 다시 캐스팅 할 필요가 없음.
+                //if (_item.Type == ItemType.Weapon)
+                //{
+                //    Weapon weapon = (Weapon)_item;
+                //    str.Append(MakeItemInfo(weapon));
+                //}
+                //else
+                //{
+                //    Armor armor = (Armor)_item;
+                //    str.Append(MakeItemInfo(armor));
+                //}
+
                 str.Append($" | {_item.Price} G\n");
 
             }
@@ -111,7 +122,7 @@ namespace TextBased_Dungeon_Game
         {
             StringBuilder str = new StringBuilder();
             StringBuilder temp = new StringBuilder();
-
+            if (_item.IsEquip) temp.Append("[E]");
             temp.Append($"{_item.Name}");
             while (temp.Length < 10) temp.Append(" ");
             str.Append($"{temp} | ");
@@ -119,14 +130,14 @@ namespace TextBased_Dungeon_Game
 
             if (_item.Type == ItemType.Weapon)
             {
-                Weapon weapon = (Weapon)_item;
-                temp.Append($"공격력 +{weapon.Attack}");
+                //Weapon weapon = (Weapon)_item;
+                temp.Append($"공격력 +{_item.Attack}");
                 while (temp.Length < 10) temp.Append(" ");
             }
             else
             {
-                Armor armor = (Armor)_item;
-                temp.Append($"방어력 +{armor.Defense}");
+                //Armor armor = (Armor)_item;
+                temp.Append($"방어력 +{_item.Defense}");
                 while (temp.Length < 10) temp.Append(" ");
             }
             str.Append($"{temp} | ");
@@ -193,16 +204,19 @@ namespace TextBased_Dungeon_Game
             {
                 str.Append($"- {index++} ");
 
-                if (_item.Type == ItemType.Weapon)
-                {
-                    Weapon weapon = (Weapon)_item;
-                    str.Append(MakeItemInfo(weapon));
-                }
-                else
-                {
-                    Armor armor = (Armor)_item;
-                    str.Append(MakeItemInfo(armor));
-                }
+                str.Append(MakeItemInfo(_item));
+
+                // 인벤토리에서 처음 추가해줄 때 각각 무기와 갑옷으로 선언해주었기 때문에 굳이 다시 캐스팅 할 필요가 없음.
+                //if (_item.Type == ItemType.Weapon)
+                //{
+                //    Weapon weapon = (Weapon)_item;
+                //    str.Append(MakeItemInfo(weapon));
+                //}
+                //else
+                //{
+                //    Armor armor = (Armor)_item;
+                //    str.Append(MakeItemInfo(armor));
+                //}
 
                 str.Append("\n");
 

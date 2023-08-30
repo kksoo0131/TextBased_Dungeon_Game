@@ -9,10 +9,7 @@ namespace TextBased_Dungeon_Game
     {
         public Warrior() : base("", 1, 10, 5, 100)
         {
-            Chad = "전사";
-            Gold = 1500;
-            Inventory.AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
-            Inventory.AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 5));
+
         }
 
 
@@ -26,6 +23,14 @@ namespace TextBased_Dungeon_Game
 
         public int PrevHealth { get; set; }
         public int PrevGold { get; set; }
+
+        public void PlayerInit()
+        {
+            Chad = "전사";
+            Gold = 1500;
+            Inventory.AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
+            Inventory.AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 5));
+        }
 
         public string PlayerInfo()
         {
