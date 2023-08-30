@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -99,12 +100,17 @@ namespace TextBased_Dungeon_Game
     class InventoryScene : Scene
     {   
         Inventory _inventory;
-
-        public InventoryScene() :base() { _inventory = _player.Inventory; }
+        PotionInventory _potionInventory;
+        
+        public InventoryScene() :base()
+        { 
+            _inventory = _player.Inventory;
+            _potionInventory = _player.potionInventory;
+        }
      
         public override int DrawScene()
         {
-            options = new int[] { 0, 1, 2, 3, 4, 5};
+            options = new int[] { 0, 1, 2, 3, 4, 5, 6};
             Console.Clear();
             Console.WriteLine(MakeText());
 
@@ -116,15 +122,20 @@ namespace TextBased_Dungeon_Game
                 case 1:
                     return EquipmentInfo();
                 case 2:
+                    return PotionInventoryInfo();
+                case 3:
                     _inventory.SortInventory(SortingInventory.Name);
                     return (int)SceneType.InventoryScene;
-                case 3:
+                    
+                case 4:
                     _inventory.SortInventory(SortingInventory.Equipment);
                     return (int)SceneType.InventoryScene;
-                case 4:
+                    
+                case 5:
                     _inventory.SortInventory(SortingInventory.Attack);
                     return (int)SceneType.InventoryScene;
-                case 5:
+                    
+                case 6:
                     _inventory.SortInventory(SortingInventory.Defense);
                     return (int)SceneType.InventoryScene;
                 default:
@@ -158,17 +169,48 @@ namespace TextBased_Dungeon_Game
             }
         }
 
+        public int PotionInventoryInfo()  // 포션 인벤토리
+        {
+            Console.Clear();
+            Console.WriteLine(MakePotionText());
+
+            // options를 포션 Count만큼 추가
+            options = new int[_potionInventory.Count() + 1];
+            options[0] = 0;
+            for (int i = 1; i <= _potionInventory.Count(); i++)
+            {
+                options[i] = i;
+            }
+
+            int index = InputKey(options);
+            switch (index)
+            {
+                case 0:
+                    return (int)SceneType.InventoryScene;
+                default:
+                    _player.DrinkPotion(index - 1);
+                    DungeonGame.Instance.PlayerSave();
+                    return PotionInventoryInfo();
+            }
+        }
+
         public string MakeText()
         {
-            return $"인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{_inventory.MakeItemList()}\n\n1. 장착 관리 & 아이템 사용\n2. 이름\n3. 장착순\n4. 공격력\n5. 방어력\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            return $"인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{_inventory.MakeItemList()}\n\n1. 장착 관리\n2. 포션 인벤토리\n3. 이름\n4. 장착순\n5. 공격력\n6. 방어력\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
         }
 
         public string MakeEquipText()
         {
-            return $"인벤토리 - 장착 관리 & 아이템 사용\n보유 중인 아이템을 관리할 수 있습니다.\n\n{_inventory.MakeEquipList()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            return $"인벤토리 - 장착 관리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{_inventory.MakeEquipList()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
         }
+
+        public string MakePotionText()
+        {
+            return $"포션 인벤토리 - 포션 사용\n보유 중인 포션을 사용할 수 있습니다.\n\n{_potionInventory.MakePotionList()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+        }  
     }
-    class ShopScene : Scene
+
+class ShopScene : Scene
     {
         Shop _shop;
         public ShopScene() : base() 
@@ -559,8 +601,7 @@ namespace TextBased_Dungeon_Game
         }
     }
     class BattleResultScene : Scene
-    { 
-
+    {
         Dungeon dungeon;
         public BattleResultScene() { dungeon = DungeonGame.Instance.dungeon; }
         public override int DrawScene()
@@ -599,8 +640,9 @@ namespace TextBased_Dungeon_Game
             Console.WriteLine($"몬스터 {dungeon.Count()}마리를 잡았습니다! 경험치 {dungeon.Count() * 5} 증가!\n\n");
             _player.GetExp(dungeon.Count() * 5);  // 몬스터 한 마리당 5의 경험치
             Console.WriteLine("[보상 정산]\n");
-            Console.WriteLine("골드 + 300 G\n\n0. 다음");  // 유동적으로 바꿀 필요 있음.
+            Console.WriteLine("골드 + 300 G\n체력 회복 포션 + 1개\n\n0. 다음");  // 유동적으로 바꿀 필요 있음.
             _player.Gold += 300;
+            _player.potionInventory.GetPotion("체력 회복 포션", 1);
 
         }
 

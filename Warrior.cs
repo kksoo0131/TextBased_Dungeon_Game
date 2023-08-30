@@ -1,5 +1,5 @@
 ﻿using System.Text;
-
+using System.Linq;
 
 
 namespace TextBased_Dungeon_Game
@@ -21,10 +21,14 @@ namespace TextBased_Dungeon_Game
 
             Inventory.AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
             Inventory.AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 5));
-            
+            potionInventory.AddPotion(new Potion("체력 회복 포션", ItemType.HpPotion, "소량의 체력(30)을 회복하는 포션. 딸기맛이다!", 50, 30, 0, 3));
+            potionInventory.AddPotion(new Potion("마나 회복 포션", ItemType.MpPotion, "소량의 마나(15)를 회복하는 포션. 소다맛!", 50, 0, 15, 2));
+
             AddSkill(new AlphaStrike());
             AddSkill(new DoubleStrike());
         }
+
+        public PotionInventory potionInventory = new PotionInventory();
 
         public Inventory Inventory = new Inventory();
 
@@ -33,7 +37,6 @@ namespace TextBased_Dungeon_Game
         public List<Unit> targetList = new List<Unit>();
         public int SkillCount { get; set; }
         public string Chad { get; set; }
-        public int MaxHealth { get; set; }
         public int MP { get; set; }
         public int MaxMP { get; set; }
         public int Gold { get; set; }
@@ -98,15 +101,64 @@ namespace TextBased_Dungeon_Game
             }
         }
 
-        public void DrinkingPotion(int i)
+        public void DrinkPotion(int i)
         {
-            Item target = Inventory.PeekItem(i);
+            Item target = potionInventory.PeekPotion(i);
 
-            if(target.Type == ItemType.HpPotion)
+
+
+            if (target.Type == ItemType.HpPotion && target.Quantity != 0)
             {
-                
+                if (Health != MaxHealth)
+                {
+                    target.Quantity--;
+                    Health += target.HpRecovery;
+                }
+                else
+                {
+                    Console.WriteLine("체력이 충분합니다.");
+                    Thread.Sleep(500);
+                }
+
+            }
+            else if (target.Type == ItemType.MpPotion && target.Quantity != 0)
+            {
+                if (MP != MaxMP)
+                {
+                    target.Quantity--;
+                    MP += target.MpRecovery;
+                }
+                else
+                {
+                    Console.WriteLine("마나가 충분합니다.");
+                    Thread.Sleep(500);
+                }
+            } 
+            else
+            {
+                Console.WriteLine("포션이 없습니다.");
+                Thread.Sleep(500);
             }
         }
+        
+        //public void GetHpPotion(int i)
+        //{
+        //    Item target = potionInventory.PeekPotion(i);
+
+        //    if (target.Type == ItemType.HpPotion)
+        //    {
+        //        target.Quantity++;
+        //    }
+        //}
+        //public void GetMpPotion(int i)
+        //{
+        //    Item target = potionInventory.PeekPotion(i);
+
+        //    if (target.Type == ItemType.MpPotion)
+        //    {
+        //        target.Quantity++;
+        //    }
+        //}
         public void SellItem(int i)
         {
             Item sellitem = Inventory.PeekItem(i);

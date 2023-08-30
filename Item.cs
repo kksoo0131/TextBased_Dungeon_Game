@@ -70,7 +70,25 @@ namespace TextBased_Dungeon_Game
         public int Defense { get; set; }
         public int HpRecovery { get; set; }  // 체력 포션 회복량
         public int MpRecovery { get; set; }  // 마나 포션 회복량
-        public int Quantity { get; set; }  // 포션 보유량. 아이템과는 다르게 보유량이 필요함. 처음에 3개 갖고있음
+
+        private int _quantity;
+
+        public int Quantity
+        {
+            get => _quantity;
+            set
+            {
+                if (value >= 0)  // 값이 0 이상인 경우에만 설정
+                {
+                    _quantity = value;
+                }
+                else
+                {
+                    Console.SetCursorPosition(10, 20);
+                    Console.WriteLine("포션이 없으면 사용할 수 없습니다.");
+                }
+            }
+        }
         public int Price { get; private set; }
 
         public bool IsSell { get; set; }
