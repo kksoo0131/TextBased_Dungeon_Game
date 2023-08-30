@@ -1,5 +1,5 @@
 ﻿using System.Text;
-
+using System.Linq;
 
 
 namespace TextBased_Dungeon_Game
@@ -7,23 +7,11 @@ namespace TextBased_Dungeon_Game
     [Serializable]
     class Warrior : Unit
     {
-        public Warrior() : base("전사전사전사", 1, 10, 5, 100, 100)
+        public Warrior() : base("", 1, 10, 5, 100, 100)
         {
-            Chad = "전사";
-            Gold = 1500;
-            MaxHealth = 100;
-            MaxMP = 50;
-            MP = 50;
-            Exp = 0;
-            ExpNeeded = CalculateExpNeeded();
-            SkillCount = 0;
-
-
-            Inventory.AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
-            Inventory.AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 5));
-            AddSkill(new AlphaStrike());
-            AddSkill(new DoubleStrike());
         }
+
+        public PotionInventory potionInventory = new PotionInventory();
 
         public Inventory Inventory = new Inventory();
 
@@ -54,6 +42,26 @@ namespace TextBased_Dungeon_Game
         public int PrevGold { get; set; }
         public int Exp { get; set; } // 추가: 경험치
         public int ExpNeeded { get; set; } // 추가: 다음 레벨까지 필요한 경험치
+
+        public void PlayerInit()
+        {
+            Chad = "전사";
+            Gold = 1500;
+            MaxHealth = 100;
+            MaxMP = 50;
+            MP = 50;
+            Exp = 0;
+            ExpNeeded = CalculateExpNeeded();
+            SkillCount = 0;
+
+
+            Inventory.AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
+            Inventory.AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 5));
+            potionInventory.AddPotion(new Potion("체력 회복 포션", ItemType.HpPotion, "소량의 체력(30)을 회복하는 포션. 딸기맛이다!", 50, 30, 0, 3));
+            potionInventory.AddPotion(new Potion("마나 회복 포션", ItemType.MpPotion, "소량의 마나(15)를 회복하는 포션. 소다맛!", 50, 0, 15, 2));
+            AddSkill(new AlphaStrike());
+            AddSkill(new DoubleStrike());
+        }
 
         public string PlayerInfo()
         {
@@ -106,7 +114,7 @@ namespace TextBased_Dungeon_Game
                     }
                     EquipWeapon = target;
                 }
-                else
+                else if(target.Type == ItemType.Armor)
                 {
                     if (EquipArmor != null)
                     {
@@ -117,6 +125,65 @@ namespace TextBased_Dungeon_Game
                 target.IsEquip = true;
             }
         }
+
+        public void DrinkPotion(int i)
+        {
+            Item target = potionInventory.PeekPotion(i);
+
+
+
+            if (target.Type == ItemType.HpPotion && target.Quantity != 0)
+            {
+                if (Health != MaxHealth)
+                {
+                    target.Quantity--;
+                    Health += target.HpRecovery;
+                }
+                else
+                {
+                    Console.WriteLine("체력이 충분합니다.");
+                    Thread.Sleep(500);
+                }
+
+            }
+            else if (target.Type == ItemType.MpPotion && target.Quantity != 0)
+            {
+                if (MP != MaxMP)
+                {
+                    target.Quantity--;
+                    MP += target.MpRecovery;
+                }
+                else
+                {
+                    Console.WriteLine("마나가 충분합니다.");
+                    Thread.Sleep(500);
+                }
+            } 
+            else
+            {
+                Console.WriteLine("포션이 없습니다.");
+                Thread.Sleep(500);
+            }
+        }
+        
+        //public void GetHpPotion(int i)
+        //{
+        //    Item target = potionInventory.PeekPotion(i);
+
+        //    if (target.Type == ItemType.HpPotion)
+        //    {
+        //        target.Quantity++;
+        //    }
+        //}
+        //public void GetMpPotion(int i)
+        //{
+        //    Item target = potionInventory.PeekPotion(i);
+
+        //    if (target.Type == ItemType.MpPotion)
+        //    {
+        //        target.Quantity++;
+        //    }
+        //}
         public void SellItem(int i)
         {
             Item sellitem = Inventory.PeekItem(i);
@@ -164,7 +231,7 @@ namespace TextBased_Dungeon_Game
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"{Name}의 공격!\n Lv.{_unit.Level} {_unit.Name}을 공격했습니다. [데미지 : {damage}]");
+            sb.Append($"{Name}의 공격!\nLv.{_unit.Level} {_unit.Name}을 공격했습니다. [데미지 : {damage}]");
             sb.Append(result ? $" - 치명타 공격!!\n" : "\n");
             DungeonGame.Instance.message.Append($"{sb.ToString()}");
             
@@ -233,5 +300,7 @@ namespace TextBased_Dungeon_Game
         {
             return Level * 10;
         }
+
+        
     }
 }

@@ -19,9 +19,9 @@ namespace TextBased_Dungeon_Game
 
         public void Init()
         {
-            monsterList.Add(new Unit("미니언", 2, 10, 0, 15, 15));
-            monsterList.Add(new Unit("대포미니언", 5, 10, 0, 25, 25));
-            monsterList.Add(new Unit("공허충", 3, 10, 0, 10, 10));
+            monsterList.Add(new Wolf());
+            monsterList.Add(new Chicken());
+            monsterList.Add(new WildBoar());
             DeadCount = 0;
             Result = true;
         }
@@ -72,4 +72,6 @@ namespace TextBased_Dungeon_Game
             monsterList.Clear();
         }
     }
+
+    
 }

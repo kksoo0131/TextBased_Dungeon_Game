@@ -13,7 +13,7 @@ namespace TextBased_Dungeon_Game
     }
 
     [Serializable]
-    public abstract class Skill
+    public class Skill
     {
         public string name;
         public string skillInfo;
@@ -34,10 +34,9 @@ namespace TextBased_Dungeon_Game
         // 스킬 마다 클래스로 생성
         // 플레이어의 Skill Ation에 등록해서 사용한다.
         // Skill은 스킬마다 대상 몬스터가 달라지니까 Unit의 List를 받는다.
-        public abstract void Use(List<Unit> _units, int _attack);
+        public virtual void Use(List<Unit> _units, int _attack) { }
     }
     [Serializable]
-
     public class AlphaStrike : Skill
     {
         public AlphaStrike() : base("알파 스트라이크", "공격력 * 2로 하나의 적을 공격합니다.", 10, 1, SkillType.Target) { }

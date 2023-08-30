@@ -6,10 +6,6 @@ using System.Threading.Tasks;
 
 namespace TextBased_Dungeon_Game
 {
-    enum MonsterType
-    {
-        //여기에 유닛을 상속받은 몬스터들의 클래스이름을 추가.
-    }
     [Serializable]
     public class Unit
     {
@@ -22,15 +18,14 @@ namespace TextBased_Dungeon_Game
             MaxHealth = maxHealth;
             Health = health;
             IsDead = false;
-            
         }
         public string Name { get; set; }
         public int Level { get; set; }
         public int Attack { get; set; }
         public int Defense { get; set; }
-        
+
         private int health;
-        public int MaxHealth { get; set; }
+        
         public int Health
         {
             get { return health; }
@@ -39,7 +34,7 @@ namespace TextBased_Dungeon_Game
                 health = Math.Min(value, MaxHealth);
             }
         }
-        
+        public int MaxHealth { get; set; }
 
         public bool IsDead { get; set; }
         public bool IsCritical()
@@ -79,7 +74,7 @@ namespace TextBased_Dungeon_Game
             {
                 sb.Append($"HP {Health}\n");
             }
-            
+
             return sb.ToString();
         }
         public void AttackUnit(Unit _unit)
@@ -90,7 +85,7 @@ namespace TextBased_Dungeon_Game
 
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"{Name}의 공격!\n Lv.{_unit.Level} {_unit.Name}을 공격했습니다. [데미지 : {damage}]\n");
+            sb.Append($"{Name}의 공격!\nLv.{_unit.Level} {_unit.Name}을 공격했습니다. [데미지 : {damage}]");
             sb.Append(result ? $" - 치명타 공격!!\n" : "\n");
 
             DungeonGame.Instance.message.Append(sb);
@@ -131,4 +126,17 @@ namespace TextBased_Dungeon_Game
 
         }
     }
+    public class Wolf : Unit
+    {
+        public Wolf() : base("늑대", 3, 15, 5, 20, 20) { }
+    }
+    public class Chicken : Unit
+    {
+        public Chicken() : base("닭", 1, 5, 5, 10, 10) { }
+    }
+    public class WildBoar : Unit
+    {
+        public WildBoar() : base("멧돼지", 5, 10, 10, 30, 30) { }
+    }
+
 }
