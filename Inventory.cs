@@ -49,12 +49,11 @@ namespace TextBased_Dungeon_Game
                     Weapon weapon = (Weapon)_item;
                     str.Append(MakeItemInfo(weapon));
                 }
-                else
+                else if (_item.Type == ItemType.Armor)
                 {
                     Armor armor = (Armor)_item;
                     str.Append(MakeItemInfo(armor));
                 }
-
                 str.Append("\n");
 
             }
@@ -95,11 +94,12 @@ namespace TextBased_Dungeon_Game
                     Weapon weapon = (Weapon)_item;
                     str.Append(MakeItemInfo(weapon));
                 }
-                else
+                else if( _item.Type == ItemType.Armor)
                 {
                     Armor armor = (Armor)_item;
                     str.Append(MakeItemInfo(armor));
                 }
+                
                 str.Append($" | {_item.Price} G\n");
 
             }
@@ -123,7 +123,7 @@ namespace TextBased_Dungeon_Game
                 temp.Append($"공격력 +{weapon.Attack}");
                 while (temp.Length < 10) temp.Append(" ");
             }
-            else
+            else if(_item.Type == ItemType.Armor)
             {
                 Armor armor = (Armor)_item;
                 temp.Append($"방어력 +{armor.Defense}");
@@ -198,10 +198,20 @@ namespace TextBased_Dungeon_Game
                     Weapon weapon = (Weapon)_item;
                     str.Append(MakeItemInfo(weapon));
                 }
-                else
+                else if (_item.Type == ItemType.Armor)
                 {
                     Armor armor = (Armor)_item;
                     str.Append(MakeItemInfo(armor));
+                }
+                else if( _item.Type == ItemType.HpPotion)
+                {
+                    Potion hpPotion = (Potion)_item;
+                    str.Append(MakeItemInfo(hpPotion));
+                }
+                else
+                {
+                    Potion mpPotion = (Potion)_item;
+                    str.Append(MakeItemInfo(mpPotion));
                 }
 
                 str.Append("\n");
@@ -237,4 +247,6 @@ namespace TextBased_Dungeon_Game
             
         }
     }
+
+    
 }

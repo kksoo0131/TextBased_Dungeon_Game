@@ -90,7 +90,6 @@ namespace TextBased_Dungeon_Game
 
         public string MakeText()
         {
-           
             return $"상태 보기\n캐릭터의 정보가 표시됩니다.\n\n{DungeonGame.Instance.player.PlayerInfo()}0. 나가기\n\n원하시는 행동을 입력해주세요";
             // 버그 해결
             // 괄호 안에 DungeonGame.player.PlayerInfo를 넣으면 델리게이트에 메서드 이름을 추가할때의 형식으로 메서드 이름이 들어가게됨
@@ -161,12 +160,12 @@ namespace TextBased_Dungeon_Game
 
         public string MakeText()
         {
-            return $"인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{_inventory.MakeItemList()}\n\n1. 장착 관리\n2. 이름\n3. 장착순\n4. 공격력\n5. 방어력\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            return $"인벤토리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{_inventory.MakeItemList()}\n\n1. 장착 관리 & 아이템 사용\n2. 이름\n3. 장착순\n4. 공격력\n5. 방어력\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
         }
 
         public string MakeEquipText()
         {
-            return $"인벤토리 - 장착 관리\n보유 중인 아이템을 관리할 수 있습니다.\n\n{_inventory.MakeEquipList()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
+            return $"인벤토리 - 장착 관리 & 아이템 사용\n보유 중인 아이템을 관리할 수 있습니다.\n\n{_inventory.MakeEquipList()}\n\n0. 나가기\n\n원하시는 행동을 입력해주세요.";
         }
     }
     class ShopScene : Scene

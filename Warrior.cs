@@ -21,6 +21,7 @@ namespace TextBased_Dungeon_Game
 
             Inventory.AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
             Inventory.AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 5));
+            
             AddSkill(new AlphaStrike());
             AddSkill(new DoubleStrike());
         }
@@ -85,7 +86,7 @@ namespace TextBased_Dungeon_Game
                     }
                     EquipWeapon = target;
                 }
-                else
+                else if(target.Type == ItemType.Armor)
                 {
                     if (EquipArmor != null)
                     {
@@ -94,6 +95,16 @@ namespace TextBased_Dungeon_Game
                     EquipArmor = target;
                 }
                 target.IsEquip = true;
+            }
+        }
+
+        public void DrinkingPotion(int i)
+        {
+            Item target = Inventory.PeekItem(i);
+
+            if(target.Type == ItemType.HpPotion)
+            {
+                
             }
         }
         public void SellItem(int i)
@@ -197,5 +208,7 @@ namespace TextBased_Dungeon_Game
         {
             return Level * 10;
         }
+
+        
     }
 }

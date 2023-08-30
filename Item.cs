@@ -21,6 +21,8 @@ namespace TextBased_Dungeon_Game
     {
         Weapon,
         Armor,
+        HpPotion,
+        MpPotion,
     }
 
     public enum SortingInventory
@@ -66,6 +68,9 @@ namespace TextBased_Dungeon_Game
         public bool IsEquip { get; set; }
         public int Attack { get; set; }
         public int Defense { get; set; }
+        public int HpRecovery { get; set; }  // 체력 포션 회복량
+        public int MpRecovery { get; set; }  // 마나 포션 회복량
+        public int Quantity { get; set; }  // 포션 보유량. 아이템과는 다르게 보유량이 필요함. 처음에 3개 갖고있음
         public int Price { get; private set; }
 
         public bool IsSell { get; set; }
@@ -114,5 +119,17 @@ namespace TextBased_Dungeon_Game
         {
             Defense = _defense;
         }
+    }
+
+    [Serializable]
+    class Potion : Item
+    {
+        public Potion(string _name, ItemType _type, string _Info, int _price, int _hpRecovery, int _mpRecovery, int _quantity) : base(_name, _type, _Info, _price)
+        {
+            HpRecovery = _hpRecovery;
+            MpRecovery = _mpRecovery;
+            Quantity = _quantity;
+        }
+
     }
 }
