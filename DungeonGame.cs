@@ -1,18 +1,19 @@
 ﻿using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 
 namespace TextBased_Dungeon_Game
 {
     internal class DungeonGame
     {
+        //DungeonGame == GameManager ,싱글톤 클래스.
+        public static DungeonGame Instance;
 
         public SceneManager sceneManager;
-        public static DungeonGame Instance;
         public Warrior player;
         public Shop shop;
-        public static Dungeon dungeon;
-
-        public static Action message;
+        public Dungeon dungeon;
+        public StringBuilder message = new StringBuilder();
         public DungeonGame()
         {
             Instance = this;
@@ -22,7 +23,6 @@ namespace TextBased_Dungeon_Game
 
         public void GameInit()
         {
-            Console.SetWindowSize(100, 40);
             dungeon = new Dungeon();
             Read();
             sceneManager = new SceneManager();
@@ -32,12 +32,13 @@ namespace TextBased_Dungeon_Game
             int nextScene = 0;
             while (true)
             {
+                Console.SetWindowSize(120, 40);
                 nextScene = sceneManager.SceneList((SceneType)nextScene).DrawScene();
             }
             
         }
 
-        static public void PlayerSave()
+        public void PlayerSave()
         {
             IFormatter formatter = new BinaryFormatter();
             // 파일 저장을 위한 BinaryFormatter객체 생성
@@ -48,7 +49,7 @@ namespace TextBased_Dungeon_Game
                 // player 객체의 정보를 직렬화하여 stream에 저장한다.
             }
         }
-        static public void ShopSave()
+        public void ShopSave()
         {
             IFormatter formatter = new BinaryFormatter();
             using (Stream stream = new FileStream("shop_info.bin", FileMode.Create, FileAccess.Write))
@@ -89,13 +90,11 @@ namespace TextBased_Dungeon_Game
             }
 
         }
-        static public void PrintMessage()
+        public string PrintMessage()
         {
-            if (message != null)
-            {
-                message();
-                message = null;
-            }
+            string str = message.ToString();
+            message.Clear();
+            return str;
         }
 
       /*  public int EnterDungeon(int i)

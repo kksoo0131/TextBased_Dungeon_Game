@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace TextBased_Dungeon_Game
 {
+    enum MonsterType
+    {
+        //여기에 유닛을 상속받은 몬스터들의 클래스이름을 추가.
+    }
     [Serializable]
-    internal class Unit
+    public class Unit
     {
         public Unit(string name, int level, int attack, int defense, int health, int maxHealth)
         {
@@ -20,7 +24,6 @@ namespace TextBased_Dungeon_Game
             IsDead = false;
             
         }
-
         public string Name { get; set; }
         public int Level { get; set; }
         public int Attack { get; set; }
@@ -39,7 +42,30 @@ namespace TextBased_Dungeon_Game
         
 
         public bool IsDead { get; set; }
-        
+        public bool IsCritical()
+        {
+            Random rand = new Random();
+            return rand.Next(0, 101) < 15 ? true : false;
+        }
+
+        public bool IsAvoid()
+        {
+            Random rand = new Random();
+            return rand.Next(0, 101) < 10 ? true : false;
+
+        }
+        public int SetAttackPower(bool critical)
+        {
+            Random rand = new Random();
+
+            float errorFloat = (Attack) * 0.1f;
+            int errorInt = (int)errorFloat;
+            int errorDamage = errorInt < errorFloat ? errorInt + 1 : errorInt;
+
+            int damage = rand.Next(Attack - errorDamage, Attack + errorDamage);
+            return critical ? (int)(damage * 1.6f) : damage;
+        }
+
         public string MonsterInfo()
         {
             StringBuilder sb = new StringBuilder();
@@ -56,45 +82,53 @@ namespace TextBased_Dungeon_Game
             
             return sb.ToString();
         }
-
-        public void AttackUnit(Unit m)
+        public void AttackUnit(Unit _unit)
         {
-            Random rand = new Random();
 
-            float errorFloat = (Attack ) * 0.1f;
-            int errorInt = (int)errorFloat;
-            int errorDamage = errorInt < errorFloat ? errorInt + 1 : errorInt;
+            bool result = IsCritical();
+            int damage = SetAttackPower(result);
 
-            int damage = rand.Next(Attack  - errorDamage, Attack  + errorDamage);
+            StringBuilder sb = new StringBuilder();
 
-            DungeonGame.message += () => Console.WriteLine($"{Name}의 공격!");
+            sb.Append($"{Name}의 공격!\n Lv.{_unit.Level} {_unit.Name}을 공격했습니다. [데미지 : {damage}]\n");
+            sb.Append(result ? $" - 치명타 공격!!\n" : "\n");
 
-            m.Attacked(damage);
+            DungeonGame.Instance.message.Append(sb);
+
+            _unit.Attacked(damage);
+
         }
-
         public void Attacked(int i)
         {
             StringBuilder sb = new StringBuilder();
-            
-            sb.Append($"Lv.{Level} {Name}을 공격했습니다. [데미지 : {i}]\n");
-            sb.Append($"Lv.{Level} {Name} HP {Health} -> ");
-            Health -= i;
 
-            if (Health <= 0) 
+            if (IsAvoid())
             {
-                sb.Append("Dead");
-                IsDead = true;
-                DungeonGame.dungeon.DeadCount++;
+                sb.Append($"Lv.{Level} {Name} 를 공격했지만 아무일도 일어나지 않았습니다.\n");
             }
             else
             {
-                sb.Append($"{Health}");
+                sb.Append($"Lv.{Level} {Name} HP {Health} -> ");
+                Health -= i;
+
+                if (Health <= 0)
+                {
+                    sb.Append("Dead\n");
+                    IsDead = true;
+                    DungeonGame.Instance.dungeon.DeadCount += 1;
+                }
+                else
+                {
+                    sb.Append($"{Health}\n");
+                }
             }
 
-            
-            DungeonGame.message += () => Console.WriteLine(sb.ToString());
 
-            
+
+
+            DungeonGame.Instance.message.Append(sb);
+
+
         }
     }
 }
