@@ -163,16 +163,17 @@ namespace TextBased_Dungeon_Game
         public override int DrawScene()
         {         
             options = new int[] { 1, 2, 3, 4, 5 };
+            SoundPlayer.StopSound();
+            SoundPlayer.Bgm("");
             Console.Clear();
-/*
-            Console.WriteLine(MakeText());
-                      Console.WriteLine();
+
+     
             for (int i = 0; i <= 255; i += 5)
             {
                 string s = "──────────────────────────────────────────────────────";
                 Console.Write($"\u001b[38;2;255;{i};80m{s.Substring(i / 5, 1)}");
             }
-            */
+          
             DrawUI();
             WriteText();
             return InputKey(options);
@@ -181,12 +182,46 @@ namespace TextBased_Dungeon_Game
         }
         public void WriteText()
         {
-
+            WriteRightMessage(MakeLogo());
+            Console.ResetColor();
             WriteSelectMessage("1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기\n6. 저장하기 & 기불러오기");
             WriteMessage("스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.\n원하시는 행동을 입력해주세요.");
-/*
-            SoundPlayer.StopSound();
-            SoundPlayer.Bgm("");
+
+        }
+
+        public string MakeLogo()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i <= 255; i += 8)
+            {
+                string s = "┌──────────────────────────────┐";
+                sb.Append($"\u001b[38;2;255;{i};80m{s.Substring(i / 8, 1)}");
+            }
+            sb.Append("\n");
+            for (int i = 0; i <= 255; i += 8)
+            {
+                string s = "│  WELCOME TO SPARTA VILLAGE   │";
+                sb.Append($"\u001b[38;2;255;{i};100m{s.Substring(i / 8, 1)}");
+            }
+            sb.Append("\n");
+            for (int i = 255; i >= 0; i -= 13)
+            {
+                string s = "■■■■■■■■■■■■■■■■■■■■■";
+                sb.Append($"\u001b[38;2;0;{i};150m{s.Substring(i / 13, 1)}");
+            }
+            sb.Append("\n");
+            for (int i = 0; i <= 255; i += 8)
+            {
+                string s = "└──────────────────────────────┘";
+                sb.Append($"\u001b[38;2;255;{i};80m{s.Substring(i / 8, 1)}");
+            }
+            sb.Append("\n");
+            sb.Append("\n");
+
+            return sb.ToString();
+
+            /*
+            
             Console.WriteLine();
             for (int i = 0; i <= 255; i += 8)
             {
@@ -571,6 +606,97 @@ namespace TextBased_Dungeon_Game
                     
             }
         }
+
+        public int SelectSkillTarget(int index, int count)
+        {
+            Console.Clear();
+            DrawUI();
+            WriteSkillTargetText();
+            DungeonGame.Instance.PrintMessage();
+
+            int key = InputKey(MakeOption(dungeon.Count()));
+            switch (key)
+            {
+                case 0:
+                    return PlayerSelectSkill();
+                default:
+                    Unit _unit = dungeon.GetUnit(key - 1);
+                    if (_player.targetList.Contains(_unit))
+                    {
+                        DungeonGame.Instance.message.Append("이미 선택한 대상입니다.\n");
+                        return SelectSkillTarget(index, count);
+                    }
+                    else if (_unit.IsDead == true)
+                    {
+                        DungeonGame.Instance.message.Append("이미 죽은 몬스터 입니다.\n");
+                        return PlayerPhaseAttack();
+                    }
+
+                    _player.targetList.Add(_unit);
+                    if (--count > 0) return SelectSkillTarget(index, count);
+                    _player.UseSkill(index);
+                    // 스킬을 사용하기위해 내가 선택한 target들이 저장되야함
+                    return AttackResult();
+                    // 선택된 타겟을 저장하면서 count가 0이 될때까지 계속 선택
+            }
+
+
+        }
+        public int AttackResult()
+        {
+
+            options = new int[] { 0 };
+            Console.Clear();
+            DrawUI();
+            WriteAttackResultText();
+
+
+
+            switch (InputKey(options))
+            {
+                default:
+                    return dungeon.DungeonClear() ? (int)SceneType.BattleResultScene : (int)SceneType.MonsterPhaseScene;
+            }
+        }
+
+        public void WriteText()
+        {
+            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteSelectMessage("1. 공격\n\n2. 스킬");
+            WriteRightMessage($"{dungeon.MonsterListInfo()}");
+            WriteMessage("Battle!!\n");
+        }
+
+        public void WriteAttackResultText()
+        {
+            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteSelectMessage("0. 다음");
+            WriteRightMessage($"{dungeon.MonsterSelectInfo()}");
+            WriteMessage("Battle!!\n");
+        }
+        public void WriteBattleText()
+        {
+            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteSelectMessage("0. 취소");
+            WriteRightMessage($"{dungeon.MonsterSelectInfo()}");
+            WriteMessage("Battle!!\n");
+        }
+
+        public void WriteSkillText()
+        {
+            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteSelectMessage($"{_player.PlayerSkillInfo()}0.취소");
+            WriteRightMessage($"{dungeon.MonsterListInfo()}");
+            WriteMessage("Battle!!\n");
+        }
+
+        public void WriteSkillTargetText()
+        {
+            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteSelectMessage($"0.취소");
+            WriteRightMessage($"{dungeon.MonsterSelectInfo()}");
+            WriteMessage("Battle!!\n");
+        }
     }
 
     class SaveRoadScene : Scene
@@ -632,100 +758,6 @@ namespace TextBased_Dungeon_Game
         }
     }
 
-    class BattleScene : Scene 
-    {
-        public int SelectSkillTarget(int index, int count)
-        {
-            Console.Clear();
-            DrawUI();
-            WriteSkillTargetText();
-            DungeonGame.Instance.PrintMessage();
-
-            int key = InputKey(MakeOption(dungeon.Count()));
-            switch (key)
-            {
-                case 0:
-                    return PlayerSelectSkill();
-                default:
-                    Unit _unit = dungeon.GetUnit(key-1);
-                    if (_player.targetList.Contains(_unit))
-                    {
-                        DungeonGame.Instance.message.Append("이미 선택한 대상입니다.\n");
-                        return SelectSkillTarget(index, count);
-                    }
-                    else if (_unit.IsDead == true)
-                    {
-                        DungeonGame.Instance.message.Append("이미 죽은 몬스터 입니다.\n");
-                        return PlayerPhaseAttack();
-                    }
-
-                    _player.targetList.Add(_unit);
-                    if (--count > 0) return SelectSkillTarget(index, count);
-                    _player.UseSkill(index);
-                    // 스킬을 사용하기위해 내가 선택한 target들이 저장되야함
-                    return AttackResult();
-                    // 선택된 타겟을 저장하면서 count가 0이 될때까지 계속 선택
-            }
-
-
-        }
-        public int AttackResult()
-        { 
-            
-            options = new int[] { 0 };
-            Console.Clear();
-            DrawUI();
-            WriteAttackResultText();
-
-
-
-            switch (InputKey(options))
-            {
-                default:
-                    return dungeon.DungeonClear() ? (int)SceneType.BattleResultScene : (int)SceneType.MonsterPhaseScene;
-            }
-        }
-
-        public void WriteText()
-        {
-            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
-            WriteSelectMessage("1. 공격\n\n2. 스킬");
-            WriteRightMessage($"{dungeon.MonsterListInfo()}");
-            WriteMessage("Battle!!\n");
-        }
-
-        public void WriteAttackResultText()
-        {
-            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
-            WriteSelectMessage("0. 다음");
-            WriteRightMessage($"{dungeon.MonsterSelectInfo()}");
-            WriteMessage("Battle!!\n");
-        }
-        public void WriteBattleText()
-        {
-            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
-            WriteSelectMessage("0. 취소");
-            WriteRightMessage($"{dungeon.MonsterSelectInfo()}");
-            WriteMessage("Battle!!\n");
-        }
-
-        public void WriteSkillText()
-        {
-            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
-            WriteSelectMessage($"{_player.PlayerSkillInfo()}0.취소");
-            WriteRightMessage($"{dungeon.MonsterListInfo()}");
-            WriteMessage("Battle!!\n");
-        }
-
-        public void WriteSkillTargetText()
-        {
-            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
-            WriteSelectMessage($"0.취소");
-            WriteRightMessage($"{dungeon.MonsterSelectInfo()}");
-            WriteMessage("Battle!!\n");
-        }
-
-    }
     class MonsterPhaseScene : Scene
     {
         Dungeon dungeon;
