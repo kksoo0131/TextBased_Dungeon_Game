@@ -18,13 +18,13 @@ namespace TextBased_Dungeon_Game
             MaxHealth = maxHealth;
             Health = health;
             IsDead = false;
-            
+
         }
         public string Name { get; set; }
         public int Level { get; set; }
         public int Attack { get; set; }
         public int Defense { get; set; }
-        
+
         private int health;
         public int MaxHealth { get; set; }
         public int Health
@@ -35,7 +35,7 @@ namespace TextBased_Dungeon_Game
                 health = Math.Min(value, MaxHealth);
             }
         }
-        
+
 
         public bool IsDead { get; set; }
         public bool IsCritical()
@@ -75,7 +75,7 @@ namespace TextBased_Dungeon_Game
             {
                 sb.Append($"HP {Health}\n");
             }
-            
+
             return sb.ToString();
         }
         public void AttackUnit(Unit _unit)
@@ -127,14 +127,17 @@ namespace TextBased_Dungeon_Game
 
         }
     }
-
-    public class Wolf :Unit
+    public class Wolf : Unit
     {
-        public Wolf() : base("늑대",3,15,5,20,20) { }
+        public Wolf() : base("늑대", 3, 15, 5, 20, 20) { }
     }
-
     public class Chicken : Unit
     {
         public Chicken() : base("닭", 1, 5, 5, 10, 10) { }
     }
+    public class WildBoar : Unit
+    {
+        public WildBoar() : base("멧돼지", 5, 10, 10, 30, 30) { }
+    }
+
 }
