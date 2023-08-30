@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -65,15 +66,48 @@ namespace TextBased_Dungeon_Game
     {
         public StartScene() : base() { }    
         public override int DrawScene()
-        {
+        {         
             options = new int[] { 1, 2, 3, 4, 5 };
             Console.Clear();
             Console.WriteLine(MakeText());
             return InputKey(options);
+
+         
         }
         public string MakeText()
         {
+            SoundPlayer.StopSound();
+            SoundPlayer.Bgm("");
+            Console.WriteLine();
+            for (int i = 0; i <= 255; i += 8)
+            {
+                string s = "┌──────────────────────────────┐";
+                Console.Write($"\u001b[38;2;255;{i};80m{s.Substring(i / 8, 1)}");      
+            }
+            Console.WriteLine();
+
+            for (int i = 0; i <= 255; i += 8)
+            {
+                string s = "│  WELCOME TO SPARTA VILLAGE   │";
+                Console.Write($"\u001b[38;2;255;{i};100m{s.Substring(i / 8, 1)}");
+            }
+            for (int i = 255; i >= 0; i -= 13)
+            {
+                string s = "■■■■■■■■■■■■■■■■■■■■■";
+                Console.Write($"\u001b[38;2;0;{i};150m{s.Substring(i / 13, 1)}");
+            }
+            Console.WriteLine();
+            for (int i = 0; i <= 255; i += 8)
+            {
+                string s = "└──────────────────────────────┘";
+                Console.Write($"\u001b[38;2;255;{i};80m{s.Substring(i / 8, 1)}");
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.ResetColor();
+
             return "스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다. \n\n1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기\n\n원하시는 행동을 입력해주세요.";
+
         }
 
     }
@@ -182,6 +216,7 @@ namespace TextBased_Dungeon_Game
                 case 0:
                     return (int)SceneType.StartScene;
                 case 1:
+                    SoundPlayer.StopSound();
                     return BuyItem();
                 case 2:
                     return SellItem();
@@ -608,7 +643,8 @@ namespace TextBased_Dungeon_Game
             _player.GetExp(dungeon.Count() * 5);  // 몬스터 한 마리당 5의 경험치
             Console.WriteLine("[보상 정산]\n");
             Console.WriteLine("골드 + 300 G\n\n0. 다음");  // 유동적으로 바꿀 필요 있음.
-            DungeonGame.Instance.dungeon.Clear();
+
+            _player.Gold += 300;
         }
 
         public string MakeLoseText()
