@@ -32,6 +32,18 @@ namespace TextBased_Dungeon_Game
         public List<Unit> targetList = new List<Unit>();
         public int SkillCount { get; set; }
         public string Chad { get; set; }
+
+        public new int Attack
+        {
+            get
+            {
+                return EquipWeapon != null ?  base.Attack + EquipWeapon.Attack : base.Attack ;
+            }
+            set
+            {
+                base.Attack = value;
+            }
+        }
         public int MaxHealth { get; set; }
         public int MP { get; set; }
         public int MaxMP { get; set; }
@@ -47,9 +59,9 @@ namespace TextBased_Dungeon_Game
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.Append($"Lv.{Level}\n{Name}({Chad})\n\n");
-            sb.Append(EquipWeapon != null ? $"공격력: {Attack + EquipWeapon.Attack} (+{EquipWeapon.Attack})\n\n" : $"공격력: {Attack}\n\n");
-            sb.Append(EquipArmor != null ? $"방어력 : {Defense + EquipArmor.Defense} (+{EquipArmor.Defense})\n\n" : $"방어력: {Defense}\n\n");
+            sb.Append($"Lv.{Level} {Name}({Chad})\n\n");
+            sb.Append(EquipWeapon != null ? $"공격력: {Attack} (+{EquipWeapon.Attack})\n\n" : $"공격력: {Attack}\n\n");
+            sb.Append(EquipArmor != null ? $"방어력 : {Defense} (+{EquipArmor.Defense})\n\n" : $"방어력: {Defense}\n\n");
             sb.Append($"HP: {Health} / {MaxHealth}\n\nMP: {MP} / {MaxMP}\n\nGold: {Gold} G\n\n");
             sb.Append($"EXP: {Exp} / {ExpNeeded}\n\n");
             return sb.ToString();
@@ -74,6 +86,15 @@ namespace TextBased_Dungeon_Game
             if (target.IsEquip)
             {
                 target.IsEquip = false;
+                if(target.Type == ItemType.Weapon)
+                {
+                    EquipWeapon = null;
+                }
+                else
+                {
+                    EquipArmor = null;
+                }
+
             }
             else
             {
@@ -107,7 +128,7 @@ namespace TextBased_Dungeon_Game
 
             int price = (int)(sellitem.Price * 0.85f);
             Gold += price;
-            DungeonGame.Instance.message += () => Console.WriteLine($"{sellitem.Name}을 {price} G 에 판매 하였습니다.");
+            DungeonGame.Instance.message.Append($"{sellitem.Name}을 {price} G 에 판매 하였습니다.\n");
             Inventory.DeleteItem(sellitem);
 
 
@@ -117,11 +138,11 @@ namespace TextBased_Dungeon_Game
             if (Gold >= 500)
             {
                 Gold -= 500;
-                DungeonGame.Instance.message += () => Console.WriteLine("휴식을 완료했습니다.");
+                DungeonGame.Instance.message.Append("휴식을 완료했습니다.\n");
             }
             else
             {
-                DungeonGame.Instance.message += () => Console.WriteLine("Gold 가 부족합니다.");
+                DungeonGame.Instance.message.Append("Gold 가 부족합니다.\n");
             }
         }
 
@@ -129,17 +150,13 @@ namespace TextBased_Dungeon_Game
         {
             Random rand = new Random();
 
-            int AddAttack = EquipWeapon == null ? 0 : EquipWeapon.Attack;
-
-            float errorFloat = (Attack + AddAttack) * 0.1f;
+            float errorFloat = (Attack) * 0.1f;
             int errorInt = (int)errorFloat;
             int errorDamage = errorInt < errorFloat ? errorInt + 1 : errorInt;
             
-            int damage = rand.Next(Attack + AddAttack - errorDamage, Attack + AddAttack + errorDamage);
+            int damage = rand.Next(Attack - errorDamage, Attack + errorDamage);
             return critical ? (int)(damage * 1.6f) : damage;
-        }
-
-        
+        } 
         public new void AttackUnit(Unit _unit)
         {
             bool result = IsCritical();
@@ -149,8 +166,8 @@ namespace TextBased_Dungeon_Game
 
             sb.Append($"{Name}의 공격!\n Lv.{_unit.Level} {_unit.Name}을 공격했습니다. [데미지 : {damage}]");
             sb.Append(result ? $" - 치명타 공격!!\n" : "\n");
-                
-            DungeonGame.Instance.message += () => Console.WriteLine(sb.ToString());
+            DungeonGame.Instance.message.Append($"{sb.ToString()}");
+            
             _unit.Attacked(damage);
         }
         public void AddSkill(Skill skill)
@@ -179,7 +196,7 @@ namespace TextBased_Dungeon_Game
                 sb.Append($"{Name}의 {skillList[index].name}! [데미지 : {damage}]");
                 sb.Append(result ? $" - 치명타 공격!!\n" : "\n");
 
-                DungeonGame.Instance.message += () => Console.WriteLine(sb.ToString());
+                DungeonGame.Instance.message.Append($"{sb.ToString()}");
 
                 skillList[index].Use(targetList, damage);
                 MP -= skillList[index].mp;
@@ -187,7 +204,7 @@ namespace TextBased_Dungeon_Game
             }
             else
             {
-                DungeonGame.Instance.message += () => Console.WriteLine("잘못된 입력 입니다.");
+                DungeonGame.Instance.message.Append("잘못된 입력 입니다.\n");
             }
 
             

@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 
 namespace TextBased_Dungeon_Game
 {
@@ -12,7 +13,7 @@ namespace TextBased_Dungeon_Game
         public Warrior player;
         public Shop shop;
         public Dungeon dungeon;
-        public Action message;
+        public StringBuilder message = new StringBuilder();
         public DungeonGame()
         {
             Instance = this;
@@ -22,7 +23,6 @@ namespace TextBased_Dungeon_Game
 
         public void GameInit()
         {
-            Console.SetWindowSize(100, 40);
             dungeon = new Dungeon();
             Read();
             sceneManager = new SceneManager();
@@ -32,6 +32,7 @@ namespace TextBased_Dungeon_Game
             int nextScene = 0;
             while (true)
             {
+                Console.SetWindowSize(120, 40);
                 nextScene = sceneManager.SceneList((SceneType)nextScene).DrawScene();
             }
             
@@ -89,13 +90,11 @@ namespace TextBased_Dungeon_Game
             }
 
         }
-        public void PrintMessage()
+        public string PrintMessage()
         {
-            if (Instance.message != null)
-            {
-                Instance.message();
-                Instance.message = null;
-            }
+            string str = message.ToString();
+            message.Clear();
+            return str;
         }
 
       /*  public int EnterDungeon(int i)
