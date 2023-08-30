@@ -178,7 +178,7 @@ namespace TextBased_Dungeon_Game
         }
         public void WriteText()
         {
-
+            SoundPlayer.Bgm("");
             WriteSelectMessage("1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기");
             WriteMessage("스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.\n원하시는 행동을 입력해주세요.");
 /*
