@@ -37,7 +37,6 @@ namespace TextBased_Dungeon_Game
         public virtual void Use(List<Unit> _units, int _attack) { }
     }
     [Serializable]
-
     public class AlphaStrike : Skill
     {
         public AlphaStrike() : base("알파 스트라이크", "공격력 * 2로 하나의 적을 공격합니다.", 10, 1, SkillType.Target) { }

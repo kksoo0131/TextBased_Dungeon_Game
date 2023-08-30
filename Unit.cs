@@ -18,7 +18,6 @@ namespace TextBased_Dungeon_Game
             MaxHealth = maxHealth;
             Health = health;
             IsDead = false;
-
         }
         public string Name { get; set; }
         public int Level { get; set; }
@@ -26,7 +25,7 @@ namespace TextBased_Dungeon_Game
         public int Defense { get; set; }
 
         private int health;
-        public int MaxHealth { get; set; }
+        
         public int Health
         {
             get { return health; }
@@ -35,7 +34,7 @@ namespace TextBased_Dungeon_Game
                 health = Math.Min(value, MaxHealth);
             }
         }
-
+        public int MaxHealth { get; set; }
 
         public bool IsDead { get; set; }
         public bool IsCritical()

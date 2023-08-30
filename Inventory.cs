@@ -47,7 +47,6 @@ namespace TextBased_Dungeon_Game
             foreach (Item _item in itemlist)
             {
                 str.Append($"- {index++} ");
-
                 str.Append(MakeItemInfo(_item));
 
                 // 인벤토리에서 처음 추가해줄 때 각각 무기와 갑옷으로 선언해주었기 때문에 굳이 다시 캐스팅 할 필요가 없음.
@@ -61,7 +60,6 @@ namespace TextBased_Dungeon_Game
                 //    Armor armor = (Armor)_item;
                 //    str.Append(MakeItemInfo(armor));
                 //}
-
                 str.Append("\n");
 
             }
@@ -96,7 +94,6 @@ namespace TextBased_Dungeon_Game
             foreach (Item _item in itemlist)
             {
                 str.Append($"- {index++} ");
-
                 str.Append(MakeItemInfo(_item));
                 str.Insert(str.Length - 30, "\n");
                 // 인벤토리에서 처음 추가해줄 때 각각 무기와 갑옷으로 선언해주었기 때문에 굳이 다시 캐스팅 할 필요가 없음.
@@ -110,7 +107,6 @@ namespace TextBased_Dungeon_Game
                 //    Armor armor = (Armor)_item;
                 //    str.Append(MakeItemInfo(armor));
                 //}
-
                 str.Append($" | {_item.Price} G\n");
 
             }
@@ -134,7 +130,7 @@ namespace TextBased_Dungeon_Game
                 temp.Append($"공격력 +{_item.Attack}");
                 while (temp.Length < 10) temp.Append(" ");
             }
-            else
+            else if(_item.Type == ItemType.Armor)
             {
                 //Armor armor = (Armor)_item;
                 temp.Append($"방어력 +{_item.Defense}");
@@ -203,7 +199,6 @@ namespace TextBased_Dungeon_Game
             foreach (Item _item in itemlist)
             {
                 str.Append($"- {index++} ");
-
                 str.Append(MakeItemInfo(_item));
 
                 // 인벤토리에서 처음 추가해줄 때 각각 무기와 갑옷으로 선언해주었기 때문에 굳이 다시 캐스팅 할 필요가 없음.
@@ -217,7 +212,6 @@ namespace TextBased_Dungeon_Game
                 //    Armor armor = (Armor)_item;
                 //    str.Append(MakeItemInfo(armor));
                 //}
-
                 str.Append("\n");
 
             }
@@ -250,4 +244,6 @@ namespace TextBased_Dungeon_Game
             
         }
     }
+
+    
 }

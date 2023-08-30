@@ -21,6 +21,8 @@ namespace TextBased_Dungeon_Game
     {
         Weapon,
         Armor,
+        HpPotion,
+        MpPotion,
     }
 
     public enum SortingInventory
@@ -66,8 +68,28 @@ namespace TextBased_Dungeon_Game
         public bool IsEquip { get; set; }
         public int Attack { get; set; }
         public int Defense { get; set; }
-        public int Price { get; set; }
+        public int HpRecovery { get; set; }  // 체력 포션 회복량
+        public int MpRecovery { get; set; }  // 마나 포션 회복량
 
+        private int _quantity;
+
+        public int Quantity
+        {
+            get => _quantity;
+            set
+            {
+                if (value >= 0)  // 값이 0 이상인 경우에만 설정
+                {
+                    _quantity = value;
+                }
+                else
+                {
+                    Console.SetCursorPosition(10, 20);
+                    Console.WriteLine("포션이 없으면 사용할 수 없습니다.");
+                }
+            }
+        }
+        public int Price { get; private set; }
         public bool IsSell { get; set; }
         
 
@@ -114,5 +136,17 @@ namespace TextBased_Dungeon_Game
         {
             Defense = _defense;
         }
+    }
+
+    [Serializable]
+    class Potion : Item
+    {
+        public Potion(string _name, ItemType _type, string _Info, int _price, int _hpRecovery, int _mpRecovery, int _quantity) : base(_name, _type, _Info, _price)
+        {
+            HpRecovery = _hpRecovery;
+            MpRecovery = _mpRecovery;
+            Quantity = _quantity;
+        }
+
     }
 }
