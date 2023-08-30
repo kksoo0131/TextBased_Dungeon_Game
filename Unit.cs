@@ -6,10 +6,6 @@ using System.Threading.Tasks;
 
 namespace TextBased_Dungeon_Game
 {
-    enum MonsterType
-    {
-        //여기에 유닛을 상속받은 몬스터들의 클래스이름을 추가.
-    }
     [Serializable]
     public class Unit
     {
@@ -130,5 +126,15 @@ namespace TextBased_Dungeon_Game
 
 
         }
+    }
+
+    public class Wolf :Unit
+    {
+        public Wolf() : base("늑대",3,15,5,20,20) { }
+    }
+
+    public class Chicken : Unit
+    {
+        public Chicken() : base("닭", 1, 5, 5, 10, 10) { }
     }
 }
