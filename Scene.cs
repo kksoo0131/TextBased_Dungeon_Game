@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
@@ -16,6 +17,7 @@ namespace TextBased_Dungeon_Game
         ShopScene,
         DungeonEnterScene,
         RestScene,
+        SaveRoadScene,
         //나머지
         /* DungeonClearScene,
          DungeonFailScene,*/
@@ -156,6 +158,7 @@ namespace TextBased_Dungeon_Game
 
     class StartScene : Scene
     {
+        int[] options;
         public StartScene() : base() { }    
         public override int DrawScene()
         {         
@@ -179,7 +182,7 @@ namespace TextBased_Dungeon_Game
         public void WriteText()
         {
 
-            WriteSelectMessage("1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기");
+            WriteSelectMessage("1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기\n6. 저장하기 & 기불러오기");
             WriteMessage("스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.\n원하시는 행동을 입력해주세요.");
 /*
             SoundPlayer.StopSound();
@@ -292,7 +295,7 @@ namespace TextBased_Dungeon_Game
                     // 해당 장비가 장착중 -> 장착 해제
                     // 장착 해제 -> 장착중으로 변경함
                     _player.EquipItem(index - 1);
-                    DungeonGame.Instance.PlayerSave();
+                    // DungeonGame.Instance.PlayerSave();
                     return EquipmentInfo();
             }
         }
@@ -357,8 +360,8 @@ namespace TextBased_Dungeon_Game
                     Item? item = _shop.BuyItem(index - 1);
                     if (item != null)
                     {
-                        DungeonGame.Instance.PlayerSave();
-                        DungeonGame.Instance.ShopSave();
+                        //DungeonGame.Instance.PlayerSave();
+                        //DungeonGame.Instance.ShopSave();
                         _player.Inventory.AddItem(item);
                     }
 
@@ -386,7 +389,7 @@ namespace TextBased_Dungeon_Game
                     return (int)SceneType.ShopScene;
                 default:
                     _player.SellItem(index - 1);
-                    DungeonGame.Instance.PlayerSave();
+                    //DungeonGame.Instance.PlayerSave();
                     return SellItem();
             }
         }
@@ -452,7 +455,7 @@ namespace TextBased_Dungeon_Game
             DrawUI();
             WriteText();
             DungeonGame.Instance.PrintMessage();
-            DungeonGame.Instance.PlayerSave();
+            //DungeonGame.Instance.PlayerSave();
             if (InputKey(options) == 1)
             {
                 _player.Rest();
@@ -568,7 +571,69 @@ namespace TextBased_Dungeon_Game
                     
             }
         }
+    }
 
+    class SaveRoadScene : Scene
+    {
+        int[] options = { 0, 1, 2 };
+
+        public override int DrawScene()
+        {
+            Console.Clear();
+            Console.WriteLine(MakeText());
+            
+            switch(InputKey(options)) 
+            {
+                case 0:
+                    return (int)SceneType.StartScene;
+                case 1:
+                    return Save();
+                case 2:
+                    return Load();
+                default:
+                    return (int)SceneType.SaveRoadScene;
+
+            }
+        }
+
+        public int Save()
+        {
+            Console.Clear();
+            Console.WriteLine(MakeSaveText());
+            DungeonGame.dataManager.PlayerSave();
+            //DungeonGame.dataManager.InventorySave();
+
+            return DrawScene();
+        }
+
+        public int Load()
+        {
+            Console.Clear();
+            Console.WriteLine(MakeLoadText());
+            DungeonGame.dataManager.PlayerLoad();
+            //DungeonGame.dataManager.InventoryLoad();
+
+            return DrawScene();
+        }
+
+        public string MakeText()
+        {
+            return "저장하거나 불러오시겠습니까? \n\n0. 나가기\n1. 저장하기\n2. 불러오기\n\n원하시는 행동을 입력해주세요.";
+        }
+
+        public string MakeSaveText()
+        {
+            return "저장하기";
+        }
+
+        public string MakeLoadText()
+        {
+            return "불러오기";
+        }
+    }
+
+    class BattleScene : Scene 
+    {
         public int SelectSkillTarget(int index, int count)
         {
             Console.Clear();

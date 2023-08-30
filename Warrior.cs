@@ -55,6 +55,24 @@ namespace TextBased_Dungeon_Game
         public int Exp { get; set; } // 추가: 경험치
         public int ExpNeeded { get; set; } // 추가: 다음 레벨까지 필요한 경험치
 
+        public void PlayerInit()
+        {
+            Chad = "전사";
+            Gold = 1500;
+            MaxHealth = 100;
+            MaxMP = 50;
+            MP = 50;
+            Exp = 0;
+            ExpNeeded = CalculateExpNeeded();
+            SkillCount = 0;
+
+
+            Inventory.AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
+            Inventory.AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 5));
+            AddSkill(new AlphaStrike());
+            AddSkill(new DoubleStrike());
+        }
+
         public string PlayerInfo()
         {
             StringBuilder sb = new StringBuilder();
