@@ -125,7 +125,7 @@ namespace TextBased_Dungeon_Game
             }
         }
 
-        public int SetAttackPower()
+        public new int SetAttackPower(bool critical)
         {
             Random rand = new Random();
 
@@ -134,14 +134,24 @@ namespace TextBased_Dungeon_Game
             float errorFloat = (Attack + AddAttack) * 0.1f;
             int errorInt = (int)errorFloat;
             int errorDamage = errorInt < errorFloat ? errorInt + 1 : errorInt;
-
-            return rand.Next(Attack + AddAttack - errorDamage, Attack + AddAttack + errorDamage);
+            
+            int damage = rand.Next(Attack + AddAttack - errorDamage, Attack + AddAttack + errorDamage);
+            return critical ? (int)(damage * 1.6f) : damage;
         }
-        public new void AttackUnit(Unit m)
-        {
-            DungeonGame.Instance.message += () => Console.WriteLine($"{Name}의 공격!");
 
-            m.Attacked(SetAttackPower());
+        
+        public new void AttackUnit(Unit _unit)
+        {
+            bool result = IsCritical();
+            int damage = SetAttackPower(result);
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append($"{Name}의 공격!\n Lv.{_unit.Level} {_unit.Name}을 공격했습니다. [데미지 : {damage}]");
+            sb.Append(result ? $" - 치명타 공격!!\n" : "\n");
+                
+            DungeonGame.Instance.message += () => Console.WriteLine(sb.ToString());
+            _unit.Attacked(damage);
         }
         public void AddSkill(Skill skill)
         {
@@ -161,8 +171,17 @@ namespace TextBased_Dungeon_Game
             // Scene에서 _units를 생성해서 전달하고 SKill에서는 그냥 전부 맞게하면될듯
             if (index >=0 && index < SkillCount)
             {
-                DungeonGame.Instance.message += () => Console.WriteLine($"{Name}의 {skillList[index].name}!");
-                skillList[index].Use(targetList, SetAttackPower());
+                
+                bool result = IsCritical();
+                int damage = SetAttackPower(result);
+                StringBuilder sb = new StringBuilder();
+
+                sb.Append($"{Name}의 {skillList[index].name}! [데미지 : {damage}]");
+                sb.Append(result ? $" - 치명타 공격!!\n" : "\n");
+
+                DungeonGame.Instance.message += () => Console.WriteLine(sb.ToString());
+
+                skillList[index].Use(targetList, damage);
                 MP -= skillList[index].mp;
                 targetList.Clear();
             }

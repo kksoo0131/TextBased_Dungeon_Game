@@ -134,11 +134,9 @@ namespace TextBased_Dungeon_Game
     class InventoryScene : Scene
     {   
         Inventory _inventory;
-
-        public InventoryScene() :base() { _inventory = _player.Inventory; }
-     
         public override int DrawScene()
         {
+            _inventory = _player.Inventory;
             options = new int[] { 0, 1, 2, 3, 4, 5};
             Console.Clear();
             Console.WriteLine(MakeText());
@@ -206,12 +204,9 @@ namespace TextBased_Dungeon_Game
     class ShopScene : Scene
     {
         Shop _shop;
-        public ShopScene() : base() 
+        public override int DrawScene()
         {
             _shop = DungeonGame.Instance.shop;
-        }
-        public override int DrawScene()
-        {         
             options = new int[] { 0, 1, 2};
             Console.Clear();
             Console.WriteLine(MakeText());
@@ -310,7 +305,7 @@ namespace TextBased_Dungeon_Game
             {
                 case 0:
                     return (int)SceneType.StartScene;
-                case 1:
+                case 1:                    
                     return (int)SceneType.PlayerPhaseScene;
                 default:
                     return (int)SceneType.StartScene;
@@ -385,9 +380,10 @@ namespace TextBased_Dungeon_Game
     class PlayerPhaseScene : Scene 
     {
         Dungeon dungeon;
-        public PlayerPhaseScene() : base() { dungeon = DungeonGame.Instance.dungeon; }
+        public PlayerPhaseScene() : base() {  }
         public override int DrawScene()
         {
+            dungeon = DungeonGame.Instance.dungeon;
             return PlayerPhase();
         }
 
@@ -554,53 +550,62 @@ namespace TextBased_Dungeon_Game
     class MonsterPhaseScene : Scene
     {
         Dungeon dungeon;
-        public MonsterPhaseScene() : base() { dungeon = DungeonGame.Instance.dungeon; }
+        public MonsterPhaseScene() : base() { }
 
         public override int DrawScene()
         {
+            dungeon = DungeonGame.Instance.dungeon;
             return MonsterPhase(0);
         }
 
         public int MonsterPhase(int i)
         {
             options = new int[] { 0 };
-            Console.Clear();
+
+            if (dungeon.DungeonClear())
+            {
+                return (int)SceneType.BattleResultScene;
+            }
 
             while (i < dungeon.Count() && dungeon.GetUnit(i).IsDead)
             {
                 i++;
             }
 
-            if (i >= dungeon.Count())
+            if(i < dungeon.Count()) 
             {
-                return (int)SceneType.BattleResultScene;
+                Console.Clear();
+                Console.WriteLine($"Battle!!\n\n");
+                dungeon.GetUnit(i).AttackUnit(_player);
+                DungeonGame.Instance.PrintMessage();
+                Console.WriteLine("\n\n0. 다음");
+
+                switch (InputKey(options))
+                {
+                    default:
+                        if (_player.Health <= 0)
+                        {
+                            dungeon.Result = false;
+                            return (int)SceneType.BattleResultScene;
+                        }
+                        return ++i < dungeon.Count() ? MonsterPhase(i) : (int)SceneType.PlayerPhaseScene;
+                }
             }
 
-            Console.WriteLine($"Battle!!\n\n");
-            dungeon.GetUnit(i).AttackUnit(_player);
-            DungeonGame.Instance.PrintMessage();
+            return (int)SceneType.PlayerPhaseScene;
+            
 
-            if (_player.Health <= 0)
-            {
-                dungeon.Result = false;
-                return (int)SceneType.BattleResultScene;
-            }
-            Console.WriteLine("\n\n0. 다음");
-
-            switch (InputKey(options))
-            {
-                default:
-                    return ++i < dungeon.Count() ? MonsterPhase(i) : (int)SceneType.PlayerPhaseScene;
-            }
+            
         }
     }
     class BattleResultScene : Scene
     { 
 
         Dungeon dungeon;
-        public BattleResultScene() { dungeon = DungeonGame.Instance.dungeon; }
+        public BattleResultScene() { }
         public override int DrawScene()
         {
+            dungeon = DungeonGame.Instance.dungeon;
             return BattleResult(dungeon.Result);
         }
 
@@ -618,6 +623,8 @@ namespace TextBased_Dungeon_Game
                 Console.WriteLine(MakeLoseText());
             }
 
+            dungeon.Clear();
+            dungeon.Init();
             switch (InputKey(options))
             {
                 case 0:
@@ -636,8 +643,8 @@ namespace TextBased_Dungeon_Game
             _player.GetExp(dungeon.Count() * 5);  // 몬스터 한 마리당 5의 경험치
             Console.WriteLine("[보상 정산]\n");
             Console.WriteLine("골드 + 300 G\n\n0. 다음");  // 유동적으로 바꿀 필요 있음.
-            _player.Gold += 300;
 
+            _player.Gold += 300;
         }
 
         public string MakeLoseText()
