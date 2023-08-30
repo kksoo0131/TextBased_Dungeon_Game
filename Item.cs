@@ -53,18 +53,18 @@ namespace TextBased_Dungeon_Game
             get
             {
                 StringBuilder sb = new StringBuilder();
-                if(IsEquip)
-                {
-                    sb.Append($"[E]");
-                }
+                //if(IsEquip)
+                //{
+                //    sb.Append($"[E]"); // 아이템의 고유 이름값을 수정하는 건 지양
+                //}
                 sb.Append($"{_name}");
 
                 return sb.ToString();
             }
-            private set { _name = value; }
+            set { _name = value; }
         }       
-        public ItemType Type { get; private set; }
-        public string Info { get; private set; }
+        public ItemType Type { get; set; }
+        public string Info { get; set; }
         public bool IsEquip { get; set; }
         public int Attack { get; set; }
         public int Defense { get; set; }
@@ -90,7 +90,6 @@ namespace TextBased_Dungeon_Game
             }
         }
         public int Price { get; private set; }
-
         public bool IsSell { get; set; }
         
 

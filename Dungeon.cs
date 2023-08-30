@@ -11,16 +11,20 @@ namespace TextBased_Dungeon_Game
         public Dungeon()
         {
 
-            monsterList.Add(new Unit("미니언", 2, 10, 0, 15, 15));
-            monsterList.Add(new Unit("대포미니언", 5, 10, 0, 25, 25));
-            monsterList.Add(new Unit("공허충", 3, 10, 0, 10, 10));
-            DeadCount = 0;
-            Result = true;
+            Init();
 
         }
 
          List<Unit> monsterList = new List<Unit>();
 
+        public void Init()
+        {
+            monsterList.Add(new Wolf());
+            monsterList.Add(new Chicken());
+            monsterList.Add(new WildBoar());
+            DeadCount = 0;
+            Result = true;
+        }
         public bool Result { get; set; } 
         public int DeadCount { get; set; }
         public Unit GetUnit(int index)
@@ -62,5 +66,12 @@ namespace TextBased_Dungeon_Game
 
             return sb.ToString();
         }
+
+        public void Clear()
+        {
+            monsterList.Clear();
+        }
     }
+
+    
 }
