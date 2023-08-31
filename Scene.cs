@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
+using static Sound2;
 
 namespace TextBased_Dungeon_Game
 {
@@ -45,8 +47,8 @@ namespace TextBased_Dungeon_Game
 
         public void SoundPlay()
         {
-            SoundPlayer.StopSound();
-            SoundPlayer.Bgm("");
+            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Dungeon.mp3", true, false);
+            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Bgm.mp3", true, true);
         }
         public virtual int DrawScene() { return 0; }
         public virtual int InputKey(int[] options)
@@ -88,29 +90,29 @@ namespace TextBased_Dungeon_Game
             sb.Append("\n");
             sb.Append("\n");
 
-            for (int i = 0; i <= 255; i += 8)
+            //for (int i = 0; i <= 255; i += 8)
+            //{
+            //    string s = "┌──────────────────────────────┐";
+            //    sb.Append($"\u001b[38;2;255;{i};80m{s.Substring(i / 8, 1)}");
+            //}
+            sb.Append("\n");
+            for (int i = 0; i <= 255; i += 7)
             {
-                string s = "┌──────────────────────────────┐";
-                sb.Append($"\u001b[38;2;255;{i};80m{s.Substring(i / 8, 1)}");
+                string s = "       ◆ WELCOME TO SPARTA VILLAGE\n    ";
+                sb.Append($"\u001b[38;2;255;{i};100m{s.Substring(i / 7, 1)}");
+            }         
+            for (int i = 0; i <= 255; i += 11)
+            {
+                string s = " ◆ 스파르타 마을에 오신걸 환영합니다.   ";
+             
+                sb.Append($"\u001b[38;2;255;{i};80m{s.Substring(i / 11, 1)}");
             }
             sb.Append("\n");
-            for (int i = 0; i <= 255; i += 8)
-            {
-                string s = "│  WELCOME TO SPARTA VILLAGE   │";
-                sb.Append($"\u001b[38;2;255;{i};100m{s.Substring(i / 8, 1)}");
-            }
-            sb.Append("\n");
-            for (int i = 255; i >= 0; i -= 13)
-            {
-                string s = "■■■■■■■■■■■■■■■■■■■■■";
-                sb.Append($"\u001b[38;2;0;{i};150m{s.Substring(i / 13, 1)}");
-            }
-            sb.Append("\n");
-            for (int i = 0; i <= 255; i += 8)
-            {
-                string s = "└──────────────────────────────┘";
-                sb.Append($"\u001b[38;2;255;{i};80m{s.Substring(i / 8, 1)}");
-            }
+            //for (int i = 255; i >= 0; i -= 8)
+            //{
+            //    string s = "   EGALLIV ATRAPS OT EMOCLEW  -  ";
+            //    sb.Append($"\u001b[38;2;0;{i};150m{s.Substring(i / 8, 1)}");
+            //}      
             sb.Append("\n");
             sb.Append("\n");
 
@@ -123,17 +125,17 @@ namespace TextBased_Dungeon_Game
             for (int i = 0; i < Console.WindowHeight-2; i++)
             {
                 int posX = 0;
-                sb.Append($"\u001b[38;2;255;{255 / Console.WindowHeight * i};80m│");
+                sb.Append($"\u001b[38;2;0;200;{255 / Console.WindowHeight * i};80m◆");
                 while(posX++ < Console.WindowWidth / 2 - 30)
                 {
                     sb.Append(' ');
                 }    
-                sb.Append($"\u001b[38;2;255;{255 / Console.WindowHeight * i};80m│");
+                sb.Append($"\u001b[38;2;0;200;{255 / Console.WindowHeight * i};80m◆");
                 while (posX++ < Console.WindowWidth-4)
                 {
                     sb.Append(' ');
                 }
-                sb.Append($"\u001b[38;2;255;{255 / Console.WindowHeight * i};80m│");
+                sb.Append($"\u001b[38;2;0;0;200;{20 + i / Console.WindowHeight * i };80m◆");
                 sb.Append("\n");
             }
 
@@ -145,7 +147,7 @@ namespace TextBased_Dungeon_Game
             int posY = 0;
             for (int i = 0; i < Console.WindowWidth; i++)
             {
-                sb.Append($"\u001b[38;2;255;{255 / Console.WindowWidth * i};80m─");
+                sb.Append($"\u001b[38;2;0;100;{255 / Console.WindowWidth * i};80m■");
             }
             while (posY++ < Console.WindowHeight - 16)
             {
@@ -153,7 +155,7 @@ namespace TextBased_Dungeon_Game
             }
             for (int i = 0; i < Console.WindowWidth; i++)
             {
-                sb.Append($"\u001b[38;2;255;{255 / Console.WindowWidth * i};80m─");
+                sb.Append($"\u001b[38;2;0;100;{255 / Console.WindowWidth * i};80m■");
             }
             while (posY++ < Console.WindowHeight - 2)
             {
@@ -161,7 +163,7 @@ namespace TextBased_Dungeon_Game
             }
             for (int i = 0; i < Console.WindowWidth; i++)
             {
-                sb.Append($"\u001b[38;2;255;{255 / Console.WindowWidth * i};80m─");
+                sb.Append($"\u001b[38;2;0;100;{255 / Console.WindowWidth * i};80m■");
             }
 
             return sb.ToString();
@@ -242,6 +244,7 @@ namespace TextBased_Dungeon_Game
 
         public int Start()
         {
+            
             SceneInit();
             WriteText();
             _player.Name = Console.ReadLine();
@@ -473,8 +476,7 @@ namespace TextBased_Dungeon_Game
             {
                 case 0:
                     return (int)SceneType.StartScene;
-                case 1:
-                    SoundPlayer.StopSound();
+                case 1:                 
                     return BuyItem();
                 case 2:
                     return SellItem();
@@ -545,8 +547,8 @@ namespace TextBased_Dungeon_Game
     {
         public new void SoundPlay()
         {
-            SoundPlayer.StopSound();
-            SoundPlayer.SoundsDungeon("");
+            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Bgm.mp3", true, false);
+            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Dungeon.mp3", true, true);
         }
 
         public override int DrawScene()
@@ -603,8 +605,8 @@ namespace TextBased_Dungeon_Game
 
         public new void SoundPlay()
         {
-            SoundPlayer.StopSound();
-            SoundPlayer.SoundsAttack("");
+            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Bgm.mp3", true, false);
+            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Dungeon.mp3", true, true);
         }
         public override void SceneInit()
         {
@@ -623,7 +625,6 @@ namespace TextBased_Dungeon_Game
         {
             SceneInit();
             WriteText();
-
             options = new int[] { 1, 2 };
             switch (InputKey(options))
             {
@@ -707,6 +708,7 @@ namespace TextBased_Dungeon_Game
             SceneInit();
             WriteSkillTargetText();
 
+
             int key = InputKey(MakeOption(dungeon.Count()));
             switch (key)
             {
@@ -740,6 +742,7 @@ namespace TextBased_Dungeon_Game
             SoundPlay();
             SceneInit();
             WriteAttackResultText();
+            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Attack.mp3", false, true);
 
             switch (InputKey(MakeOption(0)))
             {
@@ -886,6 +889,7 @@ namespace TextBased_Dungeon_Game
                 DrawUI();
                 dungeon.GetUnit(i).AttackUnit(_player);
                 WriteText();
+                Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Attack.mp3", false, true);
 
                 switch (InputKey(MakeOption(0)))
                 {

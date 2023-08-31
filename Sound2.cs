@@ -16,6 +16,7 @@ public class Sound2
                 Devices[Path] = new WaveOutEvent();
                 Devices[Path].Init(Files[Path]);
             }
+           
             if (Play)
             {
                 if (Devices[Path].PlaybackState == PlaybackState.Stopped)

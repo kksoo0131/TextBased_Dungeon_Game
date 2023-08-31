@@ -109,7 +109,6 @@ namespace TextBased_Dungeon_Game
 
             }
 
-            Thread.Sleep(350);
             Console.Clear();
             Console.Write("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                                          ");
             string S5 = "자네들에게 신의 가호가 깃들기를... ";
