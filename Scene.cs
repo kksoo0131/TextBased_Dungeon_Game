@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
-using static Sound2;
 
 namespace TextBased_Dungeon_Game
 {
@@ -35,6 +34,7 @@ namespace TextBased_Dungeon_Game
     {   
         protected Player _player;
         protected int[] options;
+        protected string path = @"C:\Users\Kks\source\repos\TextBased_Dungeon_Game\.vscode";
         public virtual void SceneInit() 
         {
             if(_player == null)
@@ -47,8 +47,8 @@ namespace TextBased_Dungeon_Game
 
         public void SoundPlay()
         {
-            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Dungeon.mp3", true, false);
-            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Bgm.mp3", true, true);
+            Sound2.Play($"{path}\\Dungeon.mp3", true, false);
+            Sound2.Play($"{path}\\Bgm.mp3", true, true);
         }
         public virtual int DrawScene() { return 0; }
         public virtual int InputKey(int[] options)
@@ -131,7 +131,7 @@ namespace TextBased_Dungeon_Game
                     sb.Append(' ');
                 }    
                 sb.Append($"\u001b[38;2;0;200;{255 / Console.WindowHeight * i};80m◆");
-                while (posX++ < Console.WindowWidth-4)
+                while (posX++ < Console.WindowWidth-6)
                 {
                     sb.Append(' ');
                 }
@@ -149,7 +149,7 @@ namespace TextBased_Dungeon_Game
             {
                 sb.Append($"\u001b[38;2;0;100;{255 / Console.WindowWidth * i};80m■");
             }
-            while (posY++ < Console.WindowHeight - 16)
+            while (posY++ < Console.WindowHeight - 18)
             {
                 sb.Append("\n");
             }
@@ -157,7 +157,7 @@ namespace TextBased_Dungeon_Game
             {
                 sb.Append($"\u001b[38;2;0;100;{255 / Console.WindowWidth * i};80m■");
             }
-            while (posY++ < Console.WindowHeight - 2)
+            while (posY++ < Console.WindowHeight - 3)
             {
                 sb.Append("\n");
             }
@@ -542,8 +542,8 @@ namespace TextBased_Dungeon_Game
     {
         public new void SoundPlay()
         {
-            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Bgm.mp3", true, false);
-            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Dungeon.mp3", true, true);
+            Sound2.Play($"{path}\\Bgm.mp3", true, false);
+            Sound2.Play($"{path}\\Dungeon.mp3", true, true);
         }
         public override int DrawScene()
         {
@@ -596,11 +596,10 @@ namespace TextBased_Dungeon_Game
     class PlayerPhaseScene : Scene 
     {
         Dungeon dungeon;
-
         public new void SoundPlay()
         {
-            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Bgm.mp3", true, false);
-            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Dungeon.mp3", true, true);
+            Sound2.Play($"{path}\\Bgm.mp3", true, false);
+            Sound2.Play($"{path}\\Dungeon.mp3", true, true);
         }
         public override void SceneInit()
         {
@@ -736,7 +735,7 @@ namespace TextBased_Dungeon_Game
             SoundPlay();
             SceneInit();
             WriteAttackResultText();
-            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Attack.mp3", false, true);
+            Sound2.Play($"{path}\\Attack.mp3", false, true);
 
             switch (InputKey(MakeOption(0)))
             {
@@ -846,8 +845,7 @@ namespace TextBased_Dungeon_Game
 
         public new void SoundPlay()
         {
-            SoundPlayer.StopSound();
-            SoundPlayer.SoundsAttack("");
+            Sound2.Play($"{path}\\Attack.mp3", false, true);
         }
         public override void SceneInit()
         {
@@ -883,8 +881,6 @@ namespace TextBased_Dungeon_Game
                 DrawUI();
                 dungeon.GetUnit(i).AttackUnit(_player);
                 WriteText();
-                Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Attack.mp3", false, true);
-
                 switch (InputKey(MakeOption(0)))
                 {
                     default:
@@ -914,8 +910,7 @@ namespace TextBased_Dungeon_Game
     {
         public new void SoundPlay()
         {
-            SoundPlayer.StopSound();
-            SoundPlayer.SoundsClear("");
+            Sound2.Play($"{path}\\Clear.mp3", false, true);
         }
         Dungeon dungeon;
         public override void SceneInit()
