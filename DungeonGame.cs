@@ -11,7 +11,7 @@ namespace TextBased_Dungeon_Game
 
         public SceneManager sceneManager;
         public static DataManager dataManager;
-        public Warrior player;
+        public Player player;
         public Shop shop;
         public Dungeon dungeon;
         public StringBuilder message = new StringBuilder();
@@ -25,8 +25,6 @@ namespace TextBased_Dungeon_Game
         public void GameInit()
         {
             Console.SetWindowSize(120, 40);
-            player = new Warrior();
-            player.PlayerInit();
             sceneManager = new SceneManager();
             dataManager = new DataManager();
             shop = new Shop();

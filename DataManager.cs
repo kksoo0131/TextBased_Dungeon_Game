@@ -6,7 +6,7 @@ namespace TextBased_Dungeon_Game
     {
         public void PlayerSave()
         {
-            Warrior player = DungeonGame.Instance.player;
+            Player player = DungeonGame.Instance.player;
 
             string json = JsonConvert.SerializeObject(player, Formatting.Indented);
             File.WriteAllText(@"PlayerData.json", json);
@@ -18,7 +18,7 @@ namespace TextBased_Dungeon_Game
         {
             string json = File.ReadAllText(@"PlayerData.json");
             DungeonGame.Instance.player.Inventory.Clear();
-            DungeonGame.Instance.player = JsonConvert.DeserializeObject<Warrior>(json);
+            DungeonGame.Instance.player = JsonConvert.DeserializeObject<Player>(json);
 
             Thread.Sleep(1000);
         }
