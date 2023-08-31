@@ -232,16 +232,13 @@ namespace TextBased_Dungeon_Game
         }
 
     }
-
     class CreateCharacterScene : Scene
     {
-        public CreateCharacterScene() : base() { }
         public override int DrawScene()
         {
             SoundPlay();
             return SelectJob();
         }
-
         public int Start()
         {
             
@@ -251,7 +248,6 @@ namespace TextBased_Dungeon_Game
             Prologue.PlayPrologue();
             return (int)SceneType.StartScene;
         }
-
         public int SelectJob()
         {
             SoundPlay();
@@ -307,7 +303,6 @@ namespace TextBased_Dungeon_Game
         {
             return Start();
         }
-
         public int Start()
         {
             SceneInit();
@@ -550,7 +545,6 @@ namespace TextBased_Dungeon_Game
             Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Bgm.mp3", true, false);
             Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Dungeon.mp3", true, true);
         }
-
         public override int DrawScene()
         {
             SceneInit();
@@ -815,7 +809,7 @@ namespace TextBased_Dungeon_Game
         {
             Console.Clear();
             Console.WriteLine(MakeSaveText());
-            DungeonGame.dataManager.PlayerSave();
+            DungeonGame.Instance.dataManager.PlayerSave();
             //DungeonGame.dataManager.InventorySave();
 
             return DrawScene();
@@ -825,7 +819,7 @@ namespace TextBased_Dungeon_Game
         {
             Console.Clear();
             Console.WriteLine(MakeLoadText());
-            DungeonGame.dataManager.PlayerLoad();
+            DungeonGame.Instance.dataManager.PlayerLoad();
             //DungeonGame.dataManager.InventoryLoad();
 
             return DrawScene();
@@ -974,7 +968,7 @@ namespace TextBased_Dungeon_Game
 
             WriteLeftMessage($"[던전 결과]\n몬스터 {dungeon.Count()}마리를 잡았습니다! 경험치 {dungeon.Count() * 5} 증가!\n");
             WriteSelectMessage("0. 다음");
-            WriteMessage("[보상 정산]\n골드 + 300 G\n체력 회복 포션 + 1개원하시는 행동을 입력해주세요");
+            WriteMessage("[보상 정산]\n골드 + 300 G\n체력 회복 포션 + 1개\n원하시는 행동을 입력해주세요");
 
         }
 

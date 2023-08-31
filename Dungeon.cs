@@ -22,6 +22,7 @@ namespace TextBased_Dungeon_Game
             monsterList.Add(new Wolf());
             monsterList.Add(new Chicken());
             monsterList.Add(new WildBoar());
+            monsterList.Add(new Bear());
             DeadCount = 0;
             Result = true;
         }
