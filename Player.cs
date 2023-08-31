@@ -18,9 +18,9 @@ namespace TextBased_Dungeon_Game
 
         public Inventory Inventory = new Inventory();
 
-        public Skill[] skillList = new Skill[3];
-
         public List<Unit> targetList = new List<Unit>();
+
+        public Skill[] skillInfoList = new Skill[3];
         public int SkillCount { get; set; }
         public string Chad { get; set; }
 
@@ -89,7 +89,7 @@ namespace TextBased_Dungeon_Game
 
             for(int i =0; i< SkillCount; i++)
             {
-                Skill skill = skillList[i];
+                Skill skill = skillInfoList[i];
                 sb.Append($"{i + 1}. {skill.name} - MP {skill.mp}\n   {skill.skillInfo}\n");
             }
 
@@ -250,7 +250,7 @@ namespace TextBased_Dungeon_Game
         {
             if (SkillCount < 3)
             {
-                skillList[SkillCount++] = skill;
+                skillInfoList[SkillCount++] = skill;
             }
             else
             {
@@ -269,13 +269,13 @@ namespace TextBased_Dungeon_Game
                 int damage = SetAttackPower(result);
                 StringBuilder sb = new StringBuilder();
 
-                sb.Append($"{Name}의 {skillList[index].name}! [데미지 : {(int)(damage * skillList[index].skillRate)}]");
+                sb.Append($"{Name}의 {skillInfoList[index].name}! [데미지 : {(int)(damage * skillInfoList[index].skillRate)}]");
                 sb.Append(result ? $" - 치명타 공격!!\n" : "\n");
 
                 DungeonGame.Instance.message.Append($"{sb.ToString()}");
 
-                skillList[index].Use(targetList, damage);
-                MP -= skillList[index].mp;
+                skillInfoList[index].Use(targetList, damage, skillInfoList[index]);
+                MP -= skillInfoList[index].mp;
                 targetList.Clear();
             }
             else
@@ -322,6 +322,7 @@ namespace TextBased_Dungeon_Game
             Chad = "라우라";
             MaxMP = 50;
             MP = 50;  
+
             AddSkill(new LauraSkill1());
             AddSkill(new LauraSkill2());
         }
