@@ -303,9 +303,9 @@ namespace TextBased_Dungeon_Game
     class Laura : Player
     {
         public override void PlayerInit()
-        {       
-            base.PlayerInit();
+        {
             Init("", 1, 10, 5, 100, 100);
+            base.PlayerInit();
             Chad = "라우라";
             MaxMP = 50;
             MP = 50;  
@@ -319,8 +319,8 @@ namespace TextBased_Dungeon_Game
     {
         public override void PlayerInit()
         {
-            base.PlayerInit();
             Init("", 1, 15, 5, 70, 70);
+            base.PlayerInit();
             Chad = "캐시";
             MaxMP = 50;
             MP = 50;
