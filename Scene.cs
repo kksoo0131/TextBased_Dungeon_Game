@@ -242,7 +242,7 @@ namespace TextBased_Dungeon_Game
             SceneInit();
             WriteText();
             _player.Name = Console.ReadLine();
-            Prologue.PlayPrologue();
+            //Prologue.PlayPrologue();
             return (int)SceneType.StartScene;
         }
         public int SelectJob()
@@ -389,7 +389,6 @@ namespace TextBased_Dungeon_Game
                     // 해당 장비가 장착중 -> 장착 해제
                     // 장착 해제 -> 장착중으로 변경함
                     _player.EquipItem(index - 1);
-                    // DungeonGame.Instance.PlayerSave();
                     return EquipmentInfo();
             }
         }
@@ -480,8 +479,6 @@ namespace TextBased_Dungeon_Game
                     Item? item = _shop.BuyItem(index - 1);
                     if (item != null)
                     {
-                        //DungeonGame.Instance.PlayerSave();
-                        //DungeonGame.Instance.ShopSave();
                         _player.Inventory.AddItem(item);
                     }
 
@@ -499,7 +496,6 @@ namespace TextBased_Dungeon_Game
                     return (int)SceneType.ShopScene;
                 default:
                     _player.SellItem(index - 1);
-                    //DungeonGame.Instance.PlayerSave();
                     return SellItem();
             }
         }
@@ -564,7 +560,6 @@ namespace TextBased_Dungeon_Game
         {
             SceneInit();
             WriteText();
-            //DungeonGame.Instance.PlayerSave();
             if (InputKey(MakeOption(1)) == 1)
             {
                 _player.Rest();
@@ -773,9 +768,10 @@ namespace TextBased_Dungeon_Game
         public override int DrawScene()
         {
             SceneInit();
-            Console.WriteLine(MakeText());
-            
-            switch(InputKey(MakeOption(2))) 
+            DrawUI();
+            WriteText();
+
+            switch (InputKey(MakeOption(2))) 
             {
                 case 0:
                     return (int)SceneType.StartScene;
@@ -792,9 +788,9 @@ namespace TextBased_Dungeon_Game
         public int Save()
         {
             Console.Clear();
-            Console.WriteLine(MakeSaveText());
+            DrawUI();
+            WriteText();
             DungeonGame.Instance.dataManager.PlayerSave();
-            //DungeonGame.dataManager.InventorySave();
 
             return DrawScene();
         }
@@ -802,26 +798,17 @@ namespace TextBased_Dungeon_Game
         public int Load()
         {
             Console.Clear();
-            Console.WriteLine(MakeLoadText());
+            DrawUI();
+            WriteText();
             DungeonGame.Instance.dataManager.PlayerLoad();
-            //DungeonGame.dataManager.InventoryLoad();
 
             return DrawScene();
         }
 
-        public string MakeText()
+        public void WriteText()
         {
-            return "저장하거나 불러오시겠습니까? \n\n0. 나가기\n1. 저장하기\n2. 불러오기\n\n원하시는 행동을 입력해주세요.";
-        }
-
-        public string MakeSaveText()
-        {
-            return "저장하기";
-        }
-
-        public string MakeLoadText()
-        {
-            return "불러오기";
+            WriteSelectMessage("1.저장하기\n2.불러오기\n0.나가기");
+            WriteMessage("저장하거나 불러오시겠습니까?\n원하시는 행동을 입력해주세요.");
         }
     }
     class MonsterPhaseScene : Scene
