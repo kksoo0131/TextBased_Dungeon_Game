@@ -24,15 +24,28 @@ namespace TextBased_Dungeon_Game
         public int SkillCount { get; set; }
         public string Chad { get; set; }
 
-        public new int Attack
+        public int AddAttack
         {
             get
             {
-                return EquipWeapon != null ?  base.Attack + EquipWeapon.Attack : base.Attack ;
+                return EquipWeapon != null ? EquipWeapon.Attack : 0;
             }
+
             set
             {
                 base.Attack = value;
+            }
+        }
+        public int AddDefense
+        {
+            get
+            {
+                return EquipArmor != null ? EquipArmor.Defense : 0;
+            }
+
+            set
+            {
+                base.Defense = value;
             }
         }
         public int MP { get; set; }
@@ -63,8 +76,8 @@ namespace TextBased_Dungeon_Game
             StringBuilder sb = new StringBuilder();
 
             sb.Append($"Lv.{Level} {Name}({Chad})\n\n");
-            sb.Append(EquipWeapon != null ? $"공격력: {Attack} (+{EquipWeapon.Attack})\n\n" : $"공격력: {Attack}\n\n");
-            sb.Append(EquipArmor != null ? $"방어력 : {Defense} (+{EquipArmor.Defense})\n\n" : $"방어력: {Defense}\n\n");
+            sb.Append(EquipWeapon != null ? $"공격력: {Attack} (+{AddAttack})\n\n" : $"공격력: {Attack}\n\n");
+            sb.Append(EquipArmor != null ? $"방어력 : {Defense} (+{AddDefense})\n\n" : $"방어력: {Defense}\n\n");
             sb.Append($"HP: {Health} / {MaxHealth}\n\nMP: {MP} / {MaxMP}\n\nGold: {Gold} G\n\n");
             sb.Append($"EXP: {Exp} / {ExpNeeded}\n\n");
             return sb.ToString();
@@ -213,11 +226,11 @@ namespace TextBased_Dungeon_Game
         {
             Random rand = new Random();
 
-            float errorFloat = (Attack) * 0.1f;
+            float errorFloat = (Attack + AddAttack) * 0.1f;
             int errorInt = (int)errorFloat;
             int errorDamage = errorInt < errorFloat ? errorInt + 1 : errorInt;
             
-            int damage = rand.Next(Attack - errorDamage, Attack + errorDamage);
+            int damage = rand.Next(Attack + AddAttack - errorDamage, Attack + AddAttack + errorDamage);
             return critical ? (int)(damage * 1.6f) : damage;
         } 
         public new void AttackUnit(Unit _unit)
