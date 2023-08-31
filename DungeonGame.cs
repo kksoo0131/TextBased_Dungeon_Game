@@ -17,7 +17,11 @@ namespace TextBased_Dungeon_Game
         public StringBuilder message = new StringBuilder();
         public DungeonGame()
         {
-            Instance = this;
+            if(Instance == null)
+            {
+                Instance = this;
+            }
+            
             GameInit();
             GameStart();
         }
@@ -28,7 +32,6 @@ namespace TextBased_Dungeon_Game
             sceneManager = new SceneManager();
             dataManager = new DataManager();
             shop = new Shop();
-            dungeon = new Dungeon();
             //Read();
         }
         public void GameStart()

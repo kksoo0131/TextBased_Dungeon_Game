@@ -543,6 +543,7 @@ namespace TextBased_Dungeon_Game
                 case 0:
                     return (int)SceneType.StartScene;
                 case 1:
+                    DungeonGame.Instance.dungeon = new Dungeon();
                     SoundPlay();
                     return (int)SceneType.PlayerPhaseScene;
                 default:
