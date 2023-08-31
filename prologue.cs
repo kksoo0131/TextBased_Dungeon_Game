@@ -7,8 +7,23 @@ namespace TextBased_Dungeon_Game
 {
     public class Prologue
     {
+        static CancellationTokenSource cts = new CancellationTokenSource();
+        static async Task WaitForSkipAsync(CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKeyInfo keyInfo = Console.ReadKey(intercept: true);
+                    cts.Cancel();
+                }
+            }
+            await Task.Delay(100);
+        }
+
         public static void PlayPrologue()
         {
+            Task.Run(async () => await WaitForSkipAsync(cts.Token));
             string _path = //"\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Type.mp3";
                 "C:\\Users\\Kks\\source\\repos\\TextBased_Dungeon_Game\\.vscode\\Type.mp3";
             Console.Clear();
@@ -23,6 +38,10 @@ namespace TextBased_Dungeon_Game
                 if (S1.Substring(i / 8, 1) != " " || S1.Substring(i / 8, 1) == ",")
                 {
                     Play(_path, false, true);
+                }
+                if (cts.Token.IsCancellationRequested)
+                {
+                    return;
                 }
 
             }
@@ -40,6 +59,11 @@ namespace TextBased_Dungeon_Game
                 if (S2.Substring(i / 8, 1) != " " || S2.Substring(i / 8, 1) == "." || S2.Substring(i / 8, 1) == ",")
                 {
                     Play(_path, false, true);
+
+                }
+                if (cts.Token.IsCancellationRequested)
+                {
+                    return;
                 }
 
             }
@@ -58,6 +82,10 @@ namespace TextBased_Dungeon_Game
                 {
                     Play(_path, false, true);
                 }
+                if (cts.Token.IsCancellationRequested)
+                {
+                    return;
+                }
 
             }
 
@@ -74,6 +102,10 @@ namespace TextBased_Dungeon_Game
                 {
                     Play(_path, false, true);
                 }
+                if (cts.Token.IsCancellationRequested)
+                {
+                    return;
+                }
 
             }
 
@@ -89,6 +121,10 @@ namespace TextBased_Dungeon_Game
                 if (S5.Substring(i / 14, 1) != " " || S5.Substring(i / 14, 1) == "!" || S5.Substring(i / 14, 1) == ",")
                 {
                     Play(_path, false, true);
+                }
+                if (cts.Token.IsCancellationRequested)
+                {
+                    return;
                 }
 
             }
