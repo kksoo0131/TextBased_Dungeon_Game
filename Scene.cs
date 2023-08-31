@@ -98,7 +98,7 @@ namespace TextBased_Dungeon_Game
             }         
             for (int i = 0; i <= 255; i += 11)
             {
-                string s = " ◆ 스파르타 마을에 오신걸 환영합니다.  ";
+                string s = " ◆ 스파르타 마을에 오신걸 환영합니다.   ";
              
                 sb.Append($"\u001b[38;2;255;{i};80m{s.Substring(i / 11, 1)}");
             }
