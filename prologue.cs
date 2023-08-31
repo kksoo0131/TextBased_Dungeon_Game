@@ -9,10 +9,10 @@ namespace TextBased_Dungeon_Game
     {
         public static void PlayPrologue()
         {
-            string _path = //"\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Type.mp3";
-                "C:\\Users\\Kks\\source\\repos\\TextBased_Dungeon_Game\\.vscode\\Type.mp3";
+            string _path = "C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Type.mp3";
+            //"C:\\Users\\Kks\\source\\repos\\TextBased_Dungeon_Game\\.vscode\\Type.mp3";
             Console.Clear();
-            Console.Write("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                             ");
+            Console.Write("\n\n\n\n\n\n\n\n\n\n\n\n\n                                  ");
             string S1 = "방랑자들이여, 위대한 스파르타 왕국에 온 것을 환영하네! ";
 
 
@@ -29,7 +29,7 @@ namespace TextBased_Dungeon_Game
 
             Thread.Sleep(350);
             Console.Clear();
-            Console.Write("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                             ");
+            Console.Write("\n\n\n\n\n\n\n\n\n\n\n\n\n                                  ");
             string S2 = "5년 전만 해도, 우리 왕국은 정말 평화로운 왕국이었다네, ";
 
 
@@ -46,7 +46,7 @@ namespace TextBased_Dungeon_Game
 
             Thread.Sleep(350);
             Console.Clear();
-            Console.Write("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                          ");
+            Console.Write("\n\n\n\n\n\n\n\n\n\n\n\n\n                                ");
             string S3 = "허나, 그 평화도 잠깐.... 우리 왕국에 무시무시한 마왕이 나타났지뭔가...";
 
 
@@ -63,7 +63,7 @@ namespace TextBased_Dungeon_Game
 
             Thread.Sleep(350);
             Console.Clear();
-            Console.Write("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                      ");
+            Console.Write("\n\n\n\n\n\n\n\n\n\n\n\n\n                            ");
             string S4 = "자네들이, 그 마왕을 처치하고 우리 왕국에 다시 평화를 되찾아 줬으면 하네!!! ";
 
             for (int i = 0; i <= 255; i += 6)
@@ -79,7 +79,7 @@ namespace TextBased_Dungeon_Game
 
             Thread.Sleep(350);
             Console.Clear();
-            Console.Write("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                                          ");
+            Console.Write("\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                                  ");
             string S5 = "자네들에게 신의 가호가 깃들기를... ";
 
             for (int i = 0; i <= 255; i += 14)
@@ -92,6 +92,8 @@ namespace TextBased_Dungeon_Game
                 }
 
             }
+
+            Console.Clear();
 
         }
     }
