@@ -653,12 +653,12 @@ namespace TextBased_Dungeon_Game
                 case 0:
                     return (int)SceneType.PlayerPhaseScene;
                 default:
-                    if (_player.MP < _player.skillList[key - 1].mp)
+                    if (_player.MP < _player.skillInfoList[key - 1].mp)
                     {
                         DungeonGame.Instance.message.Append("MP가 부족합니다!\n");
                         return PlayerSelectSkill();
                     }
-                    if (_player.skillList[key-1].type == SkillType.Random)
+                    if (_player.skillInfoList[key-1].type == SkillType.Random)
                     {
                         foreach (Unit i in dungeon.GetUnitList())
                         {
@@ -672,7 +672,7 @@ namespace TextBased_Dungeon_Game
                     }
                     else
                     {
-                        return SelectSkillTarget(key - 1, _player.skillList[key - 1].targetCount);
+                        return SelectSkillTarget(key - 1, _player.skillInfoList[key - 1].targetCount);
                     }
                     
             }
