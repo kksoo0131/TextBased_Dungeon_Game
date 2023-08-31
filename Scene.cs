@@ -37,10 +37,7 @@ namespace TextBased_Dungeon_Game
         protected string path = @"C:\Users\Kks\source\repos\TextBased_Dungeon_Game\.vscode";
         public virtual void SceneInit() 
         {
-            if(_player == null)
-            {
-                _player = DungeonGame.Instance.player;
-            }
+            _player = DungeonGame.Instance.player;
             Console.Clear();
             DrawUI();
         }
@@ -342,14 +339,8 @@ namespace TextBased_Dungeon_Game
         public override void SceneInit()
         {
             base.SceneInit();
-            if(_inventory == null)
-            {
-                _inventory = _player.Inventory;
-            }
-            if(_potionInventory == null)
-            {
-                _potionInventory = _player.potionInventory;
-            }    
+            _inventory = _player.Inventory;
+            _potionInventory = _player.potionInventory; 
         }
         public override int DrawScene()
         {
@@ -451,10 +442,7 @@ namespace TextBased_Dungeon_Game
         public override void SceneInit()
         {
             base.SceneInit();
-            if(_shop == null)
-            {
-                _shop = DungeonGame.Instance.shop;
-            }
+            _shop = DungeonGame.Instance.shop;
         }
         public override int DrawScene()
         {
@@ -604,10 +592,7 @@ namespace TextBased_Dungeon_Game
         public override void SceneInit()
         {
             base.SceneInit();
-            if (dungeon == null)
-            {
-                dungeon = DungeonGame.Instance.dungeon;
-            }
+            dungeon = DungeonGame.Instance.dungeon;
         }
         public override int DrawScene()
         {
@@ -850,11 +835,7 @@ namespace TextBased_Dungeon_Game
         public override void SceneInit()
         {
             base.SceneInit();
-
-            if(dungeon == null)
-            {
-                dungeon = DungeonGame.Instance.dungeon;
-            }
+            dungeon = DungeonGame.Instance.dungeon;
         }
         public override int DrawScene()
         {
@@ -916,11 +897,7 @@ namespace TextBased_Dungeon_Game
         public override void SceneInit()
         {
             base.SceneInit();
-            if(dungeon == null)
-            {
-                dungeon = DungeonGame.Instance.dungeon;
-            }
-            
+            dungeon = DungeonGame.Instance.dungeon;
         }
         public override int DrawScene()
         {
