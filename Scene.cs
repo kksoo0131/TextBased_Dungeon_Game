@@ -91,23 +91,23 @@ namespace TextBased_Dungeon_Game
             //    sb.Append($"\u001b[38;2;255;{i};80m{s.Substring(i / 8, 1)}");
             //}
             sb.Append("\n");
-            for (int i = 0; i <= 255; i += 8)
+            for (int i = 0; i <= 255; i += 7)
             {
-                string s = " -  WELCOME TO SPARTA VILLAGE   ";
-                sb.Append($"\u001b[38;2;255;{i};100m{s.Substring(i / 8, 1)}");
+                string s = "       ◆ WELCOME TO SPARTA VILLAGE\n    ";
+                sb.Append($"\u001b[38;2;255;{i};100m{s.Substring(i / 7, 1)}");
+            }         
+            for (int i = 0; i <= 255; i += 11)
+            {
+                string s = " ◆ 스파르타 마을에 오신걸 환영합니다.  ";
+             
+                sb.Append($"\u001b[38;2;255;{i};80m{s.Substring(i / 11, 1)}");
             }
             sb.Append("\n");
-            //for (int i = 255; i >= 0; i -= 13)
+            //for (int i = 255; i >= 0; i -= 8)
             //{
-            //    string s = "■■■■■■■■■■■■■■■■■■■■■";
-            //    sb.Append($"\u001b[38;2;0;{i};150m{s.Substring(i / 13, 1)}");
-            //}
-            sb.Append("\n");
-            //for (int i = 0; i <= 255; i += 8)
-            //{
-            //    string s = "└──────────────────────────────┘";
-            //    sb.Append($"\u001b[38;2;255;{i};80m{s.Substring(i / 8, 1)}");
-            //}
+            //    string s = "   EGALLIV ATRAPS OT EMOCLEW  -  ";
+            //    sb.Append($"\u001b[38;2;0;{i};150m{s.Substring(i / 8, 1)}");
+            //}      
             sb.Append("\n");
             sb.Append("\n");
 
