@@ -239,7 +239,7 @@ namespace TextBased_Dungeon_Game
 
         public int Start()
         {
-            SoundPlayer.StopSound();
+            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Dungeon.mp3", true, false);
             Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Bgm.mp3", true, true);
             Console.Clear();
             DrawUI();
@@ -422,8 +422,7 @@ class ShopScene : Scene
             {
                 case 0:
                     return (int)SceneType.StartScene;
-                case 1:
-                    SoundPlayer.StopSound();
+                case 1:                 
                     return BuyItem();
                 case 2:
                     return SellItem();
@@ -559,7 +558,8 @@ class ShopScene : Scene
             DrawUI();
             WriteText();
             DungeonGame.Instance.PrintMessage();
-
+            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Bgm.mp3", true, false);
+            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Dungeon.mp3", true, true);
             options = new int[] { 1, 2 };
             switch (InputKey(options))
             {
@@ -650,6 +650,7 @@ class ShopScene : Scene
             WriteSkillTargetText();
             DungeonGame.Instance.PrintMessage();
 
+
             int key = InputKey(MakeOption(dungeon.Count()));
             switch (key)
             {
@@ -685,7 +686,7 @@ class ShopScene : Scene
             Console.Clear();
             DrawUI();
             WriteAttackResultText();
-
+            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Attack.mp3", false, true);
 
 
             switch (InputKey(options))
