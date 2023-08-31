@@ -33,18 +33,23 @@ namespace TextBased_Dungeon_Game
     }
     class Scene
     {   
-        // 인터페이스에서는 모든 멤버가 암시적으로 public이고,
-        // 클래스나 메서드에서는 모든 멤버가 암시적으로 internal이다.
-
-        //Type 리플렉션을 사용할때 인터페이스로는 형변환이 불가능하기 때문에
-        //인스턴스를 생성할수 있는 클래스로 변경하고 메서드를 가상메서드로 선언
-        public Scene()
-        {
-            _player = DungeonGame.Instance.player; 
-        }
-        protected Warrior _player;
+        protected Player _player;
         protected int[] options;
+        public virtual void SceneInit() 
+        {
+            if(_player == null)
+            {
+                _player = DungeonGame.Instance.player;
+            }
+            Console.Clear();
+            DrawUI();
+        }
 
+        public void SoundPlay()
+        {
+            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Dungeon.mp3", true, false);
+            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Bgm.mp3", true, true);
+        }
         public virtual int DrawScene() { return 0; }
         public virtual int InputKey(int[] options)
         {
@@ -233,19 +238,56 @@ namespace TextBased_Dungeon_Game
         public CreateCharacterScene() : base() { }
         public override int DrawScene()
         {
-            Prologue.PlayPrologue();
-            return Start();
+            SoundPlay();
+            return SelectJob();
         }
 
         public int Start()
         {
-            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Dungeon.mp3", true, false);
-            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Bgm.mp3", true, true);
-            Console.Clear();
-            DrawUI();
+            
+            SceneInit();
             WriteText();
             _player.Name = Console.ReadLine();
+            Prologue.PlayPrologue();
             return (int)SceneType.StartScene;
+        }
+
+        public int SelectJob()
+        {
+            SoundPlay();
+            Console.Clear();
+            DrawUI();
+            WriteSelectJobText();
+
+            int result = InputKey(MakeOption((int)PlayerJobs.EndPoint));
+            switch (result)
+            {
+                case 0:
+                    DungeonGame.Instance.message.Append("잘못된 입력 입니다");
+                    return SelectJob();
+                default:
+                    PlayerJobs selectedJob = (PlayerJobs)(result-1);
+
+                    string jobName = Enum.GetName(selectedJob);
+
+                    Type type = Type.GetType($"TextBased_Dungeon_Game.{jobName}");
+
+                    Player instance = (Player)Activator.CreateInstance(type);
+                    // Activator로 객체를 생성하려면 default 생성자가 있어야함
+                    DungeonGame.Instance.player = instance;
+                    instance.PlayerInit();
+                    return Start();
+
+            }
+           
+        }
+        public void WriteSelectJobText()
+        {
+            WriteRightMessage(MakeLogo());
+            Console.ResetColor();
+            WriteSelectMessage($"캐릭터 생성 중 ...\n1. 라우라\n2. 캐시");
+            WriteMessage("스파르타 마을에 오신 여러분 환영합니다.\n원하시는 캐릭터를 선택해주세요.");
+
         }
         public void WriteText()
         {
@@ -268,9 +310,7 @@ namespace TextBased_Dungeon_Game
 
         public int Start()
         {
-     
-            Console.Clear();
-            DrawUI();
+            SceneInit();
             WriteText();
             return InputKey(MakeOption((int)SceneType.SaveRoadScene));
         }
@@ -288,7 +328,7 @@ namespace TextBased_Dungeon_Game
         public StatusScene() : base() { }
         public override int DrawScene()
         {
-            DrawUI();
+            SceneInit();
             WriteText();
             return InputKey(MakeOption(0));
         }
@@ -304,17 +344,21 @@ namespace TextBased_Dungeon_Game
     {   
         Inventory _inventory;
         PotionInventory _potionInventory;
-        
-        public InventoryScene() :base()
-        { 
-            _inventory = _player.Inventory;
-            _potionInventory = _player.potionInventory;
+        public override void SceneInit()
+        {
+            base.SceneInit();
+            if(_inventory == null)
+            {
+                _inventory = _player.Inventory;
+            }
+            if(_potionInventory == null)
+            {
+                _potionInventory = _player.potionInventory;
+            }    
         }
-     
         public override int DrawScene()
         {
-            _inventory = _player.Inventory;
-            DrawUI();
+            SceneInit();
             WriteText();
 
             switch (InputKey(MakeOption(5)))
@@ -347,8 +391,7 @@ namespace TextBased_Dungeon_Game
         }
         public int EquipmentInfo()
         {
-            Console.Clear();
-            DrawUI();
+            SceneInit();
             WriteEquipText();
             int index = InputKey(MakeOption(_inventory.Count()));
 
@@ -366,8 +409,7 @@ namespace TextBased_Dungeon_Game
         }
         public int PotionInventoryInfo()  // 포션 인벤토리
         {
-            Console.Clear();
-            DrawUI();
+            SceneInit();
             WritePotionText();
 
             // options를 포션 Count만큼 추가
@@ -408,14 +450,26 @@ namespace TextBased_Dungeon_Game
             WriteMessage($"[포션 인벤토리]\n보유 중인 포션을 사용할 수 있습니다.\n원하시는 행동을 입력해주세요.");
         }  
     }
-
-class ShopScene : Scene
+    class ShopScene : Scene
     {
         Shop _shop;
+        public override void SceneInit()
+        {
+            base.SceneInit();
+            if(_shop == null)
+            {
+                _shop = DungeonGame.Instance.shop;
+            }
+        }
         public override int DrawScene()
         {
-            _shop = DungeonGame.Instance.shop;
-            DrawUI();
+            return StartShopScene();
+
+
+        }
+        public int StartShopScene()
+        {
+            SceneInit();
             WriteText();
 
             switch (InputKey(MakeOption(2)))
@@ -432,8 +486,7 @@ class ShopScene : Scene
         }
         public int BuyItem()
         {
-            Console.Clear();
-            DrawUI();
+            SceneInit();
             WriteBuyText();
             int index = InputKey(MakeOption(_shop.Count()));
             switch (index)
@@ -454,8 +507,7 @@ class ShopScene : Scene
         }
         public int SellItem()
         {
-            Console.Clear();
-            DrawUI();
+            SceneInit();
             WriteSellText();
             int index = InputKey(MakeOption(_player.Inventory.Count()));
             switch (index)
@@ -493,17 +545,23 @@ class ShopScene : Scene
     }
     class DungeonEnterScene : Scene
     {
-        public DungeonEnterScene() : base() { }
+        public new void SoundPlay()
+        {
+            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Bgm.mp3", true, false);
+            Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Dungeon.mp3", true, true);
+        }
+
         public override int DrawScene()
         {
-            DrawUI();
+            SceneInit();
             WriteText();
 
             switch (InputKey(MakeOption(1)))
             {
                 case 0:
                     return (int)SceneType.StartScene;
-                case 1:                    
+                case 1:
+                    SoundPlay();
                     return (int)SceneType.PlayerPhaseScene;
                 default:
                     return (int)SceneType.StartScene;
@@ -520,10 +578,9 @@ class ShopScene : Scene
     }
     class RestScene : Scene
     {
-        public RestScene() : base() { }
         public override int DrawScene()
         {
-            DrawUI();
+            SceneInit();
             WriteText();
             //DungeonGame.Instance.PlayerSave();
             if (InputKey(MakeOption(1)) == 1)
@@ -545,21 +602,29 @@ class ShopScene : Scene
     class PlayerPhaseScene : Scene 
     {
         Dungeon dungeon;
-        public PlayerPhaseScene() : base() {  }
-        public override int DrawScene()
-        {
-            dungeon = DungeonGame.Instance.dungeon;
-            return PlayerPhase();
-        }
 
-        public int PlayerPhase()
+        public new void SoundPlay()
         {
-            Console.Clear();
-            DrawUI();
-            WriteText();
-            DungeonGame.Instance.PrintMessage();
             Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Bgm.mp3", true, false);
             Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Dungeon.mp3", true, true);
+        }
+        public override void SceneInit()
+        {
+            base.SceneInit();
+            if (dungeon == null)
+            {
+                dungeon = DungeonGame.Instance.dungeon;
+            }
+        }
+        public override int DrawScene()
+        {
+            SceneInit();
+            return PlayerPhase();
+        }
+        public int PlayerPhase()
+        {
+            SceneInit();
+            WriteText();
             options = new int[] { 1, 2 };
             switch (InputKey(options))
             {
@@ -580,10 +645,8 @@ class ShopScene : Scene
             // 몬스터 리스트의 해당 인덱스에 있는 몬스터가
             // 플레이어가 주는 데미지를 받음
 
-            Console.Clear();
-            DrawUI();
+            SceneInit();
             WriteBattleText();
-            DungeonGame.Instance.PrintMessage();
 
             int key = InputKey(MakeOption(dungeon.Count()));
             switch (key)
@@ -607,10 +670,8 @@ class ShopScene : Scene
 
         public int PlayerSelectSkill()
         {
-            Console.Clear();
-            DrawUI();
+            SceneInit();
             WriteSkillText();
-            DungeonGame.Instance.PrintMessage();
 
             int key = InputKey(MakeOption(_player.SkillCount));
             switch (key)
@@ -642,13 +703,10 @@ class ShopScene : Scene
                     
             }
         }
-
         public int SelectSkillTarget(int index, int count)
         {
-            Console.Clear();
-            DrawUI();
+            SceneInit();
             WriteSkillTargetText();
-            DungeonGame.Instance.PrintMessage();
 
 
             int key = InputKey(MakeOption(dungeon.Count()));
@@ -681,21 +739,17 @@ class ShopScene : Scene
         }
         public int AttackResult()
         {
-
-            options = new int[] { 0 };
-            Console.Clear();
-            DrawUI();
+            SoundPlay();
+            SceneInit();
             WriteAttackResultText();
             Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Attack.mp3", false, true);
 
-
-            switch (InputKey(options))
+            switch (InputKey(MakeOption(0)))
             {
                 default:
                     return dungeon.DungeonClear() ? (int)SceneType.BattleResultScene : (int)SceneType.MonsterPhaseScene;
             }
         }
-
         public void WriteText()
         {
             WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
@@ -740,7 +794,7 @@ class ShopScene : Scene
 
         public override int DrawScene()
         {
-            Console.Clear();
+            SceneInit();
             Console.WriteLine(MakeText());
             
             switch(InputKey(MakeOption(2))) 
@@ -795,18 +849,30 @@ class ShopScene : Scene
     class MonsterPhaseScene : Scene
     {
         Dungeon dungeon;
-        public MonsterPhaseScene() : base() { }
 
+        public new void SoundPlay()
+        {
+            SoundPlayer.StopSound();
+            SoundPlayer.SoundsAttack("");
+        }
+        public override void SceneInit()
+        {
+            base.SceneInit();
+
+            if(dungeon == null)
+            {
+                dungeon = DungeonGame.Instance.dungeon;
+            }
+        }
         public override int DrawScene()
         {
-            dungeon = DungeonGame.Instance.dungeon;
             return MonsterPhase(0);
         }
 
         public int MonsterPhase(int i)
         {
-            options = new int[] { 0 };
-
+            SoundPlay();
+            SceneInit();
             if (dungeon.DungeonClear())
             {
                 return (int)SceneType.BattleResultScene;
@@ -825,7 +891,7 @@ class ShopScene : Scene
                 WriteText();
                 Play("C:\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Attack.mp3", false, true);
 
-                switch (InputKey(options))
+                switch (InputKey(MakeOption(0)))
                 {
                     default:
                         if (_player.Health <= 0)
@@ -852,21 +918,32 @@ class ShopScene : Scene
     }
     class BattleResultScene : Scene
     {
+        public new void SoundPlay()
+        {
+            SoundPlayer.StopSound();
+            SoundPlayer.SoundsClear("");
+        }
         Dungeon dungeon;
-        public BattleResultScene() { }
+        public override void SceneInit()
+        {
+            base.SceneInit();
+            if(dungeon == null)
+            {
+                dungeon = DungeonGame.Instance.dungeon;
+            }
+            
+        }
         public override int DrawScene()
         {
-            dungeon = DungeonGame.Instance.dungeon;
-            return BattleResult(dungeon.Result);
+            return BattleResult();
         }
 
-        public int BattleResult(bool _result)
+        public int BattleResult()
         {
-            options = new int[] { 0 };
-            Console.Clear();
-
-            if (_result)
+            SceneInit();
+            if (dungeon.Result)
             {
+                SoundPlay();
                 WriteVictoryText();
                 _player.GetExp(dungeon.Count() * 5);  // 몬스터 한 마리당 5의 경험치
                 _player.Gold += 300;
@@ -879,13 +956,16 @@ class ShopScene : Scene
 
             dungeon.Clear();
             dungeon.Init();
-            switch (InputKey(options))
+            switch (InputKey(MakeOption(0)))
             {
                 case 0:
+                    base.SoundPlay();
                     return (int)SceneType.StartScene;
                 default:
                     return (int)SceneType.StartScene;
             }
+
+            
 
         }
 
@@ -903,7 +983,7 @@ class ShopScene : Scene
             WriteLeftMessage($"{_player.PlayerInfo()}");
             WriteSelectMessage("0. 다음");
             WriteRightMessage($"Baltte!! - Result\nLose");
-            WriteMessage("[보상 정산]\n골드 + 300 G\n원하시는 행동을 입력해주세요");
+            WriteMessage("마을로 돌아갑니다.");
         }
     }
 }

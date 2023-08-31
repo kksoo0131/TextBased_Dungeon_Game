@@ -19,15 +19,17 @@ namespace TextBased_Dungeon_Game
         public string skillInfo;
         public int mp;
         public int targetCount;
+        public float skillRate;
         public SkillType type;
 
-        public Skill(string name, string skillInfo, int mp, int targetCount, SkillType type)
+        public Skill(string name, string skillInfo,float skillRate, int mp, int targetCount, SkillType type)
         {
             this.name = name;
             this.skillInfo = skillInfo;
             this.mp = mp;
             this.targetCount = targetCount;
             this.type = type;
+            this.skillRate = skillRate;
         }
 
 
@@ -37,16 +39,15 @@ namespace TextBased_Dungeon_Game
         public virtual void Use(List<Unit> _units, int _attack) { }
     }
     [Serializable]
-    public class AlphaStrike : Skill
+    public class LauraSkill1 : Skill
     {
-        public AlphaStrike() : base("알파 스트라이크", "공격력 * 2로 하나의 적을 공격합니다.", 10, 1, SkillType.Target) { }
+        public LauraSkill1() : base("날카로운 꽃", "라우라가 지정한 적에게 한 번 채찍을 휘둘러 스킬 피해를 입힙니다.",1.5f, 10, 1, SkillType.Target) { }
         
-
         public override void Use(List<Unit> _units, int _attack)
         {
             // Scene에서 타겟 설정 다해서 player -> Skill.use로 넘김 Skill에서는 받은 타겟을 다처리하면됨
 
-            int damage = (int)(_attack * 2f);
+            int damage = (int)(_attack * skillRate);
 
             foreach (Unit unit in _units)
             {
@@ -54,16 +55,56 @@ namespace TextBased_Dungeon_Game
             }
         }
     }
+
     [Serializable]
-    public class DoubleStrike : Skill
+    public class CathySkill1 : Skill
     {
-        public DoubleStrike() : base("더블 스트라이크", " * 1.5로 2명의 적을 랜덤으로 공격합니다.", 15, 2, SkillType.Random) { }
+        public CathySkill1() : base("동맥절제술", "캐시가 지정한 방향으로 빠르게 돌진하여 적에게 스킬 피해를 입힙니다.",2f , 10, 1, SkillType.Target) { }
+
+        public override void Use(List<Unit> _units, int _attack)
+        {
+            // Scene에서 타겟 설정 다해서 player -> Skill.use로 넘김 Skill에서는 받은 타겟을 다처리하면됨
+
+            int damage = (int)(_attack * skillRate);
+
+            foreach (Unit unit in _units)
+            {
+                unit.Attacked(damage);
+            }
+        }
+    }
+
+    [Serializable]
+    public class CathySkill2 : Skill
+    {
+        public CathySkill2() : base("엠퓨테이션", "캐시가 전방으로 톱을 날카롭게 휘둘러 두 명의 적에게 스킬 피해를 입힙니다.",2f, 20, 2, SkillType.Random) { }
+
+        public override void Use(List<Unit> _units, int _attack)
+        {
+            // Scene에서 타겟 설정 다해서 player -> Skill.use로 넘김 Skill에서는 받은 타겟을 다처리하면됨
+
+            int damage = (int)(_attack * skillRate);
+            Random ran = new Random();
+
+            int range = ran.Next( 0 , _units.Count -2);
+
+            _units[range].Attacked(damage);
+            _units[range+1].Attacked(damage);
+
+        }
+        
+    }
+
+    [Serializable]
+    public class LauraSkill2 : Skill
+    {
+        public LauraSkill2() : base("황혼의 도둑", "라우라가 저지불가 상태가 되어 적에게 돌진합니다.", 1.5f, 15, 2, SkillType.Random) { }
  
         public override void Use(List<Unit> _units, int _attack)
         {
             // Scene에서 타겟 설정 다해서 player -> Skill.use로 넘김 Skill에서는 받은 타겟을 다처리하면됨
 
-            int damage = (int)(_attack * 1.5f);
+            int damage = (int)(_attack * skillRate);
             Random ran = new Random();
 
             int count = Math.Min(_units.Count, targetCount);

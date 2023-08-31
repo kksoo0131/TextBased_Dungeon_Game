@@ -5,12 +5,15 @@ using System.Linq;
 namespace TextBased_Dungeon_Game
 {
     [Serializable]
-    class Warrior : Unit
-    {
-        public Warrior() : base("", 1, 10, 5, 100, 100)
-        {
-        }
 
+    public enum PlayerJobs
+    {
+        Laura,
+        Cathy,
+        EndPoint,
+    }
+    class Player : Unit
+    {
         public PotionInventory potionInventory = new PotionInventory();
 
         public Inventory Inventory = new Inventory();
@@ -42,24 +45,17 @@ namespace TextBased_Dungeon_Game
         public int Exp { get; set; } // 추가: 경험치
         public int ExpNeeded { get; set; } // 추가: 다음 레벨까지 필요한 경험치
 
-        public void PlayerInit()
+        public virtual void PlayerInit()
         {
-            Chad = "전사";
-            Gold = 1500;
-            MaxHealth = 100;
-            MaxMP = 50;
-            MP = 50;
+            Gold = 1500; 
             Exp = 0;
             ExpNeeded = CalculateExpNeeded();
             SkillCount = 0;
-
 
             Inventory.AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
             Inventory.AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 5));
             potionInventory.AddPotion(new Potion("체력 회복 포션", ItemType.HpPotion, "소량의 체력을 회복하는 포션. 딸기맛이다!\n", 50, 30, 0, 3));
             potionInventory.AddPotion(new Potion("마나 회복 포션", ItemType.MpPotion, "소량의 마나를 회복하는 포션. 소다맛!\n", 50, 0, 15, 2));
-            AddSkill(new AlphaStrike());
-            AddSkill(new DoubleStrike());
         }
 
         public string PlayerInfo()
@@ -259,7 +255,7 @@ namespace TextBased_Dungeon_Game
                 int damage = SetAttackPower(result);
                 StringBuilder sb = new StringBuilder();
 
-                sb.Append($"{Name}의 {skillList[index].name}! [데미지 : {damage}]");
+                sb.Append($"{Name}의 {skillList[index].name}! [데미지 : {(int)(damage * skillList[index].skillRate)}]");
                 sb.Append(result ? $" - 치명타 공격!!\n" : "\n");
 
                 DungeonGame.Instance.message.Append($"{sb.ToString()}");
@@ -295,11 +291,42 @@ namespace TextBased_Dungeon_Game
             Health = MaxHealth;
             Console.WriteLine("축하합니다! 레벨업!");
         }
-        private int CalculateExpNeeded() // 레벨 업에 필요한 경험치
+        protected int CalculateExpNeeded() // 레벨 업에 필요한 경험치
         {
             return Level * 10;
         }
 
         
     }
+
+    class Laura : Player
+    {
+        public override void PlayerInit()
+        {       
+            base.PlayerInit();
+            Init("", 1, 10, 5, 100, 100);
+            Chad = "라우라";
+            MaxMP = 50;
+            MP = 50;  
+            AddSkill(new LauraSkill1());
+            AddSkill(new LauraSkill2());
+        }
+
+    }
+
+    class Cathy : Player
+    {
+        public override void PlayerInit()
+        {
+            base.PlayerInit();
+            Init("", 1, 15, 5, 70, 70);
+            Chad = "캐시";
+            MaxMP = 50;
+            MP = 50;
+            AddSkill(new CathySkill1());
+            AddSkill(new CathySkill2());
+        }
+
+    }
+
 }

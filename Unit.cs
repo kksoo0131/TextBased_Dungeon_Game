@@ -9,7 +9,17 @@ namespace TextBased_Dungeon_Game
     [Serializable]
     public class Unit
     {
+        public Unit()
+        {
+
+        }
+
         public Unit(string name, int level, int attack, int defense, int health, int maxHealth)
+        {
+            Init(name, level, attack, defense, health, maxHealth);
+        }
+
+        public void Init(string name, int level, int attack, int defense, int health, int maxHealth)
         {
             Name = name;
             Level = level;
