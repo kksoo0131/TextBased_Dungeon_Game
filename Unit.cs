@@ -148,5 +148,8 @@ namespace TextBased_Dungeon_Game
     {
         public WildBoar() : base("멧돼지", 5, 10, 10, 30, 30) { }
     }
-
+public class Bear : Unit
+    {
+        public Bear() : base("곰", 10, 20, 10, 50, 50) { }
+    }
 }

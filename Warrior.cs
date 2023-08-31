@@ -201,6 +201,7 @@ namespace TextBased_Dungeon_Game
             {
                 Gold -= 500;
                 DungeonGame.Instance.message.Append("휴식을 완료했습니다.\n");
+                Health = MaxHealth;
             }
             else
             {
