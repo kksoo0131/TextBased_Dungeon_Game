@@ -19,7 +19,7 @@ namespace TextBased_Dungeon_Game
         ShopScene,
         DungeonEnterScene,
         RestScene,
-        SaveRoadScene,
+        SaveScene,
         //나머지
         /* DungeonClearScene,
          DungeonFailScene,*/
@@ -27,6 +27,7 @@ namespace TextBased_Dungeon_Game
         MonsterPhaseScene,
         BattleResultScene,
         CreateCharacterScene,
+        RoadScene,
         //마지막은 EndPoint여야함
         EndPoint,
     }
@@ -34,8 +35,6 @@ namespace TextBased_Dungeon_Game
     {   
         protected Player _player;
         protected int[] options;
-
-        protected string path = @"D:\WorkSpace\TextBased_Dungeon_Game\.vscode";
 
         public virtual void SceneInit() 
         {
@@ -46,8 +45,8 @@ namespace TextBased_Dungeon_Game
 
         public void SoundPlay()
         {
-            Sound2.Play($"{path}\\Dungeon.mp3", true, false);
-            Sound2.Play($"{path}\\Bgm.mp3", true, true);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Dungeon.mp3", true, false);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Bgm.mp3", true, true);
         }
         public virtual int DrawScene() { return 0; }
         public virtual int InputKey(int[] options)
@@ -306,15 +305,14 @@ namespace TextBased_Dungeon_Game
         {
             SceneInit();
             WriteText();
-            return InputKey(MakeOption((int)SceneType.SaveRoadScene));
+            return InputKey(MakeOption((int)SceneType.SaveScene));
         }
         public void WriteText()
         {
             WriteRightMessage(MakeLogo());
             Console.ResetColor();
-            WriteSelectMessage("1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 실험실 입장\n5. 휴식하기\n6. 저장하기 & 불러오기");
+            WriteSelectMessage("1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기\n6. 저장하기");
             WriteMessage("연구소에 오신 연구원분들을 환영합니다.\n이곳에서 실험실으로 들어가기 전 활동을 할 수 있습니다.\n원하시는 행동을 입력해주세요.");
-
         }
     }
     class StatusScene : Scene
@@ -528,8 +526,8 @@ namespace TextBased_Dungeon_Game
     {
         public new void SoundPlay()
         {
-            Sound2.Play($"{path}\\Bgm.mp3", true, false);
-            Sound2.Play($"{path}\\Dungeon.mp3", true, true);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Bgm.mp3", true, false);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Dungeon.mp3", true, true);
         }
         public override int DrawScene()
         {
@@ -587,8 +585,8 @@ namespace TextBased_Dungeon_Game
         Dungeon dungeon;
         public new void SoundPlay()
         {
-            Sound2.Play($"{path}\\Bgm.mp3", true, false);
-            Sound2.Play($"{path}\\Dungeon.mp3", true, true);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Bgm.mp3", true, false);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Dungeon.mp3", true, true);
         }
         public override void SceneInit()
         {
@@ -721,7 +719,7 @@ namespace TextBased_Dungeon_Game
             SoundPlay();
             SceneInit();
             WriteAttackResultText();
-            Sound2.Play($"{path}\\Attack.mp3", false, true);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Attack.mp3", false, true);
 
             switch (InputKey(MakeOption(0)))
             {
@@ -768,7 +766,7 @@ namespace TextBased_Dungeon_Game
             WriteMessage("Battle!!\n");
         }
     }
-    class SaveRoadScene : Scene
+    class SaveScene : Scene
     {
 
         public override int DrawScene()
@@ -777,16 +775,14 @@ namespace TextBased_Dungeon_Game
             DrawUI();
             WriteText();
 
-            switch (InputKey(MakeOption(2))) 
+            switch (InputKey(MakeOption(1))) 
             {
                 case 0:
                     return (int)SceneType.StartScene;
                 case 1:
                     return Save();
-                case 2:
-                    return Load();
                 default:
-                    return (int)SceneType.SaveRoadScene;
+                    return (int)SceneType.SaveScene;
 
             }
         }
@@ -813,17 +809,55 @@ namespace TextBased_Dungeon_Game
 
         public void WriteText()
         {
-            WriteSelectMessage("1.저장하기\n2.불러오기\n0.나가기");
-            WriteMessage("저장하거나 불러오시겠습니까?\n원하시는 행동을 입력해주세요.");
+            WriteSelectMessage("1.저장하기\n0.나가기");
+            WriteMessage("저장하시겠습니까?\n원하시는 행동을 입력해주세요.");
         }
     }
+
+    class RoadScene : Scene
+    {
+        public override int DrawScene()
+        {
+            SoundPlay();
+            SceneInit();
+            DrawUI();
+            WriteText();
+
+            switch (InputKey(MakeOption(2)))
+            {
+                case 1:
+                    return Load();
+                case 2:
+                    return (int)SceneType.CreateCharacterScene;
+                default:
+                    return (int)SceneType.RoadScene;
+
+            }
+        }
+
+
+        public int Load()
+        {
+            Console.Clear();
+            DungeonGame.Instance.dataManager.PlayerLoad();
+
+            return (int)SceneType.StartScene;
+        }
+
+        public void WriteText()
+        {
+            WriteSelectMessage("1.불러오기\n2.캐릭터 생성");
+            WriteMessage("이전 데이터를 불러오시겠습니까?\n원하시는 행동을 입력해주세요.");
+        }
+    }
+
     class MonsterPhaseScene : Scene
     {
         Dungeon dungeon;
 
         public new void SoundPlay()
         {
-            Sound2.Play($"{path}\\Attack.mp3", false, true);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Attack.mp3", false, true);
         }
         public override void SceneInit()
         {
@@ -884,7 +918,7 @@ namespace TextBased_Dungeon_Game
     {
         public new void SoundPlay()
         {
-            Sound2.Play($"{path}\\Clear.mp3", false, true);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Clear.mp3", false, true);
         }
         Dungeon dungeon;
         public override void SceneInit()

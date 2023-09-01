@@ -15,6 +15,7 @@ namespace TextBased_Dungeon_Game
         public Shop shop;
         public Dungeon dungeon;
         public StringBuilder message = new StringBuilder();
+        public string path;
         public DungeonGame()
         {
             if(Instance == null)
@@ -28,6 +29,11 @@ namespace TextBased_Dungeon_Game
 
         public void GameInit()
         {
+            path = Directory.GetCurrentDirectory();
+            path = Directory.GetParent(path).FullName;
+            path = Directory.GetParent(path).FullName;
+            path = Directory.GetParent(path).FullName;
+            path = $"{path}\\.vscode";
             Console.SetWindowSize(120, 40);
             sceneManager = new SceneManager();
             dataManager = new DataManager();
@@ -36,7 +42,7 @@ namespace TextBased_Dungeon_Game
         }
         public void GameStart()
         {
-            int nextScene = (int)SceneType.CreateCharacterScene;
+            int nextScene = (int)SceneType.RoadScene;
             while (true)
             {
                 Console.SetWindowSize(120, 40);
