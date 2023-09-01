@@ -59,9 +59,21 @@ AttackUnit(), Attacked()에 확률적으로 치명타를 입히거나 회피를 
 
 <br/>
 <br/>
+ 
+## 2. 저장 & 불러오기
 
-## 2. 
+DataManager 스크립트를 따로 생성하여 DataManager 클래스에 PlayerSave(), PlayerLoad() 메서드를 구현했습니다.
 
+player 객체에 담긴 정보에 [Serializable]를 붙여 모두 직렬화하여 json에 저장하였습니다.
+
+* player의 능력치, 소지금 등 - int, bool 등
+* Inventory (Inventory, PotionInventory) - 객체
+* skill - List
+* etc...
+
+게임을 시작하면 이전 데이터를 불러올지 새로 캐릭터를 생성하여 게임을 진행할지 선택하게 됩니다.
+
+[DataManager](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/develop/DataManager.cs)
 
 
 
@@ -69,6 +81,10 @@ AttackUnit(), Attacked()에 확률적으로 치명타를 입히거나 회피를 
 <br/>
 <hr/>
 
+<details>
+
+<summary>기초 개인과제</summary>
+  
 ### 과제 개요 - 기초 개인과제
 
 (기초)
@@ -194,17 +210,5 @@ Scene클래스를 상속받은 DungeonEnterScene, DungeonClearScene, DungeonFail
 <br/>
 <br/>
 
-## 선택 10. 저장 & 불러오기
+</details>
 
-DataManager 스크립트를 따로 생성하여 DataManager 클래스에 PlayerSave(), PlayerLoad() 메서드를 구현했습니다.
-
-player 객체에 담긴 정보에 [Serializable]를 붙여 모두 직렬화하여 json에 저장하였습니다.
-
-* player의 능력치, 소지금 등 - int, bool 등
-* Inventory (Inventory, PotionInventory) - 객체
-* skill - List
-* etc...
-
-게임을 시작하면 이전 데이터를 불러올지 새로 캐릭터를 생성하여 게임을 진행할지 선택하게 됩니다.
-
-[DataManager](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/develop/DataManager.cs)
