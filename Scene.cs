@@ -36,8 +36,6 @@ namespace TextBased_Dungeon_Game
         protected Player _player;
         protected int[] options;
 
-        protected string path = @"D:\WorkSpace\TextBased_Dungeon_Game\.vscode";
-
         public virtual void SceneInit() 
         {
             _player = DungeonGame.Instance.player;
@@ -47,8 +45,8 @@ namespace TextBased_Dungeon_Game
 
         public void SoundPlay()
         {
-            Sound2.Play($"{path}\\Dungeon.mp3", true, false);
-            Sound2.Play($"{path}\\Bgm.mp3", true, true);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Dungeon.mp3", true, false);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Bgm.mp3", true, true);
         }
         public virtual int DrawScene() { return 0; }
         public virtual int InputKey(int[] options)
@@ -530,8 +528,8 @@ namespace TextBased_Dungeon_Game
     {
         public new void SoundPlay()
         {
-            Sound2.Play($"{path}\\Bgm.mp3", true, false);
-            Sound2.Play($"{path}\\Dungeon.mp3", true, true);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Bgm.mp3", true, false);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Dungeon.mp3", true, true);
         }
         public override int DrawScene()
         {
@@ -589,8 +587,8 @@ namespace TextBased_Dungeon_Game
         Dungeon dungeon;
         public new void SoundPlay()
         {
-            Sound2.Play($"{path}\\Bgm.mp3", true, false);
-            Sound2.Play($"{path}\\Dungeon.mp3", true, true);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Bgm.mp3", true, false);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Dungeon.mp3", true, true);
         }
         public override void SceneInit()
         {
@@ -723,7 +721,7 @@ namespace TextBased_Dungeon_Game
             SoundPlay();
             SceneInit();
             WriteAttackResultText();
-            Sound2.Play($"{path}\\Attack.mp3", false, true);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Attack.mp3", false, true);
 
             switch (InputKey(MakeOption(0)))
             {
@@ -860,7 +858,7 @@ namespace TextBased_Dungeon_Game
 
         public new void SoundPlay()
         {
-            Sound2.Play($"{path}\\Attack.mp3", false, true);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Attack.mp3", false, true);
         }
         public override void SceneInit()
         {
@@ -921,7 +919,7 @@ namespace TextBased_Dungeon_Game
     {
         public new void SoundPlay()
         {
-            Sound2.Play($"{path}\\Clear.mp3", false, true);
+            Sound2.Play($"{DungeonGame.Instance.path}\\Clear.mp3", false, true);
         }
         Dungeon dungeon;
         public override void SceneInit()
