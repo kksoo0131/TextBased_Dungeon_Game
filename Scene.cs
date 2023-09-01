@@ -243,7 +243,7 @@ namespace TextBased_Dungeon_Game
             SceneInit();
             WriteText();
             _player.Name = Console.ReadLine();
-            //Prologue.PlayPrologue();
+            Prologue.PlayPrologue();
             return (int)SceneType.StartScene;
         }
         public int SelectJob()
@@ -966,7 +966,6 @@ namespace TextBased_Dungeon_Game
 
         public void WriteVictoryText()
         {
-
             WriteLeftMessage($"[던전 결과]\n몬스터 {dungeon.Count()}마리를 잡았습니다! 경험치 {dungeon.Count() * 5} 증가!\n");
             WriteSelectMessage("0. 다음");
             WriteMessage("[보상 정산]\n골드 + 300 G\n체력 회복 포션 + 1개\n원하시는 행동을 입력해주세요");

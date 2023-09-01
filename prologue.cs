@@ -24,8 +24,7 @@ namespace TextBased_Dungeon_Game
         public static void PlayPrologue()
         {
             Task.Run(async () => await WaitForSkipAsync(cts.Token));
-            string _path = //"\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Type.mp3";
-                "C:\\Users\\Kks\\source\\repos\\TextBased_Dungeon_Game\\.vscode\\Type.mp3";
+            string _path = $"{DungeonGame.Instance.path}\\Type.mp3";
             Console.Clear();
             Console.Write("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                             ");
             string S1 = "방랑자들이여, 위대한 스파르타 왕국에 온 것을 환영하네! ";
