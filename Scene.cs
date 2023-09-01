@@ -665,6 +665,7 @@ namespace TextBased_Dungeon_Game
                     }
                     if (_player.skillInfoList[key-1].type == SkillType.Random)
                     {
+                        Sound2.Play($"{path}\\Skill.mp3", false, true);
                         foreach (Unit i in dungeon.GetUnitList())
                         {
                             if (!i.IsDead)
