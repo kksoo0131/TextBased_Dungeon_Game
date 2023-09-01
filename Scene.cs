@@ -96,12 +96,12 @@ namespace TextBased_Dungeon_Game
             sb.Append("\n");
             for (int i = 0; i <= 255; i += 7)
             {
-                string s = "       ◆ WELCOME TO SPARTA VILLAGE\n    ";
+                string s = "       ◆ WELCOME TO AGLAEA LABO!!\n    ";
                 sb.Append($"\u001b[38;2;255;{i};100m{s.Substring(i / 7, 1)}");
             }         
             for (int i = 0; i <= 255; i += 11)
             {
-                string s = " ◆ 스파르타 마을에 오신걸 환영합니다.   ";
+                string s = " ◆ 아글라이아 연구소에 오신걸 환영합니다.   ";
              
                 sb.Append($"\u001b[38;2;255;{i};80m{s.Substring(i / 11, 1)}");
             }
@@ -243,7 +243,7 @@ namespace TextBased_Dungeon_Game
             SceneInit();
             WriteText();
             _player.Name = Console.ReadLine();
-            //Prologue.PlayPrologue();
+            Prologue.PlayPrologue();
             return (int)SceneType.StartScene;
         }
         public int SelectJob()
@@ -279,16 +279,16 @@ namespace TextBased_Dungeon_Game
         {
             WriteRightMessage(MakeLogo());
             Console.ResetColor();
-            WriteSelectMessage($"캐릭터 생성 중 ...\n1. 라우라\n2. 캐시");
-            WriteMessage("스파르타 마을에 오신 여러분 환영합니다.\n원하시는 캐릭터를 선택해주세요.");
+            WriteSelectMessage($"실험체 부르는 중 ...\n1. 라우라\n2. 캐시");
+            WriteMessage("아글라이아의 실험실에 오신 연구원분들을 환영합니다.\n원하시는 실험체를 선택해주세요.");
 
         }
         public void WriteText()
         {
             WriteRightMessage(MakeLogo());
             Console.ResetColor();
-            WriteSelectMessage("캐릭터 생성 중 ...");
-            WriteMessage("스파르타 마을에 오신 여러분 환영합니다.\n원하시는 이름을 설정해주세요.");
+            WriteSelectMessage("실험체 동기화 중 ...");
+            WriteMessage("아글라이아의 실험실에 오신 연구원분들을 환영합니다.\n원하시는 이름을 설정해주세요.");
 
         }
 
@@ -312,9 +312,7 @@ namespace TextBased_Dungeon_Game
             WriteRightMessage(MakeLogo());
             Console.ResetColor();
             WriteSelectMessage("1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기\n6. 저장하기");
-
-            WriteMessage("스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.\n원하시는 행동을 입력해주세요.");
-
+            WriteMessage("연구소에 오신 연구원분들을 환영합니다.\n이곳에서 실험실으로 들어가기 전 활동을 할 수 있습니다.\n원하시는 행동을 입력해주세요.");
         }
     }
     class StatusScene : Scene
@@ -331,7 +329,7 @@ namespace TextBased_Dungeon_Game
         {
             WriteSelectMessage("0. 나가기");
             WriteLeftMessage($"{DungeonGame.Instance.player.PlayerInfo()}");
-            WriteMessage("상태 보기\n캐릭터의 정보가 표시됩니다\n원하시는 행동을 입력해주세요.");
+            WriteMessage("[상태 보기]\n실험체의 정보가 표시됩니다\n원하시는 행동을 입력해주세요.");
         }
     }
     class InventoryScene : Scene
@@ -420,7 +418,7 @@ namespace TextBased_Dungeon_Game
         public void WriteText()
         {
             WriteRightMessage($"{_inventory.MakeItemList()}");
-            WriteSelectMessage("1. 장착 관리\n2. 포션 인벤토리\n3. 이름\n4. 장착순\n5. 공격력\n6. 방어력");
+            WriteSelectMessage("1. 장착 관리\n2. 음식 보관 가방\n3. 정렬 - 이름\n4. 정렬 - 장착순\n5. 정렬 - 공격력\n6. 정렬 - 방어력");
             WriteMessage("[인벤토리]\n보유 중인 아이템을 관리할 수 있습니다.\n원하시는 행동을 입력해주세요.");
         }
         public void WriteEquipText()
@@ -433,8 +431,8 @@ namespace TextBased_Dungeon_Game
         public void WritePotionText()
         {
             WriteRightMessage($"{_potionInventory.MakePotionList()}");
-            WriteSelectMessage("1. 포션 사용\n0. 나가기");
-            WriteMessage($"[포션 인벤토리]\n보유 중인 포션을 사용할 수 있습니다.\n원하시는 행동을 입력해주세요.");
+            WriteSelectMessage("1. 음식 먹기\n0. 나가기");
+            WriteMessage($"[음식 보관 가방]\n보유 중인 음식들을 먹고 회복할 수 있습니다.\n원하시는 행동을 입력해주세요.");
         }  
     }
     class ShopScene : Scene
@@ -506,21 +504,21 @@ namespace TextBased_Dungeon_Game
         {
             WriteRightMessage($"{_shop.MakeItemList()}");
             WriteSelectMessage("1. 아이템 구매\n2. 아이템 판매\n0. 나가기");
-            WriteMessage($"[상점]\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
+            WriteMessage($"[상점]\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유 골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
         }
 
         public void WriteBuyText()
         {
             WriteRightMessage($"{_shop.MakeShopList()}");
             WriteSelectMessage("0. 나가기");
-            WriteMessage($"[상점 - 아이템 구매]\n필요한 아이템을 얻을 수 있는 상점입니다.\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
+            WriteMessage($"[상점 - 아이템 구매]\n필요한 아이템을 얻을 수 있는 상점입니다.\n[보유 골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
         }
 
         public void WriteSellText()
         {
             WriteRightMessage($"{_player.Inventory.MakeSellList()}");
             WriteSelectMessage("0. 나가기");
-            WriteMessage($"[상점 - 아이템 판매]\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
+            WriteMessage($"[상점 - 아이템 판매]\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유 골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
         }
 
     }
@@ -555,7 +553,7 @@ namespace TextBased_Dungeon_Game
             WriteRightMessage("\n실험체로 가득한 루미아 섬의 초입\n운이 나쁘면 실험으로 인해 흉폭해진 곰을 볼 수도...");
             Console.ResetColor();
             WriteSelectMessage("0. 나가기");
-            WriteMessage("던전입장\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n원하시는 행동을 입력해주세요");
+            WriteMessage("[실험실 입장]\n이곳에서 실험실로 들어가기전 활동을 할 수 있습니다.\n원하시는 행동을 입력해주세요");
         }
 
      
@@ -731,7 +729,7 @@ namespace TextBased_Dungeon_Game
         }
         public void WriteText()
         {
-            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteLeftMessage($"[실험체 정보]\n\n{_player.PlayerInfo()}");
             WriteSelectMessage("1. 공격\n\n2. 스킬");
             WriteRightMessage($"{dungeon.MonsterListInfo()}");
             WriteMessage("Battle!!\n");
@@ -739,14 +737,14 @@ namespace TextBased_Dungeon_Game
 
         public void WriteAttackResultText()
         {
-            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteLeftMessage($"[실험체 정보]\n\n{_player.PlayerInfo()}");
             WriteSelectMessage("0. 다음");
             WriteRightMessage($"{dungeon.MonsterSelectInfo()}");
             WriteMessage("Battle!!\n");
         }
         public void WriteBattleText()
         {
-            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteLeftMessage($"[실험체 정보]\n\n{_player.PlayerInfo()}");
             WriteSelectMessage("0. 취소");
             WriteRightMessage($"{dungeon.MonsterSelectInfo()}");
             WriteMessage("Battle!!\n");
@@ -754,7 +752,7 @@ namespace TextBased_Dungeon_Game
 
         public void WriteSkillText()
         {
-            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteLeftMessage($"[실험체 정보]\n\n{_player.PlayerInfo()}");
             WriteSelectMessage($"{_player.PlayerSkillInfo()}0.취소");
             WriteRightMessage($"{dungeon.MonsterListInfo()}");
             WriteMessage("Battle!!\n");
@@ -762,7 +760,7 @@ namespace TextBased_Dungeon_Game
 
         public void WriteSkillTargetText()
         {
-            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteLeftMessage($"[실험체 정보]\n\n{_player.PlayerInfo()}");
             WriteSelectMessage($"0.취소");
             WriteRightMessage($"{dungeon.MonsterSelectInfo()}");
             WriteMessage("Battle!!\n");
@@ -910,7 +908,7 @@ namespace TextBased_Dungeon_Game
   
         public void WriteText()
         {
-            WriteLeftMessage($"[내정보]\n\n{_player.PlayerInfo()}");
+            WriteLeftMessage($"[실험체 정보]\n\n{_player.PlayerInfo()}");
             WriteSelectMessage("0. 다음");
             WriteRightMessage($"{dungeon.MonsterListInfo()}");
             WriteMessage("Battle!!\n");
@@ -942,7 +940,7 @@ namespace TextBased_Dungeon_Game
                 WriteVictoryText();
                 _player.GetExp(dungeon.Count() * 5);  // 몬스터 한 마리당 5의 경험치
                 _player.Gold += 300;
-                _player.potionInventory.GetPotion("체력 회복 포션", 1);
+                _player.potionInventory.GetPotion("빵", 1);
             }
             else
             {
@@ -967,9 +965,9 @@ namespace TextBased_Dungeon_Game
         public void WriteVictoryText()
         {
 
-            WriteLeftMessage($"[던전 결과]\n몬스터 {dungeon.Count()}마리를 잡았습니다! 경험치 {dungeon.Count() * 5} 증가!\n");
+            WriteLeftMessage($"[실험 결과]\n몬스터 {dungeon.Count()}마리를 잡았습니다!\n경험치 {dungeon.Count() * 5} 증가!\n");
             WriteSelectMessage("0. 다음");
-            WriteMessage("[보상 정산]\n골드 + 300 G\n체력 회복 포션 + 1개\n원하시는 행동을 입력해주세요");
+            WriteMessage("[보상 정산]\n골드 + 300 G\n빵 + 1개\n원하시는 행동을 입력해주세요");
 
         }
 

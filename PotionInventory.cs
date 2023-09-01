@@ -25,7 +25,7 @@ namespace TextBased_Dungeon_Game
         {
             StringBuilder str = new StringBuilder();
 
-            str.Append("[포션 목록]\n");
+            str.Append("[음식 목록]\n");
             int index = 1;
 
             foreach (Potion _potion in Potionlist)
