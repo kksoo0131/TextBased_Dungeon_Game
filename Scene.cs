@@ -34,11 +34,9 @@ namespace TextBased_Dungeon_Game
     {   
         protected Player _player;
         protected int[] options;
-<<<<<<< Updated upstream
-        protected string path = @"C:\Users\Kks\source\repos\TextBased_Dungeon_Game\.vscode";
-=======
+
         protected string path = @"D:\WorkSpace\TextBased_Dungeon_Game\.vscode";
->>>>>>> Stashed changes
+
         public virtual void SceneInit() 
         {
             _player = DungeonGame.Instance.player;
@@ -314,7 +312,7 @@ namespace TextBased_Dungeon_Game
         {
             WriteRightMessage(MakeLogo());
             Console.ResetColor();
-            WriteSelectMessage("1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기\n6. 저장하기 & 기불러오기");
+            WriteSelectMessage("1. 상태 보기\n2. 인벤토리\n3. 상점\n4. 던전입장\n5. 휴식하기\n6. 저장하기 & 불러오기");
             WriteMessage("스파르타 마을에 오신 여러분 환영합니다.\n이곳에서 던전으로 들어가기 전 활동을 할 수 있습니다.\n원하시는 행동을 입력해주세요.");
 
         }
@@ -508,7 +506,7 @@ namespace TextBased_Dungeon_Game
         {
             WriteRightMessage($"{_shop.MakeItemList()}");
             WriteSelectMessage("1. 아이템 구매\n2. 아이템 판매\n0. 나가기");
-            WriteMessage($"상점\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
+            WriteMessage($"[상점]\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
         }
 
         public void WriteBuyText()
@@ -522,7 +520,7 @@ namespace TextBased_Dungeon_Game
         {
             WriteRightMessage($"{_player.Inventory.MakeSellList()}");
             WriteSelectMessage("0. 나가기");
-            WriteMessage($"상점 - 아이템 판매\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
+            WriteMessage($"[상점 - 아이템 판매]\n필요한 아이템을 얻을 수 있는 상점입니다.\n\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
         }
 
     }
