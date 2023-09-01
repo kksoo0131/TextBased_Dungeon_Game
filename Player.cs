@@ -48,8 +48,12 @@ namespace TextBased_Dungeon_Game
                 base.Defense = value;
             }
         }
-        public int MP { get; set; }
+
+        private int mp;
         public int MaxMP { get; set; }
+        public int MP { get { return mp; } set { mp = Math.Min(value, MaxMP); } }
+        
+
         public int Gold { get; set; }
         public Item? EquipWeapon { get; set; }
         public Item? EquipArmor { get; set; }  
@@ -67,8 +71,8 @@ namespace TextBased_Dungeon_Game
 
             Inventory.AddItem(new Weapon("낡은 검", ItemType.Weapon, "쉽게 볼 수 있는 낡은 검입니다.", 600, 2));
             Inventory.AddItem(new Armor("무쇠갑옷", ItemType.Armor, "무쇠로 만들어져 튼튼한 갑옷입니다.", 500, 5));
-            potionInventory.AddPotion(new Potion("체력 회복 포션", ItemType.HpPotion, "소량의 체력을 회복하는 포션. 딸기맛이다!\n", 50, 30, 0, 3));
-            potionInventory.AddPotion(new Potion("마나 회복 포션", ItemType.MpPotion, "소량의 마나를 회복하는 포션. 소다맛!\n", 50, 0, 15, 2));
+            potionInventory.AddPotion(new Potion("빵", ItemType.HpPotion, "간식으로도 주식으로도 손색없는 음식.\n", 50, 30, 0, 3));
+            potionInventory.AddPotion(new Potion("물", ItemType.MpPotion, "인간이 살아가기위해선 꼭 필요하다.\n", 50, 0, 15, 2));
         }
 
         public string PlayerInfo()
@@ -302,7 +306,9 @@ namespace TextBased_Dungeon_Game
             Attack += 1;
             Defense += 2;
             MaxHealth += 20;
+            MaxMP += 10;
             Health = MaxHealth;
+            MP = MaxMP;
             Console.WriteLine("축하합니다! 레벨업!");
         }
         protected int CalculateExpNeeded() // 레벨 업에 필요한 경험치
