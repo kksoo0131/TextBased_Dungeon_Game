@@ -61,9 +61,21 @@ AttackUnit(), Attacked()에 확률적으로 치명타를 입히거나 회피를 
 
 <br/>
 <br/>
+ 
+## 2. 저장 & 불러오기
 
-## 2. 
+DataManager 스크립트를 따로 생성하여 DataManager 클래스에 PlayerSave(), PlayerLoad() 메서드를 구현했습니다.
 
+player 객체에 담긴 정보에 [Serializable]를 붙여 모두 직렬화하여 json에 저장하였습니다.
+
+* player의 능력치, 소지금 등 - int, bool 등
+* Inventory (Inventory, PotionInventory) - 객체
+* skill - List
+* etc...
+
+게임을 시작하면 이전 데이터를 불러올지 새로 캐릭터를 생성하여 게임을 진행할지 선택하게 됩니다.
+
+[DataManager](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/develop/DataManager.cs)
 
 
 
@@ -71,6 +83,10 @@ AttackUnit(), Attacked()에 확률적으로 치명타를 입히거나 회피를 
 <br/>
 <hr/>
 
+<details>
+
+<summary>기초 개인과제</summary>
+  
 ### 과제 개요 - 기초 개인과제
 
 (기초)
@@ -148,7 +164,7 @@ InventoryScene, ShopScene등에서 해당 메서드들을 이용해 출력할 St
 <br/>
 <br/>
 
-## 아이템 클래스 선택 1 + 선택6
+## 4. 아이템 클래스 선택 1 + 선택6
 
 ### 선택1. 아이템 정보를 클래스로 구현
 
@@ -169,7 +185,7 @@ InventoryScene, ShopScene등에서 해당 메서드들을 이용해 출력할 St
 <br/>
 <br/>
 
-## 선택 7. 상점 -아이템 구매, 판매
+## 선택 7. 상점 - 아이템 구매, 판매
 
 Scene을 상속받은 ShopScene클래스, Inventory를 상속받는 Shop 클래스를 만들어 주었습니다.
 
@@ -196,11 +212,5 @@ Scene클래스를 상속받은 DungeonEnterScene, DungeonClearScene, DungeonFail
 <br/>
 <br/>
 
-## 선택 10. 게임저장
+</details>
 
-DungeonGame 클래스에 PlayerSave(), ShopSave(), Read() 메서드를 만들었고,
-
-player, shop 클래스들을 모두 [Serializable] 를 붙힌 후 
-
-직렬화 하여 파일로 저장하고 불러오는 기능을 구현했습니다.
-[DungeonGame](https://github.com/kksoo0131/TextBased_Dungeon_Game/blob/main/DungeonGame.cs)
