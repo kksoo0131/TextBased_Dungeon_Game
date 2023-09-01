@@ -36,7 +36,7 @@ namespace TextBased_Dungeon_Game
         }
         public void GameStart()
         {
-            int nextScene = (int)SceneType.CreateCharacterScene;
+            int nextScene = (int)SceneType.RoadScene;
             while (true)
             {
                 Console.SetWindowSize(120, 40);

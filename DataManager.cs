@@ -17,7 +17,6 @@ namespace TextBased_Dungeon_Game
         public void PlayerLoad()
         {
             string json = File.ReadAllText(@"PlayerData.json");
-            DungeonGame.Instance.player.Inventory.Clear();
             DungeonGame.Instance.player = JsonConvert.DeserializeObject<Player>(json);
 
             Thread.Sleep(1000);
