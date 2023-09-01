@@ -34,7 +34,11 @@ namespace TextBased_Dungeon_Game
     {   
         protected Player _player;
         protected int[] options;
+<<<<<<< Updated upstream
         protected string path = @"C:\Users\Kks\source\repos\TextBased_Dungeon_Game\.vscode";
+=======
+        protected string path = @"D:\WorkSpace\TextBased_Dungeon_Game\.vscode";
+>>>>>>> Stashed changes
         public virtual void SceneInit() 
         {
             _player = DungeonGame.Instance.player;
@@ -511,7 +515,7 @@ namespace TextBased_Dungeon_Game
         {
             WriteRightMessage($"{_shop.MakeShopList()}");
             WriteSelectMessage("0. 나가기");
-            WriteMessage($"상점 - 아이템 구매\n필요한 아이템을 얻을 수 있는 상점입니다.\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
+            WriteMessage($"[상점 - 아이템 구매]\n필요한 아이템을 얻을 수 있는 상점입니다.\n[보유골드]\n{_player.Gold}\n원하시는 행동을 입력해주세요.");
         }
 
         public void WriteSellText()
@@ -548,7 +552,10 @@ namespace TextBased_Dungeon_Game
         }
         public void WriteText()
         {
-            WriteLeftMessage($"1. 쉬운 던전      | 방어력 5 이상 권장");
+            WriteLeftMessage("\n\n1. 루미아 섬 초입\n  - 방어력 5 이상 권장");
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            WriteRightMessage("\n실험체로 가득한 루미아 섬의 초입\n운이 나쁘면 실험으로 인해 흉폭해진 곰을 볼 수도...");
+            Console.ResetColor();
             WriteSelectMessage("0. 나가기");
             WriteMessage("던전입장\n이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n원하시는 행동을 입력해주세요");
         }
