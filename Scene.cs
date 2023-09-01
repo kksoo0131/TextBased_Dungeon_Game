@@ -820,6 +820,7 @@ namespace TextBased_Dungeon_Game
     {
         public override int DrawScene()
         {
+            SoundPlay();
             SceneInit();
             DrawUI();
             WriteText();
