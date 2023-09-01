@@ -24,8 +24,7 @@ namespace TextBased_Dungeon_Game
         public static void PlayPrologue()
         {
             Task.Run(async () => await WaitForSkipAsync(cts.Token));
-            string _path = //"\\Users\\User\\source\\repos\\kksoo0131\\TextBased_Dungeon_Game\\.vscode\\Type.mp3";
-                "D:\\WorkSpace\\TextBased_Dungeon_Game\\.vscode\\Type.mp3";
+            string _path = $"{DungeonGame.Instance.path}\\Type.mp3";
             Console.Clear();
             Console.Write("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n                                             ");
             string S1 = "이곳은 초 국가적 비공식 연구집단, 아글라이아의 연구소  "; 
